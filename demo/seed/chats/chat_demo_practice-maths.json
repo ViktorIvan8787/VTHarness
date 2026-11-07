@@ -1,0 +1,251 @@
+{
+	"id": "chat_demo_practice-maths",
+	"title": "Maths practice: follow an eigenvector through time",
+	"kind": "practice",
+	"version": 1,
+	"createdAt": "2026-08-23T09:00:00.000Z",
+	"updatedAt": "2026-08-23T09:08:00.000Z",
+	"messages": [
+		{
+			"id": "msg_demo_practice-maths_0",
+			"role": "custom",
+			"customType": "graph-context",
+			"content": "[Session context] — picked from the learner's knowledge map when starting this session:\n\nPropositions (id — name: statement; the problem tool's target field uses these ids):\n- [n_demo_eigen-direction] An invariant direction: An eigenvector is a nonzero vector v satisfying Av = lambda v for a scalar eigenvalue lambda.\n- [n_demo_eigen-repeat] Repeated action on an eigenvector: If Av = lambda v, then A^k v = lambda^k v for every positive integer k.\n- [n_demo_ode-exponential] An exponential solution: For constant r, y(t) = y0 exp(rt) solves dy/dt = r y with y(0) = y0.\n- [n_demo_ode-eigen-mode] An eigenvector mode of an ODE: If Av = lambda v, then y(t) = exp(lambda t) v solves the vector equation dy/dt = A y with y(0) = v.\n\nReasoning chains among them (premises → conclusion):\n- An invariant direction → Repeated action on an eigenvector\n- An invariant direction + An exponential solution → An eigenvector mode of an ODE",
+			"display": true,
+			"details": {
+				"propositions": [
+					{
+						"id": "n_demo_eigen-direction",
+						"name": "An invariant direction",
+						"statement": "An eigenvector is a nonzero vector v satisfying Av = lambda v for a scalar eigenvalue lambda.",
+						"aliases": [
+							"An eigenvector is a nonzero vector v satisfying Av = lambda v for a scalar eigenvalue lambda."
+						],
+						"createdAt": "2026-08-06T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_maths-eigenvectors",
+								"messageId": "msg_demo_maths-eigenvectors_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_eigen-repeat",
+						"name": "Repeated action on an eigenvector",
+						"statement": "If Av = lambda v, then A^k v = lambda^k v for every positive integer k.",
+						"aliases": [
+							"If Av = lambda v, then A^k v = lambda^k v for every positive integer k."
+						],
+						"createdAt": "2026-08-06T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_maths-eigenvectors",
+								"messageId": "msg_demo_maths-eigenvectors_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_ode-exponential",
+						"name": "An exponential solution",
+						"statement": "For constant r, y(t) = y0 exp(rt) solves dy/dt = r y with y(0) = y0.",
+						"aliases": [
+							"For constant r, y(t) = y0 exp(rt) solves dy/dt = r y with y(0) = y0."
+						],
+						"createdAt": "2026-08-07T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_maths-differential-equations",
+								"messageId": "msg_demo_maths-differential-equations_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_ode-eigen-mode",
+						"name": "An eigenvector mode of an ODE",
+						"statement": "If Av = lambda v, then y(t) = exp(lambda t) v solves the vector equation dy/dt = A y with y(0) = v.",
+						"aliases": [
+							"If Av = lambda v, then y(t) = exp(lambda t) v solves the vector equation dy/dt = A y with y(0) = v."
+						],
+						"createdAt": "2026-08-07T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_maths-differential-equations",
+								"messageId": "msg_demo_maths-differential-equations_15"
+							}
+						]
+					}
+				],
+				"chains": [
+					"An invariant direction → Repeated action on an eigenvector",
+					"An invariant direction + An exponential solution → An eigenvector mode of an ODE"
+				]
+			},
+			"timestamp": 1787475600000
+		},
+		{
+			"id": "msg_demo_practice-maths_1",
+			"role": "user",
+			"content": "Give me a fresh problem connecting eigenvectors and a differential equation.",
+			"timestamp": 1787475660000
+		},
+		{
+			"id": "msg_demo_practice-maths_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Try this on your own. Write down your reasoning as you go."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-maths_2",
+					"name": "problem",
+					"arguments": {
+						"statement": "Let A = diag(-1, 2) and v = (3, 0). Find Av and A^2v. Then solve y' = Ay with y(0) = v and find y(log 2), where log is the natural logarithm.",
+						"mode": "composition",
+						"target": [
+							"n_demo_eigen-direction",
+							"n_demo_eigen-repeat",
+							"n_demo_ode-exponential",
+							"n_demo_ode-eigen-mode"
+						],
+						"modelSolution": "Av = (-3, 0) = -v, and A^2v = (3, 0). The eigenvalue is -1, so y(t) = exp(-t)v = (3 exp(-t), 0). At t = log 2 this is (1.5, 0). Discrete matrix powers and continuous exponential evolution are different operations."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787475720000
+		},
+		{
+			"id": "msg_demo_practice-maths_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-maths_2",
+			"toolName": "problem",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem posed. The learner's thinking and answer will follow."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787475780000
+		},
+		{
+			"id": "msg_demo_practice-maths_4",
+			"role": "custom",
+			"customType": "practice-thinking",
+			"content": "Your thinking:\nThe vector lies on the first coordinate axis. Each matrix multiplication scales by -1, but continuous time uses exp(-t), not (-1)^t.",
+			"display": true,
+			"details": {
+				"problemCallId": "call_demo_practice-maths_2",
+				"text": "The vector lies on the first coordinate axis. Each matrix multiplication scales by -1, but continuous time uses exp(-t), not (-1)^t."
+			},
+			"timestamp": 1787475840000
+		},
+		{
+			"id": "msg_demo_practice-maths_5",
+			"role": "user",
+			"content": "Av = (-3, 0), A²v = (3, 0), and y(t) = (3e^(-t), 0), giving y(log 2) = (1.5, 0).",
+			"timestamp": 1787475900000
+		},
+		{
+			"id": "msg_demo_practice-maths_6",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-maths_6",
+					"name": "conclude",
+					"arguments": {
+						"outcome": "solved",
+						"verdict": "Solved independently. You identified the eigenvalue and distinguished repeated discrete transformations from continuous exponential decay.",
+						"rung": null,
+						"missClass": null,
+						"retest": false
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787475960000
+		},
+		{
+			"id": "msg_demo_practice-maths_7",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-maths_6",
+			"toolName": "conclude",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem concluded. Say your closing words about the learner's work if useful, then END YOUR TURN — no further tool calls. The next problem is NEVER posed here: it waits for the learner's explicit go-ahead (a *Next problem* message, or their own words asking for the next one). Between problems, answer their questions about the concluded one."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787476020000
+		},
+		{
+			"id": "msg_demo_practice-maths_8",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Solved independently. You identified the eigenvalue and distinguished repeated discrete transformations from continuous exponential decay.\n\nYou transferred the idea to a fresh problem. We can continue with a harder example whenever you're ready."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1787476080000
+		}
+	]
+}

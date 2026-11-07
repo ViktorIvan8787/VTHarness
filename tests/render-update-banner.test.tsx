@@ -17,7 +17,7 @@ import * as ReactDOMClient from "react-dom/client";
 import { flushSync } from "react-dom";
 import { parseHTML } from "linkedom";
 import UpdateBanner from "../components/update-banner.tsx";
-import type { UpdateState } from "../components/settings/update-settings.tsx";
+import type { UpdateState } from "../components/update-state.ts";
 
 // linkedom as the DOM for the interactive pass (first createRoot test in
 // the repo — the banner's push→render→click flow needs real effects).

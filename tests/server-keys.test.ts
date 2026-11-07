@@ -25,11 +25,7 @@ import { externalCliEnv } from "../src/core/auth-env.ts";
 for (const varName of [
 	"OPENROUTER_API_KEY",
 	"DEEPGRAM_API_KEY",
-	"TAVILY_API_KEY",
-	"BRAVE_API_KEY",
-	"EXA_API_KEY",
-	"FIRECRAWL_API_KEY",
-	"OLLAMA_API_KEY",
+	"DEEPGRAM_API_KEY",
 	"GOOGLE_SEARCH_API_KEY",
 	"GOOGLE_CSE_ID",
 	"OPENAI_API_KEY",
@@ -204,12 +200,17 @@ describe("saveKey / deleteKey (immediate effect, no restart)", () => {
 });
 
 describe("resolveKeyStatuses (pure projection)", () => {
+	it("retired search keys stay hidden while unrelated stored variables remain visible", () => {
+		const rows = resolveKeyStatuses({ TAVILY_API_KEY: "retired-fixture-key", FUTURE_VAR: "fixture-value" }, {}, new Set());
+		assert.ok(!rows.some(row => row.id === "TAVILY_API_KEY"));
+		assert.ok(rows.some(row => row.id === "FUTURE_VAR"));
+	});
 	it("same value in env and file is NOT shadowed (redundant, not misleading)", () => {
 		const row = resolveKeyStatuses(
-			{ BRAVE_API_KEY: "BSA-same-value-throwaway-01234" },
-			{ BRAVE_API_KEY: "BSA-same-value-throwaway-01234" },
-			new Set(["BRAVE_API_KEY"]),
-		).find((s) => s.id === "BRAVE_API_KEY")!;
+			{ DEEPGRAM_API_KEY: "BSA-same-value-throwaway-01234" },
+			{ DEEPGRAM_API_KEY: "BSA-same-value-throwaway-01234" },
+			new Set(["DEEPGRAM_API_KEY"]),
+		).find((s) => s.id === "DEEPGRAM_API_KEY")!;
 		assert.ok(row, "the curated id is always in the projection");
 		assert.equal(row.source, "env");
 		assert.ok(!row.shadowedByEnv, "same value both places: redundant, not shadowed");

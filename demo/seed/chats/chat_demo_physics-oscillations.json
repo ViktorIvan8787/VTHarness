@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_physics-oscillations",
+	"title": "Physics: why a spring oscillates",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-08T09:00:00.000Z",
+	"updatedAt": "2026-08-08T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "spring-force",
+				"title": "A restoring force",
+				"summary": "An ideal spring exerts F = -kx, with displacement x measured from equilibrium and spring constant k > 0."
+			},
+			{
+				"id": "spring-newton",
+				"title": "Newton's equation for a spring",
+				"summary": "For an ideal mass m on a spring, Newton's law gives m x'' = -kx."
+			},
+			{
+				"id": "spring-frequency",
+				"title": "Angular frequency",
+				"summary": "The ideal mass-spring equation is x'' = -omega^2 x with omega = sqrt(k/m)."
+			},
+			{
+				"id": "spring-solution",
+				"title": "A sinusoidal solution",
+				"summary": "The displacement x(t) = A cos(omega t + phi) satisfies x'' = -omega^2 x."
+			},
+			{
+				"id": "spring-period",
+				"title": "Period and angular frequency",
+				"summary": "For angular frequency omega > 0, the oscillation period is T = 2pi/omega."
+			},
+			{
+				"id": "spring-mass",
+				"title": "Changing the mass",
+				"summary": "With spring constant fixed, quadrupling the mass halves omega and doubles the period of an ideal oscillator."
+			}
+		],
+		"edges": [
+			{
+				"from": "spring-force",
+				"to": "spring-newton"
+			},
+			{
+				"from": "spring-newton",
+				"to": "spring-frequency"
+			},
+			{
+				"from": "spring-frequency",
+				"to": "spring-solution"
+			},
+			{
+				"from": "spring-solution",
+				"to": "spring-period"
+			},
+			{
+				"from": "spring-period",
+				"to": "spring-mass"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_physics-oscillations_0",
+			"role": "user",
+			"content": "I know the spring-force formula. How does it tell us the period of the motion?",
+			"timestamp": 1786179600000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786179660000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-oscillations_2",
+					"name": "probe",
+					"arguments": {
+						"question": "A spring is displaced to x > 0. Which way does its force point?",
+						"options": [
+							{
+								"label": "Toward equilibrium",
+								"value": "choice-0"
+							},
+							{
+								"label": "Further away",
+								"value": "choice-1"
+							},
+							{
+								"label": "Always upward",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "The minus sign makes force oppose the displacement."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786179720000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-oscillations_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Toward equilibrium\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The coordinate sign refers to displacement from equilibrium.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "A spring is displaced to x > 0. Which way does its force point?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Toward equilibrium"
+					},
+					{
+						"index": 2,
+						"label": "Further away"
+					},
+					{
+						"index": 3,
+						"label": "Always upward"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Toward equilibrium",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "The coordinate sign refers to displacement from equilibrium.",
+				"answeredAt": "2026-08-08T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "The minus sign makes force oppose the displacement.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786179780000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-oscillations_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "A restoring force",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Derive the frequency of an ideal mass-spring oscillator from Newton's law."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786179840000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-oscillations_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786179900000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_physics-oscillations"
+			},
+			"timestamp": 1786179960000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Derive the frequency of an ideal mass-spring oscillator from Newton's law. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-oscillations_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  spring-force[A restoring force]\n  spring-newton[Newton's equation for a spring]\n  spring-frequency[Angular frequency]\n  spring-solution[A sinusoidal solution]\n  spring-period[Period and angular frequency]\n  spring-mass[Changing the mass]\n  spring-force --> spring-newton\n  spring-newton --> spring-frequency\n  spring-frequency --> spring-solution\n  spring-solution --> spring-period\n  spring-period --> spring-mass"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786180020000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-oscillations_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: spring-force, spring-newton, spring-frequency, spring-solution, spring-period, spring-mass"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "spring-force",
+							"title": "A restoring force",
+							"summary": "An ideal spring exerts F = -kx, with displacement x measured from equilibrium and spring constant k > 0."
+						},
+						{
+							"id": "spring-newton",
+							"title": "Newton's equation for a spring",
+							"summary": "For an ideal mass m on a spring, Newton's law gives m x'' = -kx."
+						},
+						{
+							"id": "spring-frequency",
+							"title": "Angular frequency",
+							"summary": "The ideal mass-spring equation is x'' = -omega^2 x with omega = sqrt(k/m)."
+						},
+						{
+							"id": "spring-solution",
+							"title": "A sinusoidal solution",
+							"summary": "The displacement x(t) = A cos(omega t + phi) satisfies x'' = -omega^2 x."
+						},
+						{
+							"id": "spring-period",
+							"title": "Period and angular frequency",
+							"summary": "For angular frequency omega > 0, the oscillation period is T = 2pi/omega."
+						},
+						{
+							"id": "spring-mass",
+							"title": "Changing the mass",
+							"summary": "With spring constant fixed, quadrupling the mass halves omega and doubles the period of an ideal oscillator."
+						}
+					],
+					"edges": [
+						{
+							"from": "spring-force",
+							"to": "spring-newton"
+						},
+						{
+							"from": "spring-newton",
+							"to": "spring-frequency"
+						},
+						{
+							"from": "spring-frequency",
+							"to": "spring-solution"
+						},
+						{
+							"from": "spring-solution",
+							"to": "spring-period"
+						},
+						{
+							"from": "spring-period",
+							"to": "spring-mass"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786180080000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_physics-oscillations_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-08T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "spring-force",
+							"title": "A restoring force",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-newton",
+							"title": "Newton's equation for a spring",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-frequency",
+							"title": "Angular frequency",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-solution",
+							"title": "A sinusoidal solution",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-period",
+							"title": "Period and angular frequency",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-mass",
+							"title": "Changing the mass",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "spring-force",
+							"to": "spring-newton"
+						},
+						{
+							"from": "spring-newton",
+							"to": "spring-frequency"
+						},
+						{
+							"from": "spring-frequency",
+							"to": "spring-solution"
+						},
+						{
+							"from": "spring-solution",
+							"to": "spring-period"
+						},
+						{
+							"from": "spring-period",
+							"to": "spring-mass"
+						}
+					]
+				}
+			},
+			"timestamp": 1786180140000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786180200000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Differentiate the proposed motion\nFor k = 8 N/m and m = 2 kg, Newton's law requires x'' = -4x. Try x = A cos(2t): differentiating twice gives -4A cos(2t), exactly the required acceleration. The phase and amplitude come from the initial conditions.\n\n### A restoring force\nAn ideal spring exerts F = -kx, with displacement x measured from equilibrium and spring constant k > 0.\n\n### Newton's equation for a spring\nFor an ideal mass m on a spring, Newton's law gives m x'' = -kx.\n\n### Angular frequency\nThe ideal mass-spring equation is x'' = -omega^2 x with omega = sqrt(k/m)."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786180260000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-oscillations_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "If mass becomes four times larger and k stays fixed, what happens to the period?",
+						"options": [
+							{
+								"label": "It halves",
+								"value": "choice-0"
+							},
+							{
+								"label": "It doubles",
+								"value": "choice-1"
+							},
+							{
+								"label": "It quadruples",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "T = 2pi sqrt(m/k), so multiplying m by four multiplies T by two.",
+						"type": "predict",
+						"nodeId": "spring-frequency"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786180320000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-oscillations_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":3,\"label\":\"It quadruples\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I thought period scaled directly with mass rather than its square root.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "If mass becomes four times larger and k stays fixed, what happens to the period?",
+				"options": [
+					{
+						"index": 1,
+						"label": "It halves"
+					},
+					{
+						"index": 2,
+						"label": "It doubles"
+					},
+					{
+						"index": 3,
+						"label": "It quadruples"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "It quadruples",
+						"value": "choice-2",
+						"index": 3
+					}
+				],
+				"thinking": "I thought period scaled directly with mass rather than its square root.",
+				"answeredAt": "2026-08-08T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "T = 2pi sqrt(m/k), so multiplying m by four multiplies T by two.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786180380000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_14",
+			"role": "user",
+			"content": "At the turning point velocity is zero, so is acceleration zero too?",
+			"timestamp": 1786180440000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "At a turning point, displacement and restoring force have their greatest magnitudes. Acceleration is therefore largest in magnitude, even though instantaneous velocity is zero. At equilibrium the acceleration is zero and the speed is greatest.\n\n### A sinusoidal solution\nThe displacement x(t) = A cos(omega t + phi) satisfies x'' = -omega^2 x.\n\n### Period and angular frequency\nFor angular frequency omega > 0, the oscillation period is T = 2pi/omega.\n\n### Changing the mass\nWith spring constant fixed, quadrupling the mass halves omega and doubles the period of an ideal oscillator."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786180500000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-oscillations_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "For k = 8 N/m and m = 2 kg, what is omega?",
+						"options": [
+							{
+								"label": "4 rad/s",
+								"value": "choice-0"
+							},
+							{
+								"label": "2 rad/s",
+								"value": "choice-1"
+							},
+							{
+								"label": "0.5 rad/s",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "sqrt(8/2) = 2 rad/s; the period is pi seconds.",
+						"type": "check",
+						"nodeId": "spring-mass"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786180560000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-oscillations_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"2 rad/s\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I take the square root after dividing k by m.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "For k = 8 N/m and m = 2 kg, what is omega?",
+				"options": [
+					{
+						"index": 1,
+						"label": "4 rad/s"
+					},
+					{
+						"index": 2,
+						"label": "2 rad/s"
+					},
+					{
+						"index": 3,
+						"label": "0.5 rad/s"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "2 rad/s",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I take the square root after dividing k by m.",
+				"answeredAt": "2026-08-08T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "sqrt(8/2) = 2 rad/s; the period is pi seconds.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786180620000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786180680000
+		},
+		{
+			"id": "msg_demo_physics-oscillations_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "The same second-order equation models many small oscillations. The ideal spring assumes linear restoring force and no damping; a real system may lose energy or depart from that approximation."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786180740000
+		}
+	]
+}

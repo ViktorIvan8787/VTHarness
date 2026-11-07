@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_maths-eigenvectors",
+	"title": "Maths: eigenvectors as invariant directions",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-06T09:00:00.000Z",
+	"updatedAt": "2026-08-06T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "matrix-action",
+				"title": "A matrix acts on vectors",
+				"summary": "For A = diag(2, 3), multiplying (x, y) gives (2x, 3y)."
+			},
+			{
+				"id": "eigen-direction",
+				"title": "An invariant direction",
+				"summary": "An eigenvector is a nonzero vector v satisfying Av = lambda v for a scalar eigenvalue lambda."
+			},
+			{
+				"id": "eigen-example",
+				"title": "An eigenpair by substitution",
+				"summary": "For A = diag(2, 3), v = (1, 0) is an eigenvector with eigenvalue 2 because Av = (2, 0)."
+			},
+			{
+				"id": "not-eigen",
+				"title": "A vector can change direction",
+				"summary": "For A = diag(2, 3), (1, 1) is not an eigenvector because (2, 3) is not a scalar multiple of (1, 1)."
+			},
+			{
+				"id": "eigen-repeat",
+				"title": "Repeated action on an eigenvector",
+				"summary": "If Av = lambda v, then A^k v = lambda^k v for every positive integer k."
+			},
+			{
+				"id": "eigen-decompose",
+				"title": "Decomposing a vector into eigenvectors",
+				"summary": "For A = diag(2, 3), A^k(1, 1) = (2^k, 3^k) by decomposing (1, 1) along the two coordinate eigenvectors."
+			}
+		],
+		"edges": [
+			{
+				"from": "matrix-action",
+				"to": "eigen-direction"
+			},
+			{
+				"from": "eigen-direction",
+				"to": "eigen-example"
+			},
+			{
+				"from": "eigen-example",
+				"to": "not-eigen"
+			},
+			{
+				"from": "not-eigen",
+				"to": "eigen-repeat"
+			},
+			{
+				"from": "eigen-repeat",
+				"to": "eigen-decompose"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_maths-eigenvectors_0",
+			"role": "user",
+			"content": "I can multiply matrices, but what does an eigenvector actually tell me about a transformation?",
+			"timestamp": 1786006800000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786006860000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-eigenvectors_2",
+					"name": "probe",
+					"arguments": {
+						"question": "What is diag(2, 3) times (1, 0)?",
+						"options": [
+							{
+								"label": "(2, 0)",
+								"value": "choice-0"
+							},
+							{
+								"label": "(0, 3)",
+								"value": "choice-1"
+							},
+							{
+								"label": "(2, 3)",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "The first coordinate doubles and the second remains zero."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786006920000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-eigenvectors_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"(2, 0)\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I multiply each coordinate by its diagonal entry.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "What is diag(2, 3) times (1, 0)?",
+				"options": [
+					{
+						"index": 1,
+						"label": "(2, 0)"
+					},
+					{
+						"index": 2,
+						"label": "(0, 3)"
+					},
+					{
+						"index": 3,
+						"label": "(2, 3)"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "(2, 0)",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I multiply each coordinate by its diagonal entry.",
+				"answeredAt": "2026-08-06T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "The first coordinate doubles and the second remains zero.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786006980000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-eigenvectors_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "A matrix acts on vectors",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Recognise eigenvectors geometrically and calculate the effect of repeated matrix multiplication."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786007040000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-eigenvectors_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786007100000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_maths-eigenvectors"
+			},
+			"timestamp": 1786007160000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Recognise eigenvectors geometrically and calculate the effect of repeated matrix multiplication. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-eigenvectors_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  matrix-action[A matrix acts on vectors]\n  eigen-direction[An invariant direction]\n  eigen-example[An eigenpair by substitution]\n  not-eigen[A vector can change direction]\n  eigen-repeat[Repeated action on an eigenvector]\n  eigen-decompose[Decomposing a vector into eigenvectors]\n  matrix-action --> eigen-direction\n  eigen-direction --> eigen-example\n  eigen-example --> not-eigen\n  not-eigen --> eigen-repeat\n  eigen-repeat --> eigen-decompose"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786007220000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-eigenvectors_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: matrix-action, eigen-direction, eigen-example, not-eigen, eigen-repeat, eigen-decompose"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "matrix-action",
+							"title": "A matrix acts on vectors",
+							"summary": "For A = diag(2, 3), multiplying (x, y) gives (2x, 3y)."
+						},
+						{
+							"id": "eigen-direction",
+							"title": "An invariant direction",
+							"summary": "An eigenvector is a nonzero vector v satisfying Av = lambda v for a scalar eigenvalue lambda."
+						},
+						{
+							"id": "eigen-example",
+							"title": "An eigenpair by substitution",
+							"summary": "For A = diag(2, 3), v = (1, 0) is an eigenvector with eigenvalue 2 because Av = (2, 0)."
+						},
+						{
+							"id": "not-eigen",
+							"title": "A vector can change direction",
+							"summary": "For A = diag(2, 3), (1, 1) is not an eigenvector because (2, 3) is not a scalar multiple of (1, 1)."
+						},
+						{
+							"id": "eigen-repeat",
+							"title": "Repeated action on an eigenvector",
+							"summary": "If Av = lambda v, then A^k v = lambda^k v for every positive integer k."
+						},
+						{
+							"id": "eigen-decompose",
+							"title": "Decomposing a vector into eigenvectors",
+							"summary": "For A = diag(2, 3), A^k(1, 1) = (2^k, 3^k) by decomposing (1, 1) along the two coordinate eigenvectors."
+						}
+					],
+					"edges": [
+						{
+							"from": "matrix-action",
+							"to": "eigen-direction"
+						},
+						{
+							"from": "eigen-direction",
+							"to": "eigen-example"
+						},
+						{
+							"from": "eigen-example",
+							"to": "not-eigen"
+						},
+						{
+							"from": "not-eigen",
+							"to": "eigen-repeat"
+						},
+						{
+							"from": "eigen-repeat",
+							"to": "eigen-decompose"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786007280000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_maths-eigenvectors_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-06T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "matrix-action",
+							"title": "A matrix acts on vectors",
+							"status": "upcoming"
+						},
+						{
+							"id": "eigen-direction",
+							"title": "An invariant direction",
+							"status": "upcoming"
+						},
+						{
+							"id": "eigen-example",
+							"title": "An eigenpair by substitution",
+							"status": "upcoming"
+						},
+						{
+							"id": "not-eigen",
+							"title": "A vector can change direction",
+							"status": "upcoming"
+						},
+						{
+							"id": "eigen-repeat",
+							"title": "Repeated action on an eigenvector",
+							"status": "upcoming"
+						},
+						{
+							"id": "eigen-decompose",
+							"title": "Decomposing a vector into eigenvectors",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "matrix-action",
+							"to": "eigen-direction"
+						},
+						{
+							"from": "eigen-direction",
+							"to": "eigen-example"
+						},
+						{
+							"from": "eigen-example",
+							"to": "not-eigen"
+						},
+						{
+							"from": "not-eigen",
+							"to": "eigen-repeat"
+						},
+						{
+							"from": "eigen-repeat",
+							"to": "eigen-decompose"
+						}
+					]
+				}
+			},
+			"timestamp": 1786007340000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786007400000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Stretch a square\nImagine the unit square under A = diag(2, 3). Horizontal arrows double; vertical arrows triple. A diagonal arrow becomes steeper. The coordinate directions are special because the transformation preserves their lines.\n\n### A matrix acts on vectors\nFor A = diag(2, 3), multiplying (x, y) gives (2x, 3y).\n\n### An invariant direction\nAn eigenvector is a nonzero vector v satisfying Av = lambda v for a scalar eigenvalue lambda.\n\n### An eigenpair by substitution\nFor A = diag(2, 3), v = (1, 0) is an eigenvector with eigenvalue 2 because Av = (2, 0)."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786007460000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-eigenvectors_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "Is (1, 1) an eigenvector of diag(2, 3)?",
+						"options": [
+							{
+								"label": "Yes: every vector is",
+								"value": "choice-0"
+							},
+							{
+								"label": "No: the two coordinates scale differently",
+								"value": "choice-1"
+							},
+							{
+								"label": "Only if its length is one",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "A single scalar cannot turn (1, 1) into (2, 3).",
+						"type": "predict",
+						"nodeId": "eigen-example"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786007520000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-eigenvectors_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Yes: every vector is\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I confused being transformed with keeping the same direction.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "Is (1, 1) an eigenvector of diag(2, 3)?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Yes: every vector is"
+					},
+					{
+						"index": 2,
+						"label": "No: the two coordinates scale differently"
+					},
+					{
+						"index": 3,
+						"label": "Only if its length is one"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Yes: every vector is",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I confused being transformed with keeping the same direction.",
+				"answeredAt": "2026-08-06T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "A single scalar cannot turn (1, 1) into (2, 3).",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786007580000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_14",
+			"role": "user",
+			"content": "If every vector gets multiplied by a matrix, why isn't every vector an eigenvector?",
+			"timestamp": 1786007640000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Matrix multiplication is general. An eigenvector satisfies the extra condition that the output lies on the same line through the origin. The zero vector is excluded because it would satisfy the equation for every eigenvalue. A negative eigenvalue reverses direction along that same line.\n\n### A vector can change direction\nFor A = diag(2, 3), (1, 1) is not an eigenvector because (2, 3) is not a scalar multiple of (1, 1).\n\n### Repeated action on an eigenvector\nIf Av = lambda v, then A^k v = lambda^k v for every positive integer k.\n\n### Decomposing a vector into eigenvectors\nFor A = diag(2, 3), A^k(1, 1) = (2^k, 3^k) by decomposing (1, 1) along the two coordinate eigenvectors."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786007700000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-eigenvectors_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "What is A^3(1, 0) for A = diag(2, 3)?",
+						"options": [
+							{
+								"label": "(6, 0)",
+								"value": "choice-0"
+							},
+							{
+								"label": "(8, 0)",
+								"value": "choice-1"
+							},
+							{
+								"label": "(2, 0)",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "The eigenvalue multiplies on every application: 2^3 = 8.",
+						"type": "check",
+						"nodeId": "eigen-decompose"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786007760000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-eigenvectors_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"(8, 0)\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"Three applications multiply the scale factors, rather than adding them.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "What is A^3(1, 0) for A = diag(2, 3)?",
+				"options": [
+					{
+						"index": 1,
+						"label": "(6, 0)"
+					},
+					{
+						"index": 2,
+						"label": "(8, 0)"
+					},
+					{
+						"index": 3,
+						"label": "(2, 0)"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "(8, 0)",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "Three applications multiply the scale factors, rather than adding them.",
+				"answeredAt": "2026-08-06T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "The eigenvalue multiplies on every application: 2^3 = 8.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786007820000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786007880000
+		},
+		{
+			"id": "msg_demo_maths-eigenvectors_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Decompose a vector into eigenvectors when a suitable basis exists, then scale each component separately. This helps analyse repeated transformations and linear dynamical systems; not every matrix has a complete eigenvector basis."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786007940000
+		}
+	]
+}

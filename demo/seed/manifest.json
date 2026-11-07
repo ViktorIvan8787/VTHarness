@@ -1,8 +1,8 @@
 {
-	"version": 1,
+	"version": 2,
 	"synthetic": true,
-	"sessions": 8,
-	"propositions": 36,
-	"chains": 23,
+	"sessions": 23,
+	"propositions": 96,
+	"chains": 53,
 	"heroSession": "chat_demo_gradient-descent"
 }

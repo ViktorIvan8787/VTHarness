@@ -1,4 +1,5 @@
 /** Authored sample learning history. All people, answers, and sessions are synthetic. */
+import { disciplineLessons, disciplineArguments, disciplinePractices } from "./disciplines.ts";
 export interface DemoQuiz {
 	question: string;
 	options: string[];
@@ -139,6 +140,8 @@ export const lessons: DemoLesson[] = [
 	},
 ];
 
+lessons.push(...disciplineLessons);
+
 /** Premises are jointly used, rather than storing arbitrary topic-similarity edges. */
 export const argumentsForGraph: [string[], string][] = [
 	[["predictor", "forward"], "prediction"], [["prediction", "features"], "residual"], [["prediction", "residual"], "squared"],
@@ -150,6 +153,7 @@ export const argumentsForGraph: [string[], string][] = [
 	[["training-fit", "heldout", "empirical-loss"], "overfitting"], [["validation", "heldout"], "test-set"], [["training-fit", "overfitting", "validation"], "early-stop"],
 	[["gradient", "local-change"], "descent-direction"], [["local-change", "descent-direction"], "small-step"],
 	[["gradient-example", "descent-direction"], "update"], [["local-change", "small-step"], "learning-rate"],
+	...disciplineArguments,
 ];
 
 export const practices = [
@@ -171,4 +175,5 @@ export const practices = [
 		answer: "I choose B using validation error, and evaluate it on a separate test set. C's lower training error alone is not evidence that it will generalise better.",
 		verdict: "Solved independently. You used validation for selection, recognised the training/validation gap, and kept a separate test evaluation.",
 	},
+	...disciplinePractices,
 ];

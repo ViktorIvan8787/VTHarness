@@ -73,6 +73,6 @@ Review and publish releases explicitly after verifying the artifacts. Verify the
 
 ## In-app updates
 
-Packaged apps check at startup and every 24 hours by default, download automatically, and install on quit or Restart. **Settings → General** provides release notes, manual checks, status, and Automatic updates. Dev builds disable the updater. Errors go to `userData/logs/main.log`; `VT_UPDATE_FEED` is a test-only generic-feed override.
+Packaged apps check at startup and every 24 hours by default, download automatically, and install on quit or Restart. The app menu’s **Check for Updates** command triggers a manual check; downloaded updates show a Restart banner. Dev builds disable the updater. Errors go to `userData/logs/main.log`; `VT_UPDATE_FEED` is a test-only generic-feed override.
 
-Sources: [`electron/main.cjs`](../electron/main.cjs), [`preload.cjs`](../electron/preload.cjs), and [`update-settings.tsx`](../components/settings/update-settings.tsx).
+Sources: [`electron/main.cjs`](../electron/main.cjs), [`preload.cjs`](../electron/preload.cjs), and [`update-state.ts`](../components/update-state.ts).

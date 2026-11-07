@@ -15,7 +15,7 @@
  *    a paste box on a key the UI cannot make live would mislead.
  *  - OpenRouter is NOT special: one provider among 33, a row only when
  *    stored, otherwise it lives in the Add dropdown like everyone else.
- *  - Providers groups API keys, subscriptions, dictation and search.
+ *  - Providers groups API keys, subscriptions, external CLI, and dictation.
  *    Unknown variables stay masked/read-only at the end of Model API keys.
  *
  * API: GET /api/keys (masked statuses + the providers array), PUT
@@ -76,10 +76,7 @@ async function readCustomStatus(inspectKey = false): Promise<CustomStatus> {
 	return { keyReuseRequired: Boolean(cp.keyReuseRequired), revision: response.headers.get("etag") ?? "", authMode: cp.authMode ?? "keyless", keySource: cp.keySource ?? "none", baseUrl: cp.baseUrl ?? "", models: cp.models ?? [], overrides: cp.overrides ?? {}, manualModels: cp.manualModels ?? [], keyPresent: Boolean(cp.keyPresent) };
 }
 
-/** The curated tools group, pinned by id (the catalog owns the copy;
- *  these ids are the contract). Derived from the catalog (search wave,
- *  2026-09-20: the Google CSE pair retired, Tavily + Brave joined) — the
- *  section can never drift from core/auth-keys.ts again. */
+/** Curated service-key rows are derived from the shared auth catalog. */
 const TOOL_IDS = AUTH_KEYS.map((k) => k.id) as readonly string[];
 
 /** The custom endpoint's synthetic Add-provider entry (offered only while unconfigured). */
@@ -579,8 +576,8 @@ export function KeysSection({
 				<ClaudeCodeInstallationStatus />
 			</SettingsGroup>
 
-			{(["Dictation", "Search"] as const).map((label) => <SettingsGroup key={label} label={label} testid={label === "Dictation" ? "group-dictation" : "group-search"}>
-				{toolRows.filter((status) => label === "Dictation" ? status.id === "DEEPGRAM_API_KEY" : status.id !== "DEEPGRAM_API_KEY").map((status) => (
+			<SettingsGroup label="Dictation" testid="group-dictation">
+				{toolRows.filter((status) => status.id === "DEEPGRAM_API_KEY").map((status) => (
 					<KeyTableRow
 						key={status.id}
 						label={status.info?.label ?? status.id}
@@ -598,7 +595,7 @@ export function KeysSection({
 						testid={`key-${status.id.toLowerCase()}`}
 					/>
 				))}
-				{label === "Dictation" && <>
+				<>
 					<DictationLanguageSetting />
 					<p data-testid="dictation-setup-hint" className="px-1 text-[11px] leading-relaxed text-muted-foreground/70">
 						Create a <a
@@ -608,8 +605,8 @@ export function KeysSection({
 							className="underline underline-offset-2 hover:text-foreground"
 						>Deepgram API key</a> with the Member role or higher, then add it above.
 					</p>
-				</>}
-			</SettingsGroup>)}
+				</>
+			</SettingsGroup>
 
 		</>
 	);

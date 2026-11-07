@@ -23,7 +23,7 @@ Instead of just giving you an explanation, it uses your answers and thinking to 
 
 **Bring your files.** In the desktop app, attach PDFs, photos, or any other file with the paperclip, or drag them in. The file stays where it is: the message carries its path, and the agent reads it from there.
 
-The agent can also research questions in the background, create visual explanations, show your own images in the lesson and mark them up with arrows and labels, and build interactive demonstrations.
+The agent can also read supplied source URLs in the background, create visual explanations, show your own images in the lesson and mark them up with arrows and labels, and build interactive demonstrations.
 
 ## Knowledge that carries forward
 
@@ -57,13 +57,13 @@ npm start
 npm run demo
 ```
 
-Open **[http://localhost:3006](http://localhost:3006)** for a prefilled knowledge graph, six teaching sessions, and two practice sessions about how neural networks learn. The sample history is synthetic; live conversations use your existing configured provider. Model selections are imported when available, or you can choose them once in demo Settings during rehearsal.
+Open **[http://localhost:3006](http://localhost:3006)** for a prefilled knowledge graph with 96 concepts, 16 teaching sessions, and seven practice sessions across neural networks, Maths, Physics, Biology, History, and Medicine. The sample history is synthetic; live conversations use your existing configured provider. Model selections are imported when available, or you can choose them once in demo Settings during rehearsal.
 
 Demo records live separately from your regular sessions. Stop the demo, then run `npm run demo:reset` to restore the samples while keeping demo model selections. See **[demo/README.md](demo/README.md)** for the 60-second pitch, direct session links, and preparation steps.
 
 Run VT-Harness from source using the [development guide](docs/development.md). Desktop packaging instructions are in [Desktop builds and releases](docs/desktop-release.md).
 
-Choose your models, then start a session with what you want to understand. You can use provider API keys, supported subscription connections in the desktop app, an installed [Claude Code CLI](docs/claude-code.md), or a [custom OpenAI-compatible endpoint](docs/custom-providers.md), including a local model server. Optional dictation and web search use separate service keys. Web research can use a Tavily, Brave, Exa, Firecrawl, or Ollama key in Settings → Providers → Search. Ollama search uses its hosted service, not a local model server.
+Choose your models, then start a session with what you want to understand. You can use provider API keys, supported subscription connections in the desktop app, an installed [Claude Code CLI](docs/claude-code.md), or a [custom OpenAI-compatible endpoint](docs/custom-providers.md), including a local model server. Optional dictation uses a separate Deepgram key. Background research reads supplied web-page and PDF URLs; web search is not included.
 
 See [Getting started](docs/getting-started.md) for model setup, dictation, files, and notes imports, and [context, caching, and costs](docs/compaction-accounting.md) for advanced cache preferences.
 

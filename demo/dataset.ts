@@ -13,7 +13,7 @@ import { incrementalLayout } from "../src/core/layout.ts";
 import { argumentsForGraph, lessons, practices, type DemoQuiz } from "./content.ts";
 
 export const HERO_SESSION_ID = "chat_demo_gradient-descent";
-export const DEMO_SEED_VERSION = 1;
+export const DEMO_SEED_VERSION = 2;
 const nodeId = (slug: string) => `n_demo_${slug}`;
 
 /** Stable record ids and times make the seed reproducible and easy to inspect. */
@@ -66,7 +66,7 @@ export function buildDemoDataset() {
 	const chats: ChatRecord[] = [];
 	const nodes: GraphNode[] = [];
 	for (const [index, lesson] of lessons.entries()) {
-		const transcript = new Transcript(lesson.slug, Date.UTC(2026, 9, 31 + index, 9));
+		const transcript = new Transcript(lesson.slug, index < 6 ? Date.UTC(2026, 9, 31 + index, 9) : Date.UTC(2026, 7, index, 9));
 		const chatId = `chat_demo_${lesson.slug}`;
 		transcript.user(lesson.opening);
 		transcript.assistant("Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning.");
@@ -94,7 +94,9 @@ export function buildDemoDataset() {
 		transcript.user(lesson.misconception);
 		const secondPassage = transcript.assistant(`${lesson.repair}\n\n${lesson.concepts.slice(3).map(([, name, statement]) => `### ${name}\n${statement}`).join("\n\n")}`);
 		transcript.quiz(lesson.check, "quiz", "check", lesson.concepts[5]![0]);
-		transcript.user("I can now explain why that answer works instead of only repeating the rule. How does it connect to the rest of the training process?");
+		transcript.user(index < 6
+			? "I can now explain why that answer works instead of only repeating the rule. How does it connect to the rest of the training process?"
+			: "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?");
 		transcript.assistant(lesson.transfer);
 		const createdAt = new Date(transcript.startedAt).toISOString();
 		chats.push({ id: chatId, title: lesson.title, kind: "teach", version: 1, createdAt, updatedAt: transcript.updatedAt, tree, messages: transcript.messages });
@@ -109,7 +111,7 @@ export function buildDemoDataset() {
 		return { id: `arg_demo_${String(i + 1).padStart(2, "0")}`, premises: premises.map(nodeId), conclusion: node.id, provenance: node.provenance, createdAt: node.createdAt };
 	});
 	for (const [index, practice] of practices.entries()) {
-		const transcript = new Transcript(practice.slug, Date.UTC(2026, 10, 6 + index, 9));
+		const transcript = new Transcript(practice.slug, index < 2 ? Date.UTC(2026, 10, 6 + index, 9) : Date.UTC(2026, 7, 21 + index, 9));
 		const picks = practice.targets.map(slug => byId.get(nodeId(slug))!);
 		const targetIds = new Set(picks.map(p => p.id));
 		const contextChains = chains.filter(c => targetIds.has(c.conclusion) && c.premises.every(p => targetIds.has(p))).map(c => `${c.premises.map(id => byId.get(id)!.name).join(" + ")} → ${byId.get(c.conclusion)!.name}`);

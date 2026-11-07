@@ -25,7 +25,6 @@
 import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
 import type { ModelRole } from "../../config.ts";
 import type { ChatSettings } from "./contracts/chat.ts";
-import type { SearchEngineId } from "./search.ts";
 import {
 	BACKGROUND_MODEL_ROLES,
 	FACTORY_SETTINGS,
@@ -80,10 +79,6 @@ export interface EffectiveSettings {
 		tools: Record<string, boolean>;
 		/** Delta map as stored — absent key → override off. */
 		prompts: Record<string, boolean>;
-		/** The search-engine preference as stored (search wave, 2026-09-20):
-		 *  passthrough delta — engine resolution (pin → auto → unavailable)
-		 *  lives in server/search.ts, where keys are visible. */
-		search: { engine?: SearchEngineId };
 		/** Prober graph tools (wave 7): passthrough delta as stored —
 		 * absent/undefined enabled = ON; consumers use graphToolsEnabled. */
 		graphTools: { enabled?: boolean };
@@ -174,11 +169,7 @@ export function resolveModelSpec(
 export function resolveSettings(record: UserSettings | null): EffectiveSettings {
 	const agent = record?.agent ?? {};
 	const modelsSection = record?.models ?? {};
-	const appearance = record?.appearance ?? {};
-	const md = appearance.mdRendering ?? {};
 	const graph = record?.graph ?? {};
-	const factoryAppearance = FACTORY_SETTINGS.appearance;
-	const factoryMd = factoryAppearance.mdRendering;
 	const models = {} as Record<BackgroundModelRole, EffectiveModelSpec | undefined>;
 	for (const role of BACKGROUND_MODEL_ROLES) {
 		models[role] = resolveModelSpec(role, agent.models?.[role], modelsSection);
@@ -194,7 +185,6 @@ export function resolveSettings(record: UserSettings | null): EffectiveSettings 
 			models,
 			tools: agent.tools ?? {},
 			prompts: agent.prompts ?? {},
-			search: agent.search ?? {},
 			graphTools: agent.graphTools ?? {},
 		},
 		models: {
@@ -202,18 +192,7 @@ export function resolveSettings(record: UserSettings | null): EffectiveSettings 
 			cheap: resolveSlot(modelsSection.cheap),
 			vision: resolveSlot(modelsSection.vision),
 		},
-		appearance: {
-			mode: appearance.mode ?? factoryAppearance.mode,
-			background: appearance.background ?? factoryAppearance.background,
-			fontFamily: appearance.fontFamily ?? factoryAppearance.fontFamily,
-			proseFontSize: appearance.proseFontSize ?? factoryAppearance.proseFontSize,
-			sessionNameSerif: appearance.sessionNameSerif ?? factoryAppearance.sessionNameSerif,
-			mdRendering: {
-				headingWeight: md.headingWeight ?? factoryMd.headingWeight,
-				boldColor: md.boldColor ?? factoryMd.boldColor,
-				italicColor: md.italicColor ?? factoryMd.italicColor,
-			},
-		},
+		appearance: FACTORY_SETTINGS.appearance,
 		graph: {
 			// Wave 7 collapse (owner ruling 2026-09-23): the master switch ONLY —
 			// the embedding/clustering/labeling rungs and the BYOK embeddingModel
@@ -272,5 +251,3 @@ export function graphToolsEnabled(effective: {
 }): boolean {
 	return effective.graph.enabled && (effective.agent.graphTools.enabled ?? true);
 }
-
-

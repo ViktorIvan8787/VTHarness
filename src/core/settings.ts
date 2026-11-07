@@ -34,7 +34,6 @@ import { AUTH_PROVIDER_KEYS } from "./auth-keys.ts";
 import { CLAUDE_CODE_PROVIDER } from "./contracts/claude-code.ts";
 import type { ModelRole } from "../../config.ts";
 import type { ChatSettings } from "./contracts/chat.ts";
-import { isSearchEngineId, type SearchEngineId } from "./search.ts";
 import { isDictationLanguage, type DictationLanguage } from "./dictation.ts";
 import { parseFileAccessSettings, type FileAccessSettings } from "./file-access.ts";
 
@@ -349,13 +348,6 @@ export interface AgentSettings {
 	/** Tool toggles keyed by tool id (absent key = enabled). User-level
 	 *  only — no per-chat override (owner decision 2026-09-19). */
 	tools?: Record<string, boolean>;
-	/** Search-engine preference (search wave, 2026-09-20). OPTIONAL by
-	 *  owner decision: setting a key auto-activates its engine — the user
-	 *  never chooses an engine to make search work. An explicit choice only
-	 *  pins the preference (e.g. when BOTH keys are present); the chosen
-	 *  engine must still have its key, else search is honestly unavailable.
-	 *  Absent + no key = unavailable (no silent fallback, no default). */
-	search?: { engine?: SearchEngineId };
 	/** Prober graph tools (wave 7, owner ruling 2026-09-23): read-only
 	 *  knowledge-graph views for the prober agent — a session list +
 	 *  per-session propositions with understanding levels. Its SUBJECT
@@ -374,35 +366,6 @@ export interface AgentSettings {
 	 *  the current policy is read per new tool call/job start. Existing
 	 *  sensitive-location/credential denials always win, not a whole-data ban. */
 	fileAccess?: FileAccessSettings;
-}
-
-/** Markdown-rendering knobs — the bare-bones set (owner decision). */
-export interface MdRenderingSettings {
-	/** Heading font weight (100–900, default 900). CSS resolves the nearest
-	 *  available weight of the chosen font — no font introspection needed. */
-	headingWeight?: number;
-	/** Color for **bold** spans (default #ffffff). */
-	boldColor?: string | null;
-	/** Color for *italic* spans (default #ffffff). */
-	italicColor?: string | null;
-}
-
-/** Appearance settings — mode, colors, type, markdown emphasis. */
-export interface AppearanceSettings {
-	/** "dark" | "light" (default dark). */
-	mode?: "dark" | "light";
-	/** The one user-chosen color; everything else derives per-mode in code.
-	 *  null = the mode's default background. */
-	background?: string | null;
-	/** The main reading font (everything that is Source Sans 3 today), by
-	 *  name — user-chosen from installed fonts. null = Source Sans 3. */
-	fontFamily?: string | null;
-	/** Reading font size in px (12–24, default 16). Headings render as
-	 *  multiples of this, so one knob scales the document coherently. */
-	proseFontSize?: number;
-	/** Session names in CMU Serif (default true — today's look). */
-	sessionNameSerif?: boolean;
-	mdRendering?: MdRenderingSettings;
 }
 
 /** Knowledge-graph settings — a strict dependency ladder (owner decision
@@ -481,7 +444,6 @@ export interface UserSettings {
 	models?: ModelsSettings;
 	/** The custom OpenAI-compatible endpoint (non-secret config only). */
 	customProvider?: CustomProviderSettings;
-	appearance?: AppearanceSettings;
 	graph?: GraphSettings;
 	compaction?: CompactionSettings;
 	[key: string]: unknown;
@@ -535,23 +497,8 @@ export const EXTRACTION_CHUNK_TOKENS_FLOOR = 500;
 
 // ─── Sanitizer ─────────────────────────────────────────────────────────────
 
-const PROSE_FONT_MIN = 12;
-const PROSE_FONT_MAX = 24;
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
-
-/** #rgb / #rrggbb (case-insensitive) — the only color format we accept. */
-export function isHexColor(value: string): boolean {
-	return /^#[0-9a-fA-F]{3}$/.test(value) || /^#[0-9a-fA-F]{6}$/.test(value);
-}
-
-/** Coerce an arbitrary hex-or-null field: null and valid hex pass through,
- *  anything else becomes null (the factory/per-mode default). */
-function sanitizeHexOrNull(value: unknown): string | null {
-	if (value === null) return null;
-	if (typeof value === "string" && isHexColor(value)) return value;
-	return null;
-}
 
 const boolOrDrop = (value: unknown): boolean | undefined =>
 	typeof value === "boolean" ? value : undefined;
@@ -711,13 +658,6 @@ function sanitizeAgent(raw: Record<string, unknown>): AgentSettings {
 	if (tools) out.tools = tools;
 	const prompts = sanitizeBooleanMap(raw.prompts);
 	if (prompts) out.prompts = prompts;
-	// Search preference: lenient read side (an unknown engine id drops;
-	// the write side's parser is strict — a stale client can't brick the
-	// record, it just loses the pin and auto-detection resumes).
-	if (raw.search !== null && typeof raw.search === "object" && !Array.isArray(raw.search)) {
-		const engine = (raw.search as Record<string, unknown>).engine;
-		if (isSearchEngineId(engine)) out.search = { engine };
-	}
 	// Prober graph tools (wave 7): its own agent-section subsection —
 	// lenient read side (a bad shape drops the key and the default ON
 	// resumes; the write side's parser is strict).
@@ -733,34 +673,6 @@ function sanitizeAgent(raw: Record<string, unknown>): AgentSettings {
 		const parsed = parseFileAccessSettings(raw.fileAccess);
 		out.fileAccess = parsed.ok ? parsed.settings : { restricted: true, folders: [] };
 	}
-	return out;
-}
-
-function sanitizeMdRendering(raw: unknown): MdRenderingSettings {
-	const out: MdRenderingSettings = {};
-	if (raw === null || typeof raw !== "object" || Array.isArray(raw)) return out;
-	const r = raw as Record<string, unknown>;
-	if (typeof r.headingWeight === "number" && Number.isFinite(r.headingWeight)) {
-		out.headingWeight = clamp(Math.round(r.headingWeight), 100, 900);
-	}
-	if (r.boldColor !== undefined) out.boldColor = sanitizeHexOrNull(r.boldColor);
-	if (r.italicColor !== undefined) out.italicColor = sanitizeHexOrNull(r.italicColor);
-	return out;
-}
-
-function sanitizeAppearance(raw: Record<string, unknown>): AppearanceSettings {
-	const out: AppearanceSettings = {};
-	if (raw.mode === "dark" || raw.mode === "light") out.mode = raw.mode;
-	if (raw.background !== undefined) out.background = sanitizeHexOrNull(raw.background);
-	if (raw.fontFamily !== undefined) {
-		out.fontFamily = typeof raw.fontFamily === "string" && raw.fontFamily.trim() ? raw.fontFamily : null;
-	}
-	if (typeof raw.proseFontSize === "number" && Number.isFinite(raw.proseFontSize)) {
-		out.proseFontSize = clamp(Math.round(raw.proseFontSize), PROSE_FONT_MIN, PROSE_FONT_MAX);
-	}
-	const sessionNameSerif = boolOrDrop(raw.sessionNameSerif);
-	if (sessionNameSerif !== undefined) out.sessionNameSerif = sessionNameSerif;
-	if (raw.mdRendering !== undefined) out.mdRendering = sanitizeMdRendering(raw.mdRendering);
 	return out;
 }
 
@@ -836,9 +748,6 @@ export function sanitizeUserSettings(raw: unknown): UserSettings | null {
 	if (r.agent !== null && typeof r.agent === "object" && !Array.isArray(r.agent)) {
 		out.agent = sanitizeAgent(r.agent as Record<string, unknown>);
 	}
-	if (r.appearance !== null && typeof r.appearance === "object" && !Array.isArray(r.appearance)) {
-		out.appearance = sanitizeAppearance(r.appearance as Record<string, unknown>);
-	}
 	if (r.models !== null && typeof r.models === "object" && !Array.isArray(r.models)) {
 		const models = sanitizeModels(r.models as Record<string, unknown>);
 		if (Object.keys(models).length) out.models = models;
@@ -858,7 +767,8 @@ export function sanitizeUserSettings(raw: unknown): UserSettings | null {
 	// 2026-09-28) — a fossil copy on disk must never resurrect through
 	// reads (and any later write flushes it from the file for good).
 	for (const [key, value] of Object.entries(r)) {
-		if (key === "chat") continue;
+		// Retired sections are never revived by forward-compatible unknown-key handling.
+		if (key === "chat" || key === "appearance") continue;
 		if (!(key in out)) out[key] = value;
 	}
 	return out;

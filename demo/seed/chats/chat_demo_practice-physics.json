@@ -1,0 +1,268 @@
+{
+	"id": "chat_demo_practice-physics",
+	"title": "Physics practice: predict speed without solving time",
+	"kind": "practice",
+	"version": 1,
+	"createdAt": "2026-08-24T09:00:00.000Z",
+	"updatedAt": "2026-08-24T09:08:00.000Z",
+	"messages": [
+		{
+			"id": "msg_demo_practice-physics_0",
+			"role": "custom",
+			"customType": "graph-context",
+			"content": "[Session context] — picked from the learner's knowledge map when starting this session:\n\nPropositions (id — name: statement; the problem tool's target field uses these ids):\n- [n_demo_spring-frequency] Angular frequency: The ideal mass-spring equation is x'' = -omega^2 x with omega = sqrt(k/m).\n- [n_demo_spring-conserved] Conserved oscillator energy: With no dissipative forces or external work, the ideal spring mass has constant total energy E = mv^2/2 + kx^2/2.\n- [n_demo_spring-energy-amplitude] Energy from amplitude: At an oscillator's turning point x = A and v = 0, so its total mechanical energy is E = kA^2/2.\n- [n_demo_spring-speed] Speed at a displacement: Energy conservation for an ideal spring gives v^2 = (k/m)(A^2 - x^2).\n- [n_demo_spring-max-speed] Maximum speed: An ideal spring mass has maximum speed v_max = A sqrt(k/m) = A omega at equilibrium.\n\nReasoning chains among them (premises → conclusion):\n- Conserved oscillator energy → Energy from amplitude\n- Conserved oscillator energy + Energy from amplitude → Speed at a displacement\n- Speed at a displacement + Angular frequency → Maximum speed",
+			"display": true,
+			"details": {
+				"propositions": [
+					{
+						"id": "n_demo_spring-frequency",
+						"name": "Angular frequency",
+						"statement": "The ideal mass-spring equation is x'' = -omega^2 x with omega = sqrt(k/m).",
+						"aliases": [
+							"The ideal mass-spring equation is x'' = -omega^2 x with omega = sqrt(k/m)."
+						],
+						"createdAt": "2026-08-08T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_physics-oscillations",
+								"messageId": "msg_demo_physics-oscillations_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_spring-conserved",
+						"name": "Conserved oscillator energy",
+						"statement": "With no dissipative forces or external work, the ideal spring mass has constant total energy E = mv^2/2 + kx^2/2.",
+						"aliases": [
+							"With no dissipative forces or external work, the ideal spring mass has constant total energy E = mv^2/2 + kx^2/2."
+						],
+						"createdAt": "2026-08-09T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_physics-energy",
+								"messageId": "msg_demo_physics-energy_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_spring-energy-amplitude",
+						"name": "Energy from amplitude",
+						"statement": "At an oscillator's turning point x = A and v = 0, so its total mechanical energy is E = kA^2/2.",
+						"aliases": [
+							"At an oscillator's turning point x = A and v = 0, so its total mechanical energy is E = kA^2/2."
+						],
+						"createdAt": "2026-08-09T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_physics-energy",
+								"messageId": "msg_demo_physics-energy_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_spring-speed",
+						"name": "Speed at a displacement",
+						"statement": "Energy conservation for an ideal spring gives v^2 = (k/m)(A^2 - x^2).",
+						"aliases": [
+							"Energy conservation for an ideal spring gives v^2 = (k/m)(A^2 - x^2)."
+						],
+						"createdAt": "2026-08-09T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_physics-energy",
+								"messageId": "msg_demo_physics-energy_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_spring-max-speed",
+						"name": "Maximum speed",
+						"statement": "An ideal spring mass has maximum speed v_max = A sqrt(k/m) = A omega at equilibrium.",
+						"aliases": [
+							"An ideal spring mass has maximum speed v_max = A sqrt(k/m) = A omega at equilibrium."
+						],
+						"createdAt": "2026-08-09T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_physics-energy",
+								"messageId": "msg_demo_physics-energy_15"
+							}
+						]
+					}
+				],
+				"chains": [
+					"Conserved oscillator energy → Energy from amplitude",
+					"Conserved oscillator energy + Energy from amplitude → Speed at a displacement",
+					"Speed at a displacement + Angular frequency → Maximum speed"
+				]
+			},
+			"timestamp": 1787562000000
+		},
+		{
+			"id": "msg_demo_practice-physics_1",
+			"role": "user",
+			"content": "Let me solve an oscillator problem by choosing between force and energy reasoning.",
+			"timestamp": 1787562060000
+		},
+		{
+			"id": "msg_demo_practice-physics_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Try this on your own. Write down your reasoning as you go."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-physics_2",
+					"name": "problem",
+					"arguments": {
+						"statement": "An ideal horizontal spring has k = 18 N/m and mass m = 2 kg. It is released from rest at x = 0.4 m. Find angular frequency, total mechanical energy, and speed at x = 0.2 m. Can energy alone tell you the direction of velocity?",
+						"mode": "composition",
+						"target": [
+							"n_demo_spring-frequency",
+							"n_demo_spring-conserved",
+							"n_demo_spring-energy-amplitude",
+							"n_demo_spring-speed",
+							"n_demo_spring-max-speed"
+						],
+						"modelSolution": "omega = sqrt(18/2) = 3 rad/s. E = 18 × 0.4²/2 = 1.44 J. At x = 0.2 m, U = 0.36 J and K = 1.08 J, so v² = 2K/m = 1.08 and speed is approximately 1.039 m/s. Energy alone leaves two velocity signs; initial conditions and the part of the trajectory specify direction."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787562120000
+		},
+		{
+			"id": "msg_demo_practice-physics_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-physics_2",
+			"toolName": "problem",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem posed. The learner's thinking and answer will follow."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787562180000
+		},
+		{
+			"id": "msg_demo_practice-physics_4",
+			"role": "custom",
+			"customType": "practice-thinking",
+			"content": "Your thinking:\nI calculate the energy at release, subtract the potential energy at the new position, then convert the remainder to speed.",
+			"display": true,
+			"details": {
+				"problemCallId": "call_demo_practice-physics_2",
+				"text": "I calculate the energy at release, subtract the potential energy at the new position, then convert the remainder to speed."
+			},
+			"timestamp": 1787562240000
+		},
+		{
+			"id": "msg_demo_practice-physics_5",
+			"role": "user",
+			"content": "omega = 3 rad/s, E = 1.44 J, and speed is about 1.04 m/s. The energy equation alone does not give the velocity sign.",
+			"timestamp": 1787562300000
+		},
+		{
+			"id": "msg_demo_practice-physics_6",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-physics_6",
+					"name": "conclude",
+					"arguments": {
+						"outcome": "solved",
+						"verdict": "Solved independently. You conserved energy with consistent units and distinguished speed from signed velocity.",
+						"rung": null,
+						"missClass": null,
+						"retest": false
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787562360000
+		},
+		{
+			"id": "msg_demo_practice-physics_7",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-physics_6",
+			"toolName": "conclude",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem concluded. Say your closing words about the learner's work if useful, then END YOUR TURN — no further tool calls. The next problem is NEVER posed here: it waits for the learner's explicit go-ahead (a *Next problem* message, or their own words asking for the next one). Between problems, answer their questions about the concluded one."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787562420000
+		},
+		{
+			"id": "msg_demo_practice-physics_8",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Solved independently. You conserved energy with consistent units and distinguished speed from signed velocity.\n\nYou transferred the idea to a fresh problem. We can continue with a harder example whenever you're ready."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1787562480000
+		}
+	]
+}

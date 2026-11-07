@@ -1,0 +1,264 @@
+{
+	"id": "chat_demo_practice-biology",
+	"title": "Biology practice: regulation or evolutionary change?",
+	"kind": "practice",
+	"version": 1,
+	"createdAt": "2026-08-25T09:00:00.000Z",
+	"updatedAt": "2026-08-25T09:08:00.000Z",
+	"messages": [
+		{
+			"id": "msg_demo_practice-biology_0",
+			"role": "custom",
+			"customType": "graph-context",
+			"content": "[Session context] — picked from the learner's knowledge map when starting this session:\n\nPropositions (id — name: statement; the problem tool's target field uses these ids):\n- [n_demo_lac-induction] Lactose relieves repression: Allolactose derived from lactose binds the lac repressor and reduces its operator binding.\n- [n_demo_lac-high] Combining the two signals: In the standard model, lac expression is high when lactose is present and glucose is low: repression is relieved and CAP activation is available.\n- [n_demo_heritable-variation] Variation can be inherited: Natural selection can change allele frequencies when heritable differences affect reproductive success in a given environment.\n- [n_demo_genetic-drift] Random sampling changes frequencies: Genetic drift is random change in allele frequency caused by finite sampling across generations.\n- [n_demo_frequency-not-proof] A frequency change needs explanation: An observed allele-frequency increase alone does not distinguish selection from drift or other evolutionary mechanisms.",
+			"display": true,
+			"details": {
+				"propositions": [
+					{
+						"id": "n_demo_lac-induction",
+						"name": "Lactose relieves repression",
+						"statement": "Allolactose derived from lactose binds the lac repressor and reduces its operator binding.",
+						"aliases": [
+							"Allolactose derived from lactose binds the lac repressor and reduces its operator binding."
+						],
+						"createdAt": "2026-08-10T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_biology-gene-regulation",
+								"messageId": "msg_demo_biology-gene-regulation_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_lac-high",
+						"name": "Combining the two signals",
+						"statement": "In the standard model, lac expression is high when lactose is present and glucose is low: repression is relieved and CAP activation is available.",
+						"aliases": [
+							"In the standard model, lac expression is high when lactose is present and glucose is low: repression is relieved and CAP activation is available."
+						],
+						"createdAt": "2026-08-10T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_biology-gene-regulation",
+								"messageId": "msg_demo_biology-gene-regulation_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_heritable-variation",
+						"name": "Variation can be inherited",
+						"statement": "Natural selection can change allele frequencies when heritable differences affect reproductive success in a given environment.",
+						"aliases": [
+							"Natural selection can change allele frequencies when heritable differences affect reproductive success in a given environment."
+						],
+						"createdAt": "2026-08-11T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_biology-evolution",
+								"messageId": "msg_demo_biology-evolution_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_genetic-drift",
+						"name": "Random sampling changes frequencies",
+						"statement": "Genetic drift is random change in allele frequency caused by finite sampling across generations.",
+						"aliases": [
+							"Genetic drift is random change in allele frequency caused by finite sampling across generations."
+						],
+						"createdAt": "2026-08-11T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_biology-evolution",
+								"messageId": "msg_demo_biology-evolution_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_frequency-not-proof",
+						"name": "A frequency change needs explanation",
+						"statement": "An observed allele-frequency increase alone does not distinguish selection from drift or other evolutionary mechanisms.",
+						"aliases": [
+							"An observed allele-frequency increase alone does not distinguish selection from drift or other evolutionary mechanisms."
+						],
+						"createdAt": "2026-08-11T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_biology-evolution",
+								"messageId": "msg_demo_biology-evolution_15"
+							}
+						]
+					}
+				],
+				"chains": []
+			},
+			"timestamp": 1787648400000
+		},
+		{
+			"id": "msg_demo_practice-biology_1",
+			"role": "user",
+			"content": "Can I practise separating changes inside a cell from changes across generations?",
+			"timestamp": 1787648460000
+		},
+		{
+			"id": "msg_demo_practice-biology_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Try this on your own. Write down your reasoning as you go."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-biology_2",
+					"name": "problem",
+					"arguments": {
+						"statement": "In a fictional experiment, an E. coli culture expresses more lac genes after lactose is supplied under low glucose. Separately, a neutral allele rises in frequency in a small population over generations. Must either observation show a directed beneficial mutation? Explain the mechanisms and what additional evidence could support selection.",
+						"mode": "composition",
+						"target": [
+							"n_demo_lac-induction",
+							"n_demo_lac-high",
+							"n_demo_heritable-variation",
+							"n_demo_genetic-drift",
+							"n_demo_frequency-not-proof"
+						],
+						"modelSolution": "The expression change is consistent with induction and CAP activation, without requiring a new mutation. The neutral allele can rise through genetic drift. Neither observation establishes directed beneficial mutation. Selection would require evidence linking heritable variation to differential reproductive success in that environment, with a design that considers alternative mechanisms."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787648520000
+		},
+		{
+			"id": "msg_demo_practice-biology_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-biology_2",
+			"toolName": "problem",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem posed. The learner's thinking and answer will follow."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787648580000
+		},
+		{
+			"id": "msg_demo_practice-biology_4",
+			"role": "custom",
+			"customType": "practice-thinking",
+			"content": "Your thinking:\nThe first outcome concerns transcription in cells; the second concerns allele frequencies in a population. I should not give both the same causal explanation.",
+			"display": true,
+			"details": {
+				"problemCallId": "call_demo_practice-biology_2",
+				"text": "The first outcome concerns transcription in cells; the second concerns allele frequencies in a population. I should not give both the same causal explanation."
+			},
+			"timestamp": 1787648640000
+		},
+		{
+			"id": "msg_demo_practice-biology_5",
+			"role": "user",
+			"content": "Neither requires directed mutation. The culture can regulate existing genes; finite-population sampling can change a neutral allele's frequency. Selection needs evidence about heritable differences and reproductive success.",
+			"timestamp": 1787648700000
+		},
+		{
+			"id": "msg_demo_practice-biology_6",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-biology_6",
+					"name": "conclude",
+					"arguments": {
+						"outcome": "solved",
+						"verdict": "Solved independently. You separated regulatory responses from evolutionary change and identified why a frequency change alone does not prove selection.",
+						"rung": null,
+						"missClass": null,
+						"retest": false
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787648760000
+		},
+		{
+			"id": "msg_demo_practice-biology_7",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-biology_6",
+			"toolName": "conclude",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem concluded. Say your closing words about the learner's work if useful, then END YOUR TURN — no further tool calls. The next problem is NEVER posed here: it waits for the learner's explicit go-ahead (a *Next problem* message, or their own words asking for the next one). Between problems, answer their questions about the concluded one."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787648820000
+		},
+		{
+			"id": "msg_demo_practice-biology_8",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Solved independently. You separated regulatory responses from evolutionary change and identified why a frequency change alone does not prove selection.\n\nYou transferred the idea to a fresh problem. We can continue with a harder example whenever you're ready."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1787648880000
+		}
+	]
+}

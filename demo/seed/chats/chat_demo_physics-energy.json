@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_physics-energy",
+	"title": "Physics: energy through an oscillation",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-09T09:00:00.000Z",
+	"updatedAt": "2026-08-09T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "spring-potential",
+				"title": "Elastic potential energy",
+				"summary": "For an ideal spring with zero potential at equilibrium, U = kx^2/2."
+			},
+			{
+				"id": "kinetic-energy",
+				"title": "Kinetic energy",
+				"summary": "A mass m moving at speed v has kinetic energy K = mv^2/2 in Newtonian mechanics."
+			},
+			{
+				"id": "spring-conserved",
+				"title": "Conserved oscillator energy",
+				"summary": "With no dissipative forces or external work, the ideal spring mass has constant total energy E = mv^2/2 + kx^2/2."
+			},
+			{
+				"id": "spring-energy-amplitude",
+				"title": "Energy from amplitude",
+				"summary": "At an oscillator's turning point x = A and v = 0, so its total mechanical energy is E = kA^2/2."
+			},
+			{
+				"id": "spring-speed",
+				"title": "Speed at a displacement",
+				"summary": "Energy conservation for an ideal spring gives v^2 = (k/m)(A^2 - x^2)."
+			},
+			{
+				"id": "spring-max-speed",
+				"title": "Maximum speed",
+				"summary": "An ideal spring mass has maximum speed v_max = A sqrt(k/m) = A omega at equilibrium."
+			}
+		],
+		"edges": [
+			{
+				"from": "spring-potential",
+				"to": "kinetic-energy"
+			},
+			{
+				"from": "kinetic-energy",
+				"to": "spring-conserved"
+			},
+			{
+				"from": "spring-conserved",
+				"to": "spring-energy-amplitude"
+			},
+			{
+				"from": "spring-energy-amplitude",
+				"to": "spring-speed"
+			},
+			{
+				"from": "spring-speed",
+				"to": "spring-max-speed"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_physics-energy_0",
+			"role": "user",
+			"content": "Can I find the speed halfway to equilibrium without solving for the motion as a function of time?",
+			"timestamp": 1786266000000
+		},
+		{
+			"id": "msg_demo_physics-energy_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786266060000
+		},
+		{
+			"id": "msg_demo_physics-energy_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-energy_2",
+					"name": "probe",
+					"arguments": {
+						"question": "At a turning point, where is the ideal oscillator's mechanical energy?",
+						"options": [
+							{
+								"label": "Entirely elastic potential",
+								"value": "choice-0"
+							},
+							{
+								"label": "Entirely kinetic",
+								"value": "choice-1"
+							},
+							{
+								"label": "It has vanished",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "The velocity is zero there, so kinetic energy is zero."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786266120000
+		},
+		{
+			"id": "msg_demo_physics-energy_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-energy_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Entirely elastic potential\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"Zero speed does not mean zero total energy.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "At a turning point, where is the ideal oscillator's mechanical energy?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Entirely elastic potential"
+					},
+					{
+						"index": 2,
+						"label": "Entirely kinetic"
+					},
+					{
+						"index": 3,
+						"label": "It has vanished"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Entirely elastic potential",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "Zero speed does not mean zero total energy.",
+				"answeredAt": "2026-08-09T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "The velocity is zero there, so kinetic energy is zero.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786266180000
+		},
+		{
+			"id": "msg_demo_physics-energy_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-energy_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "Elastic potential energy",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Use conservation of mechanical energy to predict the speed of an ideal spring mass."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786266240000
+		},
+		{
+			"id": "msg_demo_physics-energy_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-energy_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786266300000
+		},
+		{
+			"id": "msg_demo_physics-energy_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_physics-energy"
+			},
+			"timestamp": 1786266360000
+		},
+		{
+			"id": "msg_demo_physics-energy_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Use conservation of mechanical energy to predict the speed of an ideal spring mass. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-energy_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  spring-potential[Elastic potential energy]\n  kinetic-energy[Kinetic energy]\n  spring-conserved[Conserved oscillator energy]\n  spring-energy-amplitude[Energy from amplitude]\n  spring-speed[Speed at a displacement]\n  spring-max-speed[Maximum speed]\n  spring-potential --> kinetic-energy\n  kinetic-energy --> spring-conserved\n  spring-conserved --> spring-energy-amplitude\n  spring-energy-amplitude --> spring-speed\n  spring-speed --> spring-max-speed"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786266420000
+		},
+		{
+			"id": "msg_demo_physics-energy_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-energy_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: spring-potential, kinetic-energy, spring-conserved, spring-energy-amplitude, spring-speed, spring-max-speed"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "spring-potential",
+							"title": "Elastic potential energy",
+							"summary": "For an ideal spring with zero potential at equilibrium, U = kx^2/2."
+						},
+						{
+							"id": "kinetic-energy",
+							"title": "Kinetic energy",
+							"summary": "A mass m moving at speed v has kinetic energy K = mv^2/2 in Newtonian mechanics."
+						},
+						{
+							"id": "spring-conserved",
+							"title": "Conserved oscillator energy",
+							"summary": "With no dissipative forces or external work, the ideal spring mass has constant total energy E = mv^2/2 + kx^2/2."
+						},
+						{
+							"id": "spring-energy-amplitude",
+							"title": "Energy from amplitude",
+							"summary": "At an oscillator's turning point x = A and v = 0, so its total mechanical energy is E = kA^2/2."
+						},
+						{
+							"id": "spring-speed",
+							"title": "Speed at a displacement",
+							"summary": "Energy conservation for an ideal spring gives v^2 = (k/m)(A^2 - x^2)."
+						},
+						{
+							"id": "spring-max-speed",
+							"title": "Maximum speed",
+							"summary": "An ideal spring mass has maximum speed v_max = A sqrt(k/m) = A omega at equilibrium."
+						}
+					],
+					"edges": [
+						{
+							"from": "spring-potential",
+							"to": "kinetic-energy"
+						},
+						{
+							"from": "kinetic-energy",
+							"to": "spring-conserved"
+						},
+						{
+							"from": "spring-conserved",
+							"to": "spring-energy-amplitude"
+						},
+						{
+							"from": "spring-energy-amplitude",
+							"to": "spring-speed"
+						},
+						{
+							"from": "spring-speed",
+							"to": "spring-max-speed"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786266480000
+		},
+		{
+			"id": "msg_demo_physics-energy_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_physics-energy_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-09T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "spring-potential",
+							"title": "Elastic potential energy",
+							"status": "upcoming"
+						},
+						{
+							"id": "kinetic-energy",
+							"title": "Kinetic energy",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-conserved",
+							"title": "Conserved oscillator energy",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-energy-amplitude",
+							"title": "Energy from amplitude",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-speed",
+							"title": "Speed at a displacement",
+							"status": "upcoming"
+						},
+						{
+							"id": "spring-max-speed",
+							"title": "Maximum speed",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "spring-potential",
+							"to": "kinetic-energy"
+						},
+						{
+							"from": "kinetic-energy",
+							"to": "spring-conserved"
+						},
+						{
+							"from": "spring-conserved",
+							"to": "spring-energy-amplitude"
+						},
+						{
+							"from": "spring-energy-amplitude",
+							"to": "spring-speed"
+						},
+						{
+							"from": "spring-speed",
+							"to": "spring-max-speed"
+						}
+					]
+				}
+			},
+			"timestamp": 1786266540000
+		},
+		{
+			"id": "msg_demo_physics-energy_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786266600000
+		},
+		{
+			"id": "msg_demo_physics-energy_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Trade height in the energy curve for speed\nWith m = 2 kg, k = 8 N/m and A = 0.5 m, the total energy is 1 J. At x = 0.25 m, elastic potential is 0.25 J, leaving 0.75 J kinetic. Thus v^2 = 0.75 m²/s² and speed is approximately 0.866 m/s. Energy gives speed but not the direction of travel.\n\n### Elastic potential energy\nFor an ideal spring with zero potential at equilibrium, U = kx^2/2.\n\n### Kinetic energy\nA mass m moving at speed v has kinetic energy K = mv^2/2 in Newtonian mechanics.\n\n### Conserved oscillator energy\nWith no dissipative forces or external work, the ideal spring mass has constant total energy E = mv^2/2 + kx^2/2."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786266660000
+		},
+		{
+			"id": "msg_demo_physics-energy_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-energy_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "At x = A/2, what fraction of the total energy is elastic potential?",
+						"options": [
+							{
+								"label": "One half",
+								"value": "choice-0"
+							},
+							{
+								"label": "One quarter",
+								"value": "choice-1"
+							},
+							{
+								"label": "Three quarters",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Potential energy scales with x squared: (A/2)^2/A^2 = 1/4.",
+						"type": "predict",
+						"nodeId": "spring-conserved"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786266720000
+		},
+		{
+			"id": "msg_demo_physics-energy_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-energy_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"One half\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I treated energy as proportional to displacement.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "At x = A/2, what fraction of the total energy is elastic potential?",
+				"options": [
+					{
+						"index": 1,
+						"label": "One half"
+					},
+					{
+						"index": 2,
+						"label": "One quarter"
+					},
+					{
+						"index": 3,
+						"label": "Three quarters"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "One half",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I treated energy as proportional to displacement.",
+				"answeredAt": "2026-08-09T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Potential energy scales with x squared: (A/2)^2/A^2 = 1/4.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786266780000
+		},
+		{
+			"id": "msg_demo_physics-energy_14",
+			"role": "user",
+			"content": "If mechanical energy decreases with friction, does that violate energy conservation?",
+			"timestamp": 1786266840000
+		},
+		{
+			"id": "msg_demo_physics-energy_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Friction transfers mechanical energy into thermal energy. Mechanical energy of the spring and mass is no longer constant, but the larger closed system still conserves total energy. Choose the system boundary before writing a conservation equation.\n\n### Energy from amplitude\nAt an oscillator's turning point x = A and v = 0, so its total mechanical energy is E = kA^2/2.\n\n### Speed at a displacement\nEnergy conservation for an ideal spring gives v^2 = (k/m)(A^2 - x^2).\n\n### Maximum speed\nAn ideal spring mass has maximum speed v_max = A sqrt(k/m) = A omega at equilibrium."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786266900000
+		},
+		{
+			"id": "msg_demo_physics-energy_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_physics-energy_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "For m = 2 kg, k = 8 N/m and A = 0.5 m, what is the maximum speed?",
+						"options": [
+							{
+								"label": "0.5 m/s",
+								"value": "choice-0"
+							},
+							{
+								"label": "1 m/s",
+								"value": "choice-1"
+							},
+							{
+								"label": "2 m/s",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "A sqrt(k/m) = 0.5 × 2 = 1 m/s.",
+						"type": "check",
+						"nodeId": "spring-max-speed"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786266960000
+		},
+		{
+			"id": "msg_demo_physics-energy_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_physics-energy_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"1 m/s\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"At equilibrium all the mechanical energy is kinetic.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "For m = 2 kg, k = 8 N/m and A = 0.5 m, what is the maximum speed?",
+				"options": [
+					{
+						"index": 1,
+						"label": "0.5 m/s"
+					},
+					{
+						"index": 2,
+						"label": "1 m/s"
+					},
+					{
+						"index": 3,
+						"label": "2 m/s"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "1 m/s",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "At equilibrium all the mechanical energy is kinetic.",
+				"answeredAt": "2026-08-09T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "A sqrt(k/m) = 0.5 × 2 = 1 m/s.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786267020000
+		},
+		{
+			"id": "msg_demo_physics-energy_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786267080000
+		},
+		{
+			"id": "msg_demo_physics-energy_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Energy and Newton's law give consistent predictions: maximum speed equals amplitude times angular frequency. Energy often avoids solving the time-dependent equation when you only need speed at a location."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786267140000
+		}
+	]
+}

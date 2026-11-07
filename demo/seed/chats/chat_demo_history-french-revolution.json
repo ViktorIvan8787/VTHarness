@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_history-french-revolution",
+	"title": "History: explaining the French Revolution without one cause",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-12T09:00:00.000Z",
+	"updatedAt": "2026-08-12T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "fr-fiscal",
+				"title": "The monarchy's fiscal crisis",
+				"summary": "The French monarchy faced a serious fiscal crisis before the Estates-General met in 1789."
+			},
+			{
+				"id": "fr-estates",
+				"title": "A political response in 1789",
+				"summary": "Louis XVI convened the Estates-General in 1789 in the context of the monarchy's fiscal and political crisis."
+			},
+			{
+				"id": "fr-mechanism",
+				"title": "From finance to representation",
+				"summary": "Attempts to address the French monarchy's fiscal crisis brought disputes over taxation and political representation into the Estates-General."
+			},
+			{
+				"id": "fr-pressure",
+				"title": "Material and political pressures",
+				"summary": "Food insecurity and economic distress formed part of the context of popular mobilisation in revolutionary France."
+			},
+			{
+				"id": "fr-multicausal",
+				"title": "An explanation with several causes",
+				"summary": "A historical explanation of 1789 can connect fiscal crisis, institutional conflict, and popular pressures rather than treating one factor as sufficient."
+			},
+			{
+				"id": "fr-contingency",
+				"title": "Outcomes were contingent",
+				"summary": "Explaining pressures before the French Revolution does not establish that each later revolutionary outcome was inevitable."
+			}
+		],
+		"edges": [
+			{
+				"from": "fr-fiscal",
+				"to": "fr-estates"
+			},
+			{
+				"from": "fr-estates",
+				"to": "fr-mechanism"
+			},
+			{
+				"from": "fr-mechanism",
+				"to": "fr-pressure"
+			},
+			{
+				"from": "fr-pressure",
+				"to": "fr-multicausal"
+			},
+			{
+				"from": "fr-multicausal",
+				"to": "fr-contingency"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_history-french-revolution_0",
+			"role": "user",
+			"content": "Can I explain the French Revolution as people simply being hungry, or does that leave too much out?",
+			"timestamp": 1786525200000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786525260000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-french-revolution_2",
+					"name": "probe",
+					"arguments": {
+						"question": "Why distinguish a long-term pressure from an immediate event?",
+						"options": [
+							{
+								"label": "They play different roles in a causal account",
+								"value": "choice-0"
+							},
+							{
+								"label": "Only events have evidence",
+								"value": "choice-1"
+							},
+							{
+								"label": "Long-term factors determine every outcome",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "A background vulnerability differs from the event through which a crisis unfolds."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786525320000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-french-revolution_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"They play different roles in a causal account\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I need to explain a sequence, not only list dates.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "Why distinguish a long-term pressure from an immediate event?",
+				"options": [
+					{
+						"index": 1,
+						"label": "They play different roles in a causal account"
+					},
+					{
+						"index": 2,
+						"label": "Only events have evidence"
+					},
+					{
+						"index": 3,
+						"label": "Long-term factors determine every outcome"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "They play different roles in a causal account",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I need to explain a sequence, not only list dates.",
+				"answeredAt": "2026-08-12T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "A background vulnerability differs from the event through which a crisis unfolds.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786525380000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-french-revolution_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "The monarchy's fiscal crisis",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Build a qualified causal explanation linking the fiscal crisis to political conflict in 1789."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786525440000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-french-revolution_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786525500000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_history-french-revolution"
+			},
+			"timestamp": 1786525560000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Build a qualified causal explanation linking the fiscal crisis to political conflict in 1789. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-french-revolution_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  fr-fiscal[The monarchy's fiscal crisis]\n  fr-estates[A political response in 1789]\n  fr-mechanism[From finance to representation]\n  fr-pressure[Material and political pressures]\n  fr-multicausal[An explanation with several causes]\n  fr-contingency[Outcomes were contingent]\n  fr-fiscal --> fr-estates\n  fr-estates --> fr-mechanism\n  fr-mechanism --> fr-pressure\n  fr-pressure --> fr-multicausal\n  fr-multicausal --> fr-contingency"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786525620000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-french-revolution_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: fr-fiscal, fr-estates, fr-mechanism, fr-pressure, fr-multicausal, fr-contingency"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "fr-fiscal",
+							"title": "The monarchy's fiscal crisis",
+							"summary": "The French monarchy faced a serious fiscal crisis before the Estates-General met in 1789."
+						},
+						{
+							"id": "fr-estates",
+							"title": "A political response in 1789",
+							"summary": "Louis XVI convened the Estates-General in 1789 in the context of the monarchy's fiscal and political crisis."
+						},
+						{
+							"id": "fr-mechanism",
+							"title": "From finance to representation",
+							"summary": "Attempts to address the French monarchy's fiscal crisis brought disputes over taxation and political representation into the Estates-General."
+						},
+						{
+							"id": "fr-pressure",
+							"title": "Material and political pressures",
+							"summary": "Food insecurity and economic distress formed part of the context of popular mobilisation in revolutionary France."
+						},
+						{
+							"id": "fr-multicausal",
+							"title": "An explanation with several causes",
+							"summary": "A historical explanation of 1789 can connect fiscal crisis, institutional conflict, and popular pressures rather than treating one factor as sufficient."
+						},
+						{
+							"id": "fr-contingency",
+							"title": "Outcomes were contingent",
+							"summary": "Explaining pressures before the French Revolution does not establish that each later revolutionary outcome was inevitable."
+						}
+					],
+					"edges": [
+						{
+							"from": "fr-fiscal",
+							"to": "fr-estates"
+						},
+						{
+							"from": "fr-estates",
+							"to": "fr-mechanism"
+						},
+						{
+							"from": "fr-mechanism",
+							"to": "fr-pressure"
+						},
+						{
+							"from": "fr-pressure",
+							"to": "fr-multicausal"
+						},
+						{
+							"from": "fr-multicausal",
+							"to": "fr-contingency"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786525680000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_history-french-revolution_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-12T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "fr-fiscal",
+							"title": "The monarchy's fiscal crisis",
+							"status": "upcoming"
+						},
+						{
+							"id": "fr-estates",
+							"title": "A political response in 1789",
+							"status": "upcoming"
+						},
+						{
+							"id": "fr-mechanism",
+							"title": "From finance to representation",
+							"status": "upcoming"
+						},
+						{
+							"id": "fr-pressure",
+							"title": "Material and political pressures",
+							"status": "upcoming"
+						},
+						{
+							"id": "fr-multicausal",
+							"title": "An explanation with several causes",
+							"status": "upcoming"
+						},
+						{
+							"id": "fr-contingency",
+							"title": "Outcomes were contingent",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "fr-fiscal",
+							"to": "fr-estates"
+						},
+						{
+							"from": "fr-estates",
+							"to": "fr-mechanism"
+						},
+						{
+							"from": "fr-mechanism",
+							"to": "fr-pressure"
+						},
+						{
+							"from": "fr-pressure",
+							"to": "fr-multicausal"
+						},
+						{
+							"from": "fr-multicausal",
+							"to": "fr-contingency"
+						}
+					]
+				}
+			},
+			"timestamp": 1786525740000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786525800000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Turn a list into a causal account\nStart with the Crown's fiscal predicament. Explain why attempts to resolve it required political negotiation, then examine how disputes over representation changed the crisis. Add popular pressures without assuming that one strand determines the whole story. Distinguish evidence for each link from hindsight about the eventual outcome.\n\nReferences: [Federal Reserve Bank of Minneapolis: fiscal history research](https://www.minneapolisfed.org/article/1991/the-macroeconomic-causes-and-consequences-of-the-french-revolution), [The National Archives: contemporary reports](https://www.nationalarchives.gov.uk/education/teaching-resources/french-revolution/).\n\n### The monarchy's fiscal crisis\nThe French monarchy faced a serious fiscal crisis before the Estates-General met in 1789.\n\n### A political response in 1789\nLouis XVI convened the Estates-General in 1789 in the context of the monarchy's fiscal and political crisis.\n\n### From finance to representation\nAttempts to address the French monarchy's fiscal crisis brought disputes over taxation and political representation into the Estates-General."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786525860000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-french-revolution_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "Does food hardship alone explain why the Estates-General was convened?",
+						"options": [
+							{
+								"label": "Yes: no other evidence is needed",
+								"value": "choice-0"
+							},
+							{
+								"label": "No: the fiscal and political mechanisms also matter",
+								"value": "choice-1"
+							},
+							{
+								"label": "Food conditions are irrelevant",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "A sufficient account needs the monarchy's financial predicament and the institutional response, while retaining social context.",
+						"type": "predict",
+						"nodeId": "fr-mechanism"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786525920000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-french-revolution_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Yes: no other evidence is needed\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I used one vivid factor to explain every part of the crisis.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "Does food hardship alone explain why the Estates-General was convened?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Yes: no other evidence is needed"
+					},
+					{
+						"index": 2,
+						"label": "No: the fiscal and political mechanisms also matter"
+					},
+					{
+						"index": 3,
+						"label": "Food conditions are irrelevant"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Yes: no other evidence is needed",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I used one vivid factor to explain every part of the crisis.",
+				"answeredAt": "2026-08-12T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "A sufficient account needs the monarchy's financial predicament and the institutional response, while retaining social context.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786525980000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_14",
+			"role": "user",
+			"content": "Since we know the monarchy eventually fell, can we write as if everyone in 1789 knew that would happen?",
+			"timestamp": 1786526040000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Later knowledge belongs to the historian, not automatically to the actors. Reconstruct what people could know and what options they perceived at the time. A causal explanation can identify pressures without claiming an inevitable destination.\n\n### Material and political pressures\nFood insecurity and economic distress formed part of the context of popular mobilisation in revolutionary France.\n\n### An explanation with several causes\nA historical explanation of 1789 can connect fiscal crisis, institutional conflict, and popular pressures rather than treating one factor as sufficient.\n\n### Outcomes were contingent\nExplaining pressures before the French Revolution does not establish that each later revolutionary outcome was inevitable."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786526100000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-french-revolution_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "Which is the stronger essay claim?",
+						"options": [
+							{
+								"label": "Hunger inevitably caused every later event",
+								"value": "choice-0"
+							},
+							{
+								"label": "Fiscal crisis opened political conflict, interacting with popular pressures",
+								"value": "choice-1"
+							},
+							{
+								"label": "The sequence of events proves a single cause",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "It identifies interacting mechanisms and avoids claiming inevitability.",
+						"type": "check",
+						"nodeId": "fr-contingency"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786526160000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-french-revolution_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"Fiscal crisis opened political conflict, interacting with popular pressures\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I can state a mechanism and qualify how far it explains the outcome.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "Which is the stronger essay claim?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Hunger inevitably caused every later event"
+					},
+					{
+						"index": 2,
+						"label": "Fiscal crisis opened political conflict, interacting with popular pressures"
+					},
+					{
+						"index": 3,
+						"label": "The sequence of events proves a single cause"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Fiscal crisis opened political conflict, interacting with popular pressures",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I can state a mechanism and qualify how far it explains the outcome.",
+				"answeredAt": "2026-08-12T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "It identifies interacting mechanisms and avoids claiming inevitability.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786526220000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786526280000
+		},
+		{
+			"id": "msg_demo_history-french-revolution_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Use this structure in essays: a claim, evidence for a mechanism, a competing explanation, and a qualification. Next, examine how the origin and purpose of a document affect the evidence it can provide."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786526340000
+		}
+	]
+}

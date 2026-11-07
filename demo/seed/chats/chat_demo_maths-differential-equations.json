@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_maths-differential-equations",
+	"title": "Maths: exponential change from a differential equation",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-07T09:00:00.000Z",
+	"updatedAt": "2026-08-07T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "ode-proportional",
+				"title": "A proportional rate law",
+				"summary": "The differential equation dy/dt = r y specifies an instantaneous rate proportional to the current value y."
+			},
+			{
+				"id": "ode-exponential",
+				"title": "An exponential solution",
+				"summary": "For constant r, y(t) = y0 exp(rt) solves dy/dt = r y with y(0) = y0."
+			},
+			{
+				"id": "ode-decay",
+				"title": "A decay calculation",
+				"summary": "For dy/dt = -0.5 y and y(0) = 8, the exact value at t = 2 is 8/e, approximately 2.94."
+			},
+			{
+				"id": "ode-euler",
+				"title": "Euler follows a local slope",
+				"summary": "An explicit Euler step for dy/dt = r y is y_next = y_current + h r y_current."
+			},
+			{
+				"id": "ode-euler-example",
+				"title": "An approximate first step",
+				"summary": "With r = -0.5, y_current = 8 and h = 0.2, Euler gives y_next = 7.2; the exact value is 8 exp(-0.1), approximately 7.24."
+			},
+			{
+				"id": "ode-eigen-mode",
+				"title": "An eigenvector mode of an ODE",
+				"summary": "If Av = lambda v, then y(t) = exp(lambda t) v solves the vector equation dy/dt = A y with y(0) = v."
+			}
+		],
+		"edges": [
+			{
+				"from": "ode-proportional",
+				"to": "ode-exponential"
+			},
+			{
+				"from": "ode-exponential",
+				"to": "ode-decay"
+			},
+			{
+				"from": "ode-decay",
+				"to": "ode-euler"
+			},
+			{
+				"from": "ode-euler",
+				"to": "ode-euler-example"
+			},
+			{
+				"from": "ode-euler-example",
+				"to": "ode-eigen-mode"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_maths-differential-equations_0",
+			"role": "user",
+			"content": "Why does a rate proportional to the current amount lead to an exponential rather than a straight line?",
+			"timestamp": 1786093200000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786093260000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-differential-equations_2",
+					"name": "probe",
+					"arguments": {
+						"question": "For dy/dt = -0.5 y at y = 8, what is the instantaneous slope?",
+						"options": [
+							{
+								"label": "-4",
+								"value": "choice-0"
+							},
+							{
+								"label": "-0.5",
+								"value": "choice-1"
+							},
+							{
+								"label": "4",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Substitution gives -0.5 × 8 = -4."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786093320000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-differential-equations_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"-4\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The rate depends on the amount currently present.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "For dy/dt = -0.5 y at y = 8, what is the instantaneous slope?",
+				"options": [
+					{
+						"index": 1,
+						"label": "-4"
+					},
+					{
+						"index": 2,
+						"label": "-0.5"
+					},
+					{
+						"index": 3,
+						"label": "4"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "-4",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "The rate depends on the amount currently present.",
+				"answeredAt": "2026-08-07T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Substitution gives -0.5 × 8 = -4.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786093380000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-differential-equations_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "A proportional rate law",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Solve a proportional-rate differential equation and distinguish its exact solution from an Euler approximation."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786093440000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-differential-equations_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786093500000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_maths-differential-equations"
+			},
+			"timestamp": 1786093560000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Solve a proportional-rate differential equation and distinguish its exact solution from an Euler approximation. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-differential-equations_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  ode-proportional[A proportional rate law]\n  ode-exponential[An exponential solution]\n  ode-decay[A decay calculation]\n  ode-euler[Euler follows a local slope]\n  ode-euler-example[An approximate first step]\n  ode-eigen-mode[An eigenvector mode of an ODE]\n  ode-proportional --> ode-exponential\n  ode-exponential --> ode-decay\n  ode-decay --> ode-euler\n  ode-euler --> ode-euler-example\n  ode-euler-example --> ode-eigen-mode"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786093620000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-differential-equations_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: ode-proportional, ode-exponential, ode-decay, ode-euler, ode-euler-example, ode-eigen-mode"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "ode-proportional",
+							"title": "A proportional rate law",
+							"summary": "The differential equation dy/dt = r y specifies an instantaneous rate proportional to the current value y."
+						},
+						{
+							"id": "ode-exponential",
+							"title": "An exponential solution",
+							"summary": "For constant r, y(t) = y0 exp(rt) solves dy/dt = r y with y(0) = y0."
+						},
+						{
+							"id": "ode-decay",
+							"title": "A decay calculation",
+							"summary": "For dy/dt = -0.5 y and y(0) = 8, the exact value at t = 2 is 8/e, approximately 2.94."
+						},
+						{
+							"id": "ode-euler",
+							"title": "Euler follows a local slope",
+							"summary": "An explicit Euler step for dy/dt = r y is y_next = y_current + h r y_current."
+						},
+						{
+							"id": "ode-euler-example",
+							"title": "An approximate first step",
+							"summary": "With r = -0.5, y_current = 8 and h = 0.2, Euler gives y_next = 7.2; the exact value is 8 exp(-0.1), approximately 7.24."
+						},
+						{
+							"id": "ode-eigen-mode",
+							"title": "An eigenvector mode of an ODE",
+							"summary": "If Av = lambda v, then y(t) = exp(lambda t) v solves the vector equation dy/dt = A y with y(0) = v."
+						}
+					],
+					"edges": [
+						{
+							"from": "ode-proportional",
+							"to": "ode-exponential"
+						},
+						{
+							"from": "ode-exponential",
+							"to": "ode-decay"
+						},
+						{
+							"from": "ode-decay",
+							"to": "ode-euler"
+						},
+						{
+							"from": "ode-euler",
+							"to": "ode-euler-example"
+						},
+						{
+							"from": "ode-euler-example",
+							"to": "ode-eigen-mode"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786093680000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_maths-differential-equations_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-07T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "ode-proportional",
+							"title": "A proportional rate law",
+							"status": "upcoming"
+						},
+						{
+							"id": "ode-exponential",
+							"title": "An exponential solution",
+							"status": "upcoming"
+						},
+						{
+							"id": "ode-decay",
+							"title": "A decay calculation",
+							"status": "upcoming"
+						},
+						{
+							"id": "ode-euler",
+							"title": "Euler follows a local slope",
+							"status": "upcoming"
+						},
+						{
+							"id": "ode-euler-example",
+							"title": "An approximate first step",
+							"status": "upcoming"
+						},
+						{
+							"id": "ode-eigen-mode",
+							"title": "An eigenvector mode of an ODE",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "ode-proportional",
+							"to": "ode-exponential"
+						},
+						{
+							"from": "ode-exponential",
+							"to": "ode-decay"
+						},
+						{
+							"from": "ode-decay",
+							"to": "ode-euler"
+						},
+						{
+							"from": "ode-euler",
+							"to": "ode-euler-example"
+						},
+						{
+							"from": "ode-euler-example",
+							"to": "ode-eigen-mode"
+						}
+					]
+				}
+			},
+			"timestamp": 1786093740000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786093800000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Verify before memorising\nDifferentiate 8 exp(-0.5t): the result is -4 exp(-0.5t), which is -0.5 times the original function. At t = 0 it equals 8. Both the rate law and initial condition are satisfied. A constant initial slope would instead predict a straight line and miss the changing rate.\n\n### A proportional rate law\nThe differential equation dy/dt = r y specifies an instantaneous rate proportional to the current value y.\n\n### An exponential solution\nFor constant r, y(t) = y0 exp(rt) solves dy/dt = r y with y(0) = y0.\n\n### A decay calculation\nFor dy/dt = -0.5 y and y(0) = 8, the exact value at t = 2 is 8/e, approximately 2.94."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786093860000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-differential-equations_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "After two time units, is y exactly zero because the initial slope is -4?",
+						"options": [
+							{
+								"label": "Yes",
+								"value": "choice-0"
+							},
+							{
+								"label": "No: the slope becomes less negative as y decreases",
+								"value": "choice-1"
+							},
+							{
+								"label": "The slope becomes more negative",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "The initial tangent is not the whole solution: y(2) = 8/e.",
+						"type": "predict",
+						"nodeId": "ode-decay"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786093920000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-differential-equations_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Yes\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I extended one tangent line as if the slope never changed.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "After two time units, is y exactly zero because the initial slope is -4?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Yes"
+					},
+					{
+						"index": 2,
+						"label": "No: the slope becomes less negative as y decreases"
+					},
+					{
+						"index": 3,
+						"label": "The slope becomes more negative"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Yes",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I extended one tangent line as if the slope never changed.",
+				"answeredAt": "2026-08-07T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "The initial tangent is not the whole solution: y(2) = 8/e.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786093980000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_14",
+			"role": "user",
+			"content": "Euler uses the right derivative, so why is its next value only approximate?",
+			"timestamp": 1786094040000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Euler holds the starting slope fixed for a finite interval. The exact slope changes continuously along the solution. For this smooth problem, shortening the step reduces that local discrepancy, although step size and stability still matter.\n\n### Euler follows a local slope\nAn explicit Euler step for dy/dt = r y is y_next = y_current + h r y_current.\n\n### An approximate first step\nWith r = -0.5, y_current = 8 and h = 0.2, Euler gives y_next = 7.2; the exact value is 8 exp(-0.1), approximately 7.24.\n\n### An eigenvector mode of an ODE\nIf Av = lambda v, then y(t) = exp(lambda t) v solves the vector equation dy/dt = A y with y(0) = v."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786094100000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_maths-differential-equations_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "Euler starts at 8 with h = 0.2 and slope -4. What comes next?",
+						"options": [
+							{
+								"label": "7.2",
+								"value": "choice-0"
+							},
+							{
+								"label": "4",
+								"value": "choice-1"
+							},
+							{
+								"label": "8 exp(-0.1) exactly",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Euler uses 8 + 0.2 × (-4) = 7.2; it approximates the exponential.",
+						"type": "check",
+						"nodeId": "ode-eigen-mode"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786094160000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_maths-differential-equations_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"7.2\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I multiply the slope by the time step before adding it.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "Euler starts at 8 with h = 0.2 and slope -4. What comes next?",
+				"options": [
+					{
+						"index": 1,
+						"label": "7.2"
+					},
+					{
+						"index": 2,
+						"label": "4"
+					},
+					{
+						"index": 3,
+						"label": "8 exp(-0.1) exactly"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "7.2",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I multiply the slope by the time step before adding it.",
+				"answeredAt": "2026-08-07T09:17:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Euler uses 8 + 0.2 × (-4) = 7.2; it approximates the exponential.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786094220000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786094280000
+		},
+		{
+			"id": "msg_demo_maths-differential-equations_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "The eigenvector lesson now becomes dynamic: each eigenvector mode of a constant linear system evolves exponentially at its eigenvalue. This connects matrix geometry to growth, decay, and oscillation models."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786094340000
+		}
+	]
+}

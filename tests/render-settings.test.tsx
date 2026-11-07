@@ -13,9 +13,8 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { TOGGLE_TOOLS, AgentSection } from "../components/settings/agent-section.tsx";
-import { AppearanceSection, GraphSection } from "../components/settings/appearance-section.tsx";
+import { GraphSection } from "../components/settings/graph-section.tsx";
 import { KeysSection } from "../components/settings/keys-section.tsx";
-import { KeyboardSection } from "../components/settings/keyboard-section.tsx";
 import type { GraphSettings } from "../src/core/index.ts";
 import { SettingsDialogBody, SettingsDialogProvider } from "../components/settings/settings-dialog.tsx";
 import { KEYBOARD_ACTIONS } from "../src/core/index.ts";
@@ -44,18 +43,16 @@ describe("SettingsDialog (the designed surface, SSR)", () => {
 		assert.ok(!html.includes("settings-dialog"));
 	});
 
-	it("the dialog frame: role=dialog + the ✕ + the six-section nav, Providers first and General last", () => {
+	it("the dialog frame: role=dialog + the ✕ + the three-section nav", () => {
 		const html = renderToStaticMarkup(<SettingsDialogBody onClose={() => {}} />);
 		assert.ok(html.includes('role="dialog"'));
 		assert.ok(html.includes('aria-modal="true"'));
 		assert.ok(html.includes('aria-label="Close settings"'));
-		for (const id of ["general", "keys", "agent", "appearance", "graph", "keyboard"]) {
+		for (const id of ["keys", "agent", "graph"]) {
 			assert.ok(html.includes(`data-testid="settings-nav-${id}"`), id);
 		}
 		// Providers is the first landing section; internal keys deep links survive.
 		assert.ok(tagOf(html, "settings-nav-keys").includes('aria-current="true"'));
-		assert.ok(html.indexOf('data-testid="settings-nav-keys"') < html.indexOf('data-testid="settings-nav-general"'));
-		assert.ok(tagOf(html, "settings-nav-keyboard").includes('aria-current="false"'));
 		// Fetches don't run under SSR — the loading state IS the SSR state.
 		assert.ok(html.includes("Loading settings…"));
 		// Modal-only doctrine: no link back to /settings anywhere in it.
@@ -64,12 +61,11 @@ describe("SettingsDialog (the designed surface, SSR)", () => {
 });
 
 describe("the shared settings dropdown trigger", () => {
-	it("Agent, Appearance and dictation use the same compact dark mono trigger", () => {
+	it("Agent and dictation use the same compact dark mono trigger", () => {
 		const surfaces = [
-			[renderToStaticMarkup(<AgentSection agent={undefined} models={undefined} graph={undefined} onSectionChange={() => {}} onModelsChange={() => {}} />), "slot-model-strong"],
-			[renderToStaticMarkup(<AppearanceSection appearance={undefined} onSectionChange={() => {}} />), "font-trigger"],
-			[renderToStaticMarkup(<DictationLanguageSetting />), "dictation-language"],
-		] as const;
+            [renderToStaticMarkup(<AgentSection agent={undefined} models={undefined} graph={undefined} onSectionChange={() => {}} onModelsChange={() => {}} compaction={undefined} onCompactionChange={() => {}} />), "slot-model-strong"],
+            [renderToStaticMarkup(<DictationLanguageSetting />), "dictation-language"],
+        ] as const;
 		for (const [html, id] of surfaces) {
 			const tag = tagOf(html, id);
 			const classes = tag.match(/class="([^"]+)"/)![1]!.split(" ");
@@ -134,31 +130,6 @@ describe("AgentSection (thin SSR)", () => {
 		assert.ok(html.includes('data-testid="group-models"'), "Models sub-group");
 		assert.ok(html.includes('data-testid="group-tools"'), "Tools sub-group");
 		assert.ok(html.includes('data-testid="group-prompts"'), "System prompts sub-group");
-	});
-
-	it("the search-engine row renders with its live reason (search wave 2026-09-20)", () => {
-		const html = renderToStaticMarkup(<AgentSection agent={undefined} models={undefined} graph={undefined} onSectionChange={() => {}} onModelsChange={() => {}} />);
-		assert.ok(html.includes('data-testid="search-engine-row"'), "the row");
-		assert.ok(html.includes('data-testid="search-engine-trigger"'), "the trigger");
-		// SSR: /api/search never fired → no reason line yet, trigger reads Automatic
-		assert.ok(html.includes("Automatic"), "unset engine reads Automatic");
-		// the explicit preference shows the chosen engine in the trigger
-		const html2 = renderToStaticMarkup(
-			<AgentSection agent={{ search: { engine: "tavily" } }} models={undefined} graph={undefined} onSectionChange={() => {}} onModelsChange={() => {}} />,
-		);
-		assert.ok(html2.includes("Tavily"), "pinned engine visible in the trigger");
-		const exa = renderToStaticMarkup(
-			<AgentSection agent={{ search: { engine: "exa" } }} models={undefined} graph={undefined} onSectionChange={() => {}} onModelsChange={() => {}} />,
-		);
-		assert.ok(exa.includes("Exa"), "an Exa pin retains its label in the trigger");
-		const html3 = renderToStaticMarkup(
-			<AgentSection agent={{ search: { engine: "firecrawl" } }} models={undefined} graph={undefined} onSectionChange={() => {}} onModelsChange={() => {}} />,
-		);
-		assert.ok(html3.includes("Firecrawl"), "a Firecrawl pin reads by its label");
-		const ollama = renderToStaticMarkup(
-			<AgentSection agent={{ search: { engine: "ollama" } }} models={undefined} graph={undefined} onSectionChange={() => {}} onModelsChange={() => {}} />,
-		);
-		assert.ok(ollama.includes("Ollama"), "an Ollama pin reads by its label");
 	});
 
 	it("the prober graph-tools row: FIRST in the Tools group, default ON, its own key (wave 7)", () => {
@@ -283,63 +254,5 @@ describe("KeysSection (thin SSR)", () => {
 	it("SSR = the loading state (effects never fire)", () => {
 		const html = renderToStaticMarkup(<KeysSection />);
 		assert.ok(html.includes("Loading keys…"));
-	});
-});
-
-describe("AppearanceSection (thin SSR)", () => {
-	it("mode is rendered DISABLED — dark-only this wave, no lying control", () => {
-		const html = renderToStaticMarkup(<AppearanceSection appearance={undefined} onSectionChange={() => {}} />);
-		assert.ok(tagOf(html, "select-mode").includes("disabled"), "mode select disabled");
-		assert.ok(html.includes("Coming soon"));
-		// The whole row dims, graph-view style (the control never adds its own).
-		assert.ok(tagOf(html, "row-mode").includes("opacity-40"), "mode row dims whole");
-	});
-
-	it("hex inputs carry the factory placeholders; prose size resolves against the factory", () => {
-		const html = renderToStaticMarkup(<AppearanceSection appearance={undefined} onSectionChange={() => {}} />);
-		assert.ok(html.includes(`placeholder="#141414"`));
-		// The reading font is the searchable dropdown now (font-menu
-		// wave): its trigger shows the factory family; the emphasis
-		// inks' empty state is "same as text" (the old hexes died with
-		// the factory token change).
-		assert.ok(html.includes('data-testid="font-trigger"'));
-		assert.equal((html.match(/Empty = same as text/g) ?? []).length, 2);
-		assert.ok(html.includes("16px"));
-	});
-
-	it("a set background shows in the input, not the placeholder", () => {
-		const html = renderToStaticMarkup(
-			<AppearanceSection appearance={{ background: "#1a1a2e" }} onSectionChange={() => {}} />,
-		);
-		assert.ok(html.includes(`value="#1a1a2e"`));
-	});
-});
-
-describe("KeyboardSection (thin SSR)", () => {
-	it("renders every registry action in its scope group", () => {
-		const html = renderToStaticMarkup(<KeyboardSection />);
-		for (const def of KEYBOARD_ACTIONS) {
-			assert.ok(html.includes(`data-testid="kbd-row-${def.id}"`), def.id);
-		}
-		assert.ok(html.includes("kbd-scope-global"));
-		assert.ok(html.includes("kbd-scope-chat"));
-	});
-
-	it("open-settings is in the registry with the settings chord", () => {
-		const def = KEYBOARD_ACTIONS.find((a) => a.id === "open-settings");
-		assert.ok(def, "the action exists");
-		assert.equal(def?.scope, "global");
-		assert.equal(def?.binding, "mod+,");
-	});
-
-	it("displayOnly actions list but never offer Rebind", () => {
-		const html = renderToStaticMarkup(<KeyboardSection />);
-		assert.ok(html.includes("Fixed — part of this screen"));
-		assert.ok(!html.includes(`data-testid="kbd-rebind-question-next-row"`), "surface keys stay put");
-		// The model-menu entries are GONE entirely (owner, 2026-10-10):
-		// obvious in-field navigation, not settings material.
-		assert.ok(!html.includes("Model menu"), "model-menu rows removed");
-		assert.ok(!KEYBOARD_ACTIONS.some((a) => a.id as string === "model-menu-walk"));
-		assert.ok(!KEYBOARD_ACTIONS.some((a) => a.id as string === "model-menu-pick"));
 	});
 });

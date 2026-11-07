@@ -270,25 +270,26 @@ describe("startup, timer, trusted IPC and menu wiring", () => {
 		assert.equal(f.updater.checks, 1);
 	});
 
-	it("menu restores/focuses a minimized window, opens General, and manually checks while OFF", async () => {
+	it("menu restores/focuses a minimized window and manually checks while OFF without opening settings", async () => {
 		const f = fixture(); f.setSettings({ general: { autoUpdate: false } }); await f.run("main()");
 		const win = f.windows[0]!; win.webContents.loading = false; win.minimized = true;
 		f.menuCheck();
 		assert.equal(win.minimized, false); assert.equal(win.focused, true);
-		assert.ok(win.webContents.messages.some(message => message.channel === "vt:open-settings" && message.value === "general"));
+		assert.ok(!win.webContents.messages.some(message => message.channel === "vt:open-settings"));
 		assert.equal(f.updater.checks, 1);
 	});
 
-	it("menu reopens a window and delivers General after load; loading existing windows are covered too", async () => {
+	it("menu reopens and checks directly while existing windows are loading", async () => {
 		const f = fixture(); f.setSettings({ general: { autoUpdate: false } }); await f.run("main()");
 		f.windows.length = 0; f.menuCheck();
 		assert.equal(f.windows.length, 1); assert.equal(f.updater.checks, 1);
 		const win = f.windows[0]!;
 		assert.ok(!win.webContents.messages.some(message => message.channel === "vt:open-settings"));
 		win.webContents.emit("did-finish-load");
-		assert.ok(win.webContents.messages.some(message => message.channel === "vt:open-settings"));
+		assert.ok(!win.webContents.messages.some(message => message.channel === "vt:open-settings"));
 		f.menuCheck(); win.webContents.emit("did-finish-load");
-		assert.equal(win.webContents.messages.filter(message => message.channel === "vt:open-settings").length, 2);
+		assert.equal(win.webContents.messages.filter(message => message.channel === "vt:open-settings").length, 0);
+		assert.equal(f.updater.checks, 2);
 	});
 
 	it("menu navigation failure does not prevent its manual check", async () => {

@@ -1,7 +1,7 @@
 "use client";
 /**
  * The Agent section (settings-app wave): the THREE MODEL SLOTS, the tool
- * toggles + the search-engine preference, and the prompt override
+ * toggles, and the prompt override
  * switches — three GROUPS (owner, 2026-09-20: clear separation — Models /
  * Tools / System prompts).
  *
@@ -22,14 +22,6 @@
  * VISIBLE even when its provider's key lapsed out of the catalog — a
  * trigger showing "Default" over a live override would lie about the
  * record.
- *
- * Search engine (search wave, 2026-09-20, owner: no default — an engine
- * is live iff its key is present; with a key the engine AUTO-activates,
- * the explicit choice is only a preference between live engines): a row
- * in the Tools group, with the same shared-menu look and
- * the live reason line from /api/search. No engine key at all → the row
- * grays whole-row (a choice without a key would only BLOCK another
- * engine's auto-activation).
  *
  * Tools — the owner's final list (2026-09-19): research, demo, visual, pdf.
  * Absent key = enabled in the schema; the UI writes explicit booleans for
@@ -63,7 +55,6 @@ import type React from "react";
 import {
 	COMPACTION_THRESHOLD_FLOOR,
 	MODEL_SLOTS,
-	SEARCH_ENGINES,
 	resolveSettings,
 	isFileAccessFolder,
 	type AgentSettings,
@@ -71,7 +62,6 @@ import {
 	type GraphSettings,
 	type ModelSlotName,
 	type ModelsSettings,
-	type SearchEngineId,
 } from "@/src/core";
 import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
 import { prettyModel } from "@/components/usage-format";
@@ -185,21 +175,6 @@ export function composeSlotCacheRetention(models: ModelsSettings | undefined, sl
 	if (value === undefined) delete next.cacheRetention;
 	else next.cacheRetention = value;
 	return { ...models, [slot]: next };
-}
-
-/** Compose: the search-engine preference. null = the explicit pin is
- *  REMOVED (auto-activation takes over — the schema's resting state).
- *  Pure — exported for tests. */
-export function composeSearchEngine(
-	agent: AgentSettings | undefined,
-	engine: SearchEngineId | null,
-): AgentSettings {
-	if (engine === null) {
-		if (!agent?.search) return { ...agent };
-		const { search: _drop, ...rest } = agent;
-		return { ...rest } as AgentSettings;
-	}
-	return { ...agent, search: { engine } };
 }
 
 /** The indicator under a row whose override IS the version in use (owner
@@ -339,28 +314,16 @@ export function AgentSection({
 	const { catalog: body, failed: catalogFailed, refresh: refreshCatalog } = useModelCatalog();
 	const catalog = body?.models;
 	const slots = body?.slots;
-	/** The live search state (/api/search) — the row's reason line. */
 	const [folderInput, setFolderInput] = useState("");
 	const [folderError, setFolderError] = useState<string | null>(null);
-	const [search, setSearch] = useState<{ available: boolean; engine: string | null; reason: string } | null>(null);
-	/** Which search engines have a key (/api/keys) — the no-keys-anywhere
-	 *  state grays the row; per-engine marks ride the menu rows. */
-	const [engineKeys, setEngineKeys] = useState<Partial<Record<SearchEngineId, boolean>>>({});
 	const [prompts, setPrompts] = useState<PromptView | null>(null);
 	const [openSegment, setOpenSegment] = useState<string | null>(null);
 	const [segmentDraft, setSegmentDraft] = useState<Record<string, string>>({});
 	const [segmentStatus, setSegmentStatus] = useState<string | null>(null);
-	/** One open dropdown for the whole section: which slot (or the search
-	 *  row), which kind. */
-	const [openMenu, setOpenMenu] = useState<{ target: ModelSlotName | "search"; kind: "model" | "thinking" | "engine" | "cache" } | null>(null);
+	/** One open dropdown for the whole section: which slot and kind. */
+	const [openMenu, setOpenMenu] = useState<{ target: ModelSlotName; kind: "model" | "thinking" | "cache" } | null>(null);
 	const [advancedModels, setAdvancedModels] = useState(false);
 	const menuAnchorRef = useRef<HTMLSpanElement>(null);
-
-	const refreshSearch = () =>
-		fetch("/api/search")
-			.then((r) => r.json())
-			.then((body: { available: boolean; engine: string | null; reason: string }) => setSearch(body))
-			.catch(() => setSearch(null));
 
 	/** Re-read the prompt-segment view — the signal seam for the
 	 *  2026-09-26 state-echo fix: the view's `enabled` flags DERIVE from
@@ -391,25 +354,7 @@ export function AgentSection({
 			.then((r) => r.json())
 			.then((body: PromptView) => setPrompts(body))
 			.catch(() => setPrompts(null));
-		fetch("/api/keys")
-			.then((r) => r.json())
-			.then((body: { keys: { id: string; present: boolean }[] }) => {
-				const present: Partial<Record<SearchEngineId, boolean>> = {};
-				for (const { id, envVar } of SEARCH_ENGINES) {
-					present[id] = body.keys.some((k) => k.id === envVar && k.present);
-				}
-				setEngineKeys(present);
-			})
-			.catch(() => {});
 	}, []);
-
-	// The reason line re-reads /api/search AFTER an engine write lands —
-	// the write updates the `agent` prop (the dialog's record mirror), so
-	// keying on the pin avoids the race where the fetch beat the PUT and
-	// the hint contradicted the trigger it sits under.
-	useEffect(() => {
-		refreshSearch();
-	}, [agent?.search?.engine]);
 
 	// The dropdown contract (the chat model selector's, mirrored): any
 	// click outside the open menu — or an Esc — closes it. Esc is CLAIMED
@@ -484,30 +429,6 @@ export function AgentSection({
 		readPrompts();
 		setSegmentStatus("Deleted");
 	}
-
-		/** The search-engine menu row — label + the quiet live-key mark. */
-	const engineOption = (
-		id: SearchEngineId | "auto",
-		label: string,
-		active: boolean,
-		live: boolean | null,
-		onPick: () => void,
-	) => (
-		<button
-			key={id}
-			type="button"
-			data-testid={`engine-option-${id}`}
-			onClick={onPick}
-			className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-muted ${
-				active ? "bg-muted/60 text-card-foreground" : "text-card-foreground"
-			}`}
-		>
-			<span>{label}</span>
-			<span className="text-muted-foreground">
-				{live === null ? (active && <span aria-hidden>✓</span>) : live ? <span aria-hidden>✓ key</span> : <span aria-hidden>· no key</span>}
-			</span>
-		</button>
-	);
 
 	const segmentRow = (info: PromptRow) => {
 		const fileExists = info.overrideText !== null;
@@ -890,51 +811,7 @@ export function AgentSection({
 						</div>
 					);
 				})()}
-				{(() => {
-					const engine = agent?.search?.engine ?? null;
-					const anyKey = SEARCH_ENGINES.some(({ id }) => engineKeys[id] === true);
-					const open = openMenu?.target === "search";
-					return (
-						<SettingsRow
-							label="Search engine"
-							hint={search?.reason ?? undefined}
-							testid="search-engine-row"
-							dimmed={!anyKey}
-						>
-							<span ref={open ? menuAnchorRef : undefined} className="relative flex items-center gap-2">
-								<MenuTrigger
-									value={SEARCH_ENGINES.find(({ id }) => id === engine)?.label ?? ""}
-									emptyLabel="Automatic"
-									ariaLabel="Search engine"
-									testid="search-engine-trigger"
-									open={open}
-									onClick={() => setOpenMenu(open ? null : { target: "search", kind: "engine" })}
-									widthClass="min-w-20"
-									disabled={!anyKey}
-								/>
-								{open && (
-									<MenuShell
-										preferredSide="down"
-											anchorTestid="search-engine-trigger"
-										testid="search-engine-menu"
-										menuClass="flex w-44 flex-col gap-0.5 rounded-xl border border-border bg-card p-2 text-xs shadow-xl"
-									>
-										{engineOption("auto", "Automatic", engine === null, null, () => {
-											onSectionChange(composeSearchEngine(agent, null));
-											setOpenMenu(null);
-										})}
-										{SEARCH_ENGINES.map(({ id, label }) =>
-											engineOption(id, label, engine === id, engineKeys[id] ?? false, () => {
-												onSectionChange(composeSearchEngine(agent, id));
-												setOpenMenu(null);
-											}),
-										)}
-									</MenuShell>
-								)}
-							</span>
-						</SettingsRow>
-					);
-				})()}
+
 			</SettingsGroup>
 
 			<SettingsGroup label="Context" testid="group-context">

@@ -49,7 +49,7 @@ const STORAGE_KEY = "vt:sidebar-open";
  * Mirrors SIDEBAR_AUTOCLOSE in electron/main.cjs — keep in sync.
  */
 import type { ChatGPTControlBridge, NativeSubscriptionControlBridge } from "@/src/core";
-import type { UpdateState } from "@/components/settings/update-settings.tsx";
+import type { UpdateState } from "@/components/update-state.ts";
 import { FilePathDropZone } from "@/components/file-path-drop-zone";
 const SIDEBAR_AUTOCLOSE = 928;
 

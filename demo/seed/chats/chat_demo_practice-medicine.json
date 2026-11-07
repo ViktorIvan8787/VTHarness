@@ -1,0 +1,284 @@
+{
+	"id": "chat_demo_practice-medicine",
+	"title": "Medicine practice: rebuild a diagnostic probability table",
+	"kind": "practice",
+	"version": 1,
+	"createdAt": "2026-08-27T09:00:00.000Z",
+	"updatedAt": "2026-08-27T09:08:00.000Z",
+	"messages": [
+		{
+			"id": "msg_demo_practice-medicine_0",
+			"role": "custom",
+			"customType": "graph-context",
+			"content": "[Session context] — picked from the learner's knowledge map when starting this session:\n\nPropositions (id — name: statement; the problem tool's target field uses these ids):\n- [n_demo_test-sensitivity] Sensitivity conditions on disease: Sensitivity is the probability of a positive result among people who have the condition.\n- [n_demo_test-specificity] Specificity conditions on no disease: Specificity is the probability of a negative result among people who do not have the condition.\n- [n_demo_test-prevalence] A fictional screening population: In a fictional population of 1000 with 1% prevalence, 10 people have the condition and 990 do not.\n- [n_demo_test-counts] Convert rates into counts: At 90% sensitivity and 90% specificity in that fictional population, expected counts are 9 true positives and 99 false positives.\n- [n_demo_test-ppv] Predictive value conditions on the result: Positive predictive value in the fictional example is 9/(9+99), approximately 8.3%, rather than 90%.\n- [n_demo_test-base-rate] The base rate changes the answer: Holding sensitivity and specificity fixed, positive predictive value increases as prevalence increases.\n\nReasoning chains among them (premises → conclusion):\n- Sensitivity conditions on disease + Specificity conditions on no disease + A fictional screening population → Convert rates into counts\n- Convert rates into counts → Predictive value conditions on the result\n- Sensitivity conditions on disease + Specificity conditions on no disease + Predictive value conditions on the result → The base rate changes the answer",
+			"display": true,
+			"details": {
+				"propositions": [
+					{
+						"id": "n_demo_test-sensitivity",
+						"name": "Sensitivity conditions on disease",
+						"statement": "Sensitivity is the probability of a positive result among people who have the condition.",
+						"aliases": [
+							"Sensitivity is the probability of a positive result among people who have the condition."
+						],
+						"createdAt": "2026-08-15T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_medicine-diagnostic-probability",
+								"messageId": "msg_demo_medicine-diagnostic-probability_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_test-specificity",
+						"name": "Specificity conditions on no disease",
+						"statement": "Specificity is the probability of a negative result among people who do not have the condition.",
+						"aliases": [
+							"Specificity is the probability of a negative result among people who do not have the condition."
+						],
+						"createdAt": "2026-08-15T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_medicine-diagnostic-probability",
+								"messageId": "msg_demo_medicine-diagnostic-probability_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_test-prevalence",
+						"name": "A fictional screening population",
+						"statement": "In a fictional population of 1000 with 1% prevalence, 10 people have the condition and 990 do not.",
+						"aliases": [
+							"In a fictional population of 1000 with 1% prevalence, 10 people have the condition and 990 do not."
+						],
+						"createdAt": "2026-08-15T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_medicine-diagnostic-probability",
+								"messageId": "msg_demo_medicine-diagnostic-probability_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_test-counts",
+						"name": "Convert rates into counts",
+						"statement": "At 90% sensitivity and 90% specificity in that fictional population, expected counts are 9 true positives and 99 false positives.",
+						"aliases": [
+							"At 90% sensitivity and 90% specificity in that fictional population, expected counts are 9 true positives and 99 false positives."
+						],
+						"createdAt": "2026-08-15T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_medicine-diagnostic-probability",
+								"messageId": "msg_demo_medicine-diagnostic-probability_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_test-ppv",
+						"name": "Predictive value conditions on the result",
+						"statement": "Positive predictive value in the fictional example is 9/(9+99), approximately 8.3%, rather than 90%.",
+						"aliases": [
+							"Positive predictive value in the fictional example is 9/(9+99), approximately 8.3%, rather than 90%."
+						],
+						"createdAt": "2026-08-15T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_medicine-diagnostic-probability",
+								"messageId": "msg_demo_medicine-diagnostic-probability_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_test-base-rate",
+						"name": "The base rate changes the answer",
+						"statement": "Holding sensitivity and specificity fixed, positive predictive value increases as prevalence increases.",
+						"aliases": [
+							"Holding sensitivity and specificity fixed, positive predictive value increases as prevalence increases."
+						],
+						"createdAt": "2026-08-15T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_medicine-diagnostic-probability",
+								"messageId": "msg_demo_medicine-diagnostic-probability_15"
+							}
+						]
+					}
+				],
+				"chains": [
+					"Sensitivity conditions on disease + Specificity conditions on no disease + A fictional screening population → Convert rates into counts",
+					"Convert rates into counts → Predictive value conditions on the result",
+					"Sensitivity conditions on disease + Specificity conditions on no disease + Predictive value conditions on the result → The base rate changes the answer"
+				]
+			},
+			"timestamp": 1787821200000
+		},
+		{
+			"id": "msg_demo_practice-medicine_1",
+			"role": "user",
+			"content": "Give me a new fictional screening population so I have to rebuild the reasoning myself.",
+			"timestamp": 1787821260000
+		},
+		{
+			"id": "msg_demo_practice-medicine_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Try this on your own. Write down your reasoning as you go."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-medicine_2",
+					"name": "problem",
+					"arguments": {
+						"statement": "A fictional university exercise screens 2000 people for an invented condition with 5% prevalence. Sensitivity is 80% and specificity is 95%. Calculate expected true positives, false negatives, false positives, true negatives, and positive predictive value. Does 80% sensitivity imply 80% probability of the condition after a positive result?",
+						"mode": "composition",
+						"target": [
+							"n_demo_test-sensitivity",
+							"n_demo_test-specificity",
+							"n_demo_test-prevalence",
+							"n_demo_test-counts",
+							"n_demo_test-ppv",
+							"n_demo_test-base-rate"
+						],
+						"modelSolution": "There are 100 people with the condition and 1900 without it. Expected counts are TP = 80, FN = 20, FP = 95, TN = 1805. PPV = 80/(80+95) = 80/175, approximately 45.7%. Sensitivity conditions on disease status, whereas PPV conditions on a positive result. These fictional numbers are not a clinical recommendation."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787821320000
+		},
+		{
+			"id": "msg_demo_practice-medicine_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-medicine_2",
+			"toolName": "problem",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem posed. The learner's thinking and answer will follow."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787821380000
+		},
+		{
+			"id": "msg_demo_practice-medicine_4",
+			"role": "custom",
+			"customType": "practice-thinking",
+			"content": "Your thinking:\nI split by condition first, apply the appropriate rate to each group, then recombine only the positive results for the final denominator.",
+			"display": true,
+			"details": {
+				"problemCallId": "call_demo_practice-medicine_2",
+				"text": "I split by condition first, apply the appropriate rate to each group, then recombine only the positive results for the final denominator."
+			},
+			"timestamp": 1787821440000
+		},
+		{
+			"id": "msg_demo_practice-medicine_5",
+			"role": "user",
+			"content": "TP 80, FN 20, FP 95, TN 1805; PPV is about 45.7%, not 80%. The two percentages use different conditioning groups.",
+			"timestamp": 1787821500000
+		},
+		{
+			"id": "msg_demo_practice-medicine_6",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-medicine_6",
+					"name": "conclude",
+					"arguments": {
+						"outcome": "solved",
+						"verdict": "Solved independently. Your table totals 2000, and you used true positives plus false positives as the predictive-value denominator in this fictional exercise.",
+						"rung": null,
+						"missClass": null,
+						"retest": false
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787821560000
+		},
+		{
+			"id": "msg_demo_practice-medicine_7",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-medicine_6",
+			"toolName": "conclude",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem concluded. Say your closing words about the learner's work if useful, then END YOUR TURN — no further tool calls. The next problem is NEVER posed here: it waits for the learner's explicit go-ahead (a *Next problem* message, or their own words asking for the next one). Between problems, answer their questions about the concluded one."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787821620000
+		},
+		{
+			"id": "msg_demo_practice-medicine_8",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Solved independently. Your table totals 2000, and you used true positives plus false positives as the predictive-value denominator in this fictional exercise.\n\nYou transferred the idea to a fresh problem. We can continue with a harder example whenever you're ready."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1787821680000
+		}
+	]
+}

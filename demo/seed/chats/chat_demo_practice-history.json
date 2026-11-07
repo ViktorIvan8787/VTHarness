@@ -1,0 +1,280 @@
+{
+	"id": "chat_demo_practice-history",
+	"title": "History practice: critique an argument about 1789",
+	"kind": "practice",
+	"version": 1,
+	"createdAt": "2026-08-26T09:00:00.000Z",
+	"updatedAt": "2026-08-26T09:08:00.000Z",
+	"messages": [
+		{
+			"id": "msg_demo_practice-history_0",
+			"role": "custom",
+			"customType": "graph-context",
+			"content": "[Session context] — picked from the learner's knowledge map when starting this session:\n\nPropositions (id — name: statement; the problem tool's target field uses these ids):\n- [n_demo_fr-mechanism] From finance to representation: Attempts to address the French monarchy's fiscal crisis brought disputes over taxation and political representation into the Estates-General.\n- [n_demo_fr-multicausal] An explanation with several causes: A historical explanation of 1789 can connect fiscal crisis, institutional conflict, and popular pressures rather than treating one factor as sufficient.\n- [n_demo_source-provenance] Provenance frames a source: The author, date, location, and audience of a historical document help establish the conditions in which it was produced.\n- [n_demo_source-inference] Match the claim to the evidence: A document that asserts a crowd's motives directly evidences the author's assertion, but does not by itself establish every participant's motive.\n- [n_demo_source-dependence] Repeated reports can share one origin: Two newspapers copying the same report are not two independent eyewitness accounts.\n- [n_demo_source-bias] Bias can itself be evidence: A partisan source can provide evidence of its author's framing while requiring caution about the events or motives it describes.",
+			"display": true,
+			"details": {
+				"propositions": [
+					{
+						"id": "n_demo_fr-mechanism",
+						"name": "From finance to representation",
+						"statement": "Attempts to address the French monarchy's fiscal crisis brought disputes over taxation and political representation into the Estates-General.",
+						"aliases": [
+							"Attempts to address the French monarchy's fiscal crisis brought disputes over taxation and political representation into the Estates-General."
+						],
+						"createdAt": "2026-08-12T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_history-french-revolution",
+								"messageId": "msg_demo_history-french-revolution_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_fr-multicausal",
+						"name": "An explanation with several causes",
+						"statement": "A historical explanation of 1789 can connect fiscal crisis, institutional conflict, and popular pressures rather than treating one factor as sufficient.",
+						"aliases": [
+							"A historical explanation of 1789 can connect fiscal crisis, institutional conflict, and popular pressures rather than treating one factor as sufficient."
+						],
+						"createdAt": "2026-08-12T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_history-french-revolution",
+								"messageId": "msg_demo_history-french-revolution_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_source-provenance",
+						"name": "Provenance frames a source",
+						"statement": "The author, date, location, and audience of a historical document help establish the conditions in which it was produced.",
+						"aliases": [
+							"The author, date, location, and audience of a historical document help establish the conditions in which it was produced."
+						],
+						"createdAt": "2026-08-13T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_history-source-criticism",
+								"messageId": "msg_demo_history-source-criticism_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_source-inference",
+						"name": "Match the claim to the evidence",
+						"statement": "A document that asserts a crowd's motives directly evidences the author's assertion, but does not by itself establish every participant's motive.",
+						"aliases": [
+							"A document that asserts a crowd's motives directly evidences the author's assertion, but does not by itself establish every participant's motive."
+						],
+						"createdAt": "2026-08-13T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_history-source-criticism",
+								"messageId": "msg_demo_history-source-criticism_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_source-dependence",
+						"name": "Repeated reports can share one origin",
+						"statement": "Two newspapers copying the same report are not two independent eyewitness accounts.",
+						"aliases": [
+							"Two newspapers copying the same report are not two independent eyewitness accounts."
+						],
+						"createdAt": "2026-08-13T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_history-source-criticism",
+								"messageId": "msg_demo_history-source-criticism_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_source-bias",
+						"name": "Bias can itself be evidence",
+						"statement": "A partisan source can provide evidence of its author's framing while requiring caution about the events or motives it describes.",
+						"aliases": [
+							"A partisan source can provide evidence of its author's framing while requiring caution about the events or motives it describes."
+						],
+						"createdAt": "2026-08-13T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_history-source-criticism",
+								"messageId": "msg_demo_history-source-criticism_15"
+							}
+						]
+					}
+				],
+				"chains": []
+			},
+			"timestamp": 1787734800000
+		},
+		{
+			"id": "msg_demo_practice-history_1",
+			"role": "user",
+			"content": "Let me practise critiquing an essay paragraph instead of memorising another list of causes.",
+			"timestamp": 1787734860000
+		},
+		{
+			"id": "msg_demo_practice-history_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Try this on your own. Write down your reasoning as you go."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-history_2",
+					"name": "problem",
+					"arguments": {
+						"statement": "A fictional essay says: 'Two newspapers copied the same diplomatic dispatch about bread unrest, proving that every participant wanted to abolish monarchy and that hunger alone caused the Revolution.' Identify three evidential problems and propose a better argument. These invented documents are not archival quotations.",
+						"mode": "composition",
+						"target": [
+							"n_demo_fr-mechanism",
+							"n_demo_fr-multicausal",
+							"n_demo_source-provenance",
+							"n_demo_source-inference",
+							"n_demo_source-dependence",
+							"n_demo_source-bias"
+						],
+						"modelSolution": "Copied reports are not independent corroboration. A report about unrest does not establish every participant's motive. One report cannot establish hunger as a sufficient cause of the Revolution. A stronger account identifies provenance and access, seeks independent evidence, and connects popular pressures with the fiscal crisis and disputes over taxation and representation, while qualifying motives and causal scope."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787734920000
+		},
+		{
+			"id": "msg_demo_practice-history_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-history_2",
+			"toolName": "problem",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem posed. The learner's thinking and answer will follow."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787734980000
+		},
+		{
+			"id": "msg_demo_practice-history_4",
+			"role": "custom",
+			"customType": "practice-thinking",
+			"content": "Your thinking:\nI check independence, the size of the inference, and the causal mechanism separately. The dispatch may still show how its author framed the unrest.",
+			"display": true,
+			"details": {
+				"problemCallId": "call_demo_practice-history_2",
+				"text": "I check independence, the size of the inference, and the causal mechanism separately. The dispatch may still show how its author framed the unrest."
+			},
+			"timestamp": 1787735040000
+		},
+		{
+			"id": "msg_demo_practice-history_5",
+			"role": "user",
+			"content": "The sources are dependent; the claim generalises motives beyond the evidence; and one factor is treated as sufficient. I would compare independent sources and explain how fiscal and political conflict interacted with popular pressures.",
+			"timestamp": 1787735100000
+		},
+		{
+			"id": "msg_demo_practice-history_6",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-history_6",
+					"name": "conclude",
+					"arguments": {
+						"outcome": "solved",
+						"verdict": "Solved independently. You matched the claims to the evidence, recognised copied reporting, and replaced a single-cause assertion with a qualified causal account.",
+						"rung": null,
+						"missClass": null,
+						"retest": false
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1787735160000
+		},
+		{
+			"id": "msg_demo_practice-history_7",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-history_6",
+			"toolName": "conclude",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem concluded. Say your closing words about the learner's work if useful, then END YOUR TURN — no further tool calls. The next problem is NEVER posed here: it waits for the learner's explicit go-ahead (a *Next problem* message, or their own words asking for the next one). Between problems, answer their questions about the concluded one."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1787735220000
+		},
+		{
+			"id": "msg_demo_practice-history_8",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Solved independently. You matched the claims to the evidence, recognised copied reporting, and replaced a single-cause assertion with a qualified causal account.\n\nYou transferred the idea to a fresh problem. We can continue with a harder example whenever you're ready."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1787735280000
+		}
+	]
+}

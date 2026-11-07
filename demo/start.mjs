@@ -28,11 +28,11 @@ async function main() {
 	catch (error) { releaseLock(); throw error; }
 	if (reset) {
 		releaseLock();
-		console.log("Restored 8 sample sessions and the knowledge graph. Demo settings and provider connections were preserved.");
+		console.log("Restored 23 sample sessions and the knowledge graph. Demo settings and provider connections were preserved.");
 		return;
 	}
 	console.log(`VT-Harness demo: http://localhost:${port}`);
-	console.log("Sample history: 6 lessons, 2 practice sessions, 36 concepts. See demo/README.md for the 60-second pitch.");
+	console.log("Sample history: 16 lessons, 7 practice sessions, 96 concepts across AI, Maths, Physics, Biology, History, and Medicine. See demo/README.md for the 60-second pitch.");
 	console.log(prepared.initialized ? "Demo data prepared. Existing model selections were imported where available." : "Keeping your demo sessions and model selections.");
 	console.log("Live AI uses your existing provider configuration. Choose Strong, Cheap, and Vision once in Settings if needed.");
 	const child = spawn(process.execPath, [require.resolve("next/dist/bin/next"), "dev", "--hostname", "127.0.0.1", "--port", String(port)], {

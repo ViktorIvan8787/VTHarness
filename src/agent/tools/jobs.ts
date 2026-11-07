@@ -25,15 +25,11 @@ export interface JobToolContext {
 	 *  input rides along because the spawn happens MID-STREAM, before
 	 *  onFinish persists the tool part — a transcript scan would race it. */
 	spawn: (job: JobRecord, input: ResearchInput | DemoInput | VisualInput | PdfInput) => void;
-	/** Search-provider availability, retained for existing composition seams.
-	 *  Research dispatch does not depend on it: web_fetch is keyless and
-	 *  web_search reports a missing provider as a recoverable tool result. */
-	searchAvailable?: () => boolean;
 }
 
 export const researchInputSchema = Type.Object({
 	question: Type.String({
-		description: "The single research question to answer. Make it specific — the researcher sees nothing else of the lesson.",
+		description: "The specific question to answer, including the source web-page or PDF URLs to read. The researcher cannot search the web and sees nothing else of the lesson.",
 	}),
 	context: Type.Optional(
 		Type.String({
@@ -107,7 +103,7 @@ const PDF_ACK =
 	"The document brief arrives as a new message when ready; weave it into the lesson and cite its pages.";
 
 const RESEARCH_DESCRIPTION =
-	"Dispatch a background web-research agent: fact verification, current data, or niche specifics you are not certain about. " +
+	"Dispatch a background source-reading agent to examine supplied web-page or PDF URLs. Include the source URLs in the question or context. " +
 	"The call is ASYNC and fire-and-forget — it resolves immediately and your turn continues; the research brief arrives later " +
 	"as a new message and the lesson resumes from it. Cite the brief's sources when you use them. " +
 	"NEVER use it for things you know cold, internal reasoning, or math.";
@@ -136,8 +132,7 @@ const PDF_DESCRIPTION =
  * context (chatId + jobStore + the spawn seam), so concurrent chats never
  * share state. chat-handler wires it each turn; tests wire their own.
  *
- * Research remains available without a search-provider key; the role's
- * existing user-toggle filtering still applies outside this registry.
+ * The role's existing user-toggle filtering still applies outside this registry.
  */
 export function jobTools(ctx: JobToolContext): Record<string, AgentTool<any>> {
 	return {

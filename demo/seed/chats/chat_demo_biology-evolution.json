@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_biology-evolution",
+	"title": "Biology: selection, drift, and changing allele frequencies",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-11T09:00:00.000Z",
+	"updatedAt": "2026-08-11T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "allele-frequency",
+				"title": "Counting allele copies",
+				"summary": "In a diploid population of N individuals, allele frequency is the number of copies of the allele divided by 2N."
+			},
+			{
+				"id": "heritable-variation",
+				"title": "Variation can be inherited",
+				"summary": "Natural selection can change allele frequencies when heritable differences affect reproductive success in a given environment."
+			},
+			{
+				"id": "selection-mechanism",
+				"title": "Selection has a reproductive mechanism",
+				"summary": "Differential reproductive success associated with heritable variation can systematically change allele frequencies across generations."
+			},
+			{
+				"id": "genetic-drift",
+				"title": "Random sampling changes frequencies",
+				"summary": "Genetic drift is random change in allele frequency caused by finite sampling across generations."
+			},
+			{
+				"id": "drift-size",
+				"title": "Population size affects drift",
+				"summary": "Random sampling produces larger typical allele-frequency fluctuations in smaller populations than in larger populations, all else equal."
+			},
+			{
+				"id": "frequency-not-proof",
+				"title": "A frequency change needs explanation",
+				"summary": "An observed allele-frequency increase alone does not distinguish selection from drift or other evolutionary mechanisms."
+			}
+		],
+		"edges": [
+			{
+				"from": "allele-frequency",
+				"to": "heritable-variation"
+			},
+			{
+				"from": "heritable-variation",
+				"to": "selection-mechanism"
+			},
+			{
+				"from": "selection-mechanism",
+				"to": "genetic-drift"
+			},
+			{
+				"from": "genetic-drift",
+				"to": "drift-size"
+			},
+			{
+				"from": "drift-size",
+				"to": "frequency-not-proof"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_biology-evolution_0",
+			"role": "user",
+			"content": "If an allele becomes more common, does that prove it helped the organisms survive?",
+			"timestamp": 1786438800000
+		},
+		{
+			"id": "msg_demo_biology-evolution_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786438860000
+		},
+		{
+			"id": "msg_demo_biology-evolution_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-evolution_2",
+					"name": "probe",
+					"arguments": {
+						"question": "There are 40 copies of allele A among 100 diploid individuals. What is its frequency?",
+						"options": [
+							{
+								"label": "0.4",
+								"value": "choice-0"
+							},
+							{
+								"label": "0.2",
+								"value": "choice-1"
+							},
+							{
+								"label": "0.8",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "There are 200 allele copies at the locus, so 40/200 = 0.2."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786438920000
+		},
+		{
+			"id": "msg_demo_biology-evolution_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-evolution_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"0.2\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I count chromosome copies rather than individuals.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "There are 40 copies of allele A among 100 diploid individuals. What is its frequency?",
+				"options": [
+					{
+						"index": 1,
+						"label": "0.4"
+					},
+					{
+						"index": 2,
+						"label": "0.2"
+					},
+					{
+						"index": 3,
+						"label": "0.8"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "0.2",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I count chromosome copies rather than individuals.",
+				"answeredAt": "2026-08-11T09:03:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "There are 200 allele copies at the locus, so 40/200 = 0.2.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786438980000
+		},
+		{
+			"id": "msg_demo_biology-evolution_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-evolution_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "Counting allele copies",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Distinguish natural selection from genetic drift using a population example."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786439040000
+		},
+		{
+			"id": "msg_demo_biology-evolution_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-evolution_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786439100000
+		},
+		{
+			"id": "msg_demo_biology-evolution_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_biology-evolution"
+			},
+			"timestamp": 1786439160000
+		},
+		{
+			"id": "msg_demo_biology-evolution_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Distinguish natural selection from genetic drift using a population example. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-evolution_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  allele-frequency[Counting allele copies]\n  heritable-variation[Variation can be inherited]\n  selection-mechanism[Selection has a reproductive mechanism]\n  genetic-drift[Random sampling changes frequencies]\n  drift-size[Population size affects drift]\n  frequency-not-proof[A frequency change needs explanation]\n  allele-frequency --> heritable-variation\n  heritable-variation --> selection-mechanism\n  selection-mechanism --> genetic-drift\n  genetic-drift --> drift-size\n  drift-size --> frequency-not-proof"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786439220000
+		},
+		{
+			"id": "msg_demo_biology-evolution_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-evolution_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: allele-frequency, heritable-variation, selection-mechanism, genetic-drift, drift-size, frequency-not-proof"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "allele-frequency",
+							"title": "Counting allele copies",
+							"summary": "In a diploid population of N individuals, allele frequency is the number of copies of the allele divided by 2N."
+						},
+						{
+							"id": "heritable-variation",
+							"title": "Variation can be inherited",
+							"summary": "Natural selection can change allele frequencies when heritable differences affect reproductive success in a given environment."
+						},
+						{
+							"id": "selection-mechanism",
+							"title": "Selection has a reproductive mechanism",
+							"summary": "Differential reproductive success associated with heritable variation can systematically change allele frequencies across generations."
+						},
+						{
+							"id": "genetic-drift",
+							"title": "Random sampling changes frequencies",
+							"summary": "Genetic drift is random change in allele frequency caused by finite sampling across generations."
+						},
+						{
+							"id": "drift-size",
+							"title": "Population size affects drift",
+							"summary": "Random sampling produces larger typical allele-frequency fluctuations in smaller populations than in larger populations, all else equal."
+						},
+						{
+							"id": "frequency-not-proof",
+							"title": "A frequency change needs explanation",
+							"summary": "An observed allele-frequency increase alone does not distinguish selection from drift or other evolutionary mechanisms."
+						}
+					],
+					"edges": [
+						{
+							"from": "allele-frequency",
+							"to": "heritable-variation"
+						},
+						{
+							"from": "heritable-variation",
+							"to": "selection-mechanism"
+						},
+						{
+							"from": "selection-mechanism",
+							"to": "genetic-drift"
+						},
+						{
+							"from": "genetic-drift",
+							"to": "drift-size"
+						},
+						{
+							"from": "drift-size",
+							"to": "frequency-not-proof"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786439280000
+		},
+		{
+			"id": "msg_demo_biology-evolution_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_biology-evolution_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-11T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "allele-frequency",
+							"title": "Counting allele copies",
+							"status": "upcoming"
+						},
+						{
+							"id": "heritable-variation",
+							"title": "Variation can be inherited",
+							"status": "upcoming"
+						},
+						{
+							"id": "selection-mechanism",
+							"title": "Selection has a reproductive mechanism",
+							"status": "upcoming"
+						},
+						{
+							"id": "genetic-drift",
+							"title": "Random sampling changes frequencies",
+							"status": "upcoming"
+						},
+						{
+							"id": "drift-size",
+							"title": "Population size affects drift",
+							"status": "upcoming"
+						},
+						{
+							"id": "frequency-not-proof",
+							"title": "A frequency change needs explanation",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "allele-frequency",
+							"to": "heritable-variation"
+						},
+						{
+							"from": "heritable-variation",
+							"to": "selection-mechanism"
+						},
+						{
+							"from": "selection-mechanism",
+							"to": "genetic-drift"
+						},
+						{
+							"from": "genetic-drift",
+							"to": "drift-size"
+						},
+						{
+							"from": "drift-size",
+							"to": "frequency-not-proof"
+						}
+					]
+				}
+			},
+			"timestamp": 1786439340000
+		},
+		{
+			"id": "msg_demo_biology-evolution_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786439400000
+		},
+		{
+			"id": "msg_demo_biology-evolution_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### The same outcome can have different causes\nImagine sampling allele copies to form the next generation. Even with equal reproductive chances, a finite sample can contain a larger proportion of A. If carriers instead consistently leave more offspring because of a heritable trait in that environment, selection can also raise A. Observing the increase alone cannot choose between those stories.\n\nReference: [OpenStax: mechanisms of evolution](https://openstax.org/books/concepts-biology/pages/11-2-mechanisms-of-evolution).\n\n### Counting allele copies\nIn a diploid population of N individuals, allele frequency is the number of copies of the allele divided by 2N.\n\n### Variation can be inherited\nNatural selection can change allele frequencies when heritable differences affect reproductive success in a given environment.\n\n### Selection has a reproductive mechanism\nDifferential reproductive success associated with heritable variation can systematically change allele frequencies across generations."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786439460000
+		},
+		{
+			"id": "msg_demo_biology-evolution_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-evolution_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "A neutral allele rises in a small population. Must it be adaptive?",
+						"options": [
+							{
+								"label": "Yes",
+								"value": "choice-0"
+							},
+							{
+								"label": "No: random sampling can change its frequency",
+								"value": "choice-1"
+							},
+							{
+								"label": "Neutral alleles cannot change frequency",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Drift can increase a neutral allele without a fitness advantage.",
+						"type": "predict",
+						"nodeId": "selection-mechanism"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786439520000
+		},
+		{
+			"id": "msg_demo_biology-evolution_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-evolution_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Yes\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I assumed every increase meant an improvement.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "A neutral allele rises in a small population. Must it be adaptive?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Yes"
+					},
+					{
+						"index": 2,
+						"label": "No: random sampling can change its frequency"
+					},
+					{
+						"index": 3,
+						"label": "Neutral alleles cannot change frequency"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Yes",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I assumed every increase meant an improvement.",
+				"answeredAt": "2026-08-11T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Drift can increase a neutral allele without a fitness advantage.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786439580000
+		},
+		{
+			"id": "msg_demo_biology-evolution_14",
+			"role": "user",
+			"content": "Do bacteria become resistant because they need to survive an antibiotic?",
+			"timestamp": 1786439640000
+		},
+		{
+			"id": "msg_demo_biology-evolution_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Need is not a mechanism that directs a useful mutation. Heritable variants can arise and spread; antibiotic exposure can favour resistant variants already present or arising during the population's history. Mutation, selection, drift, and gene transfer have distinct roles.\n\n### Random sampling changes frequencies\nGenetic drift is random change in allele frequency caused by finite sampling across generations.\n\n### Population size affects drift\nRandom sampling produces larger typical allele-frequency fluctuations in smaller populations than in larger populations, all else equal.\n\n### A frequency change needs explanation\nAn observed allele-frequency increase alone does not distinguish selection from drift or other evolutionary mechanisms."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786439700000
+		},
+		{
+			"id": "msg_demo_biology-evolution_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-evolution_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "Which evidence most directly supports selection over a simple drift-only explanation?",
+						"options": [
+							{
+								"label": "One frequency increase",
+								"value": "choice-0"
+							},
+							{
+								"label": "A repeatable heritable difference in reproductive success",
+								"value": "choice-1"
+							},
+							{
+								"label": "A smaller population alone",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Selection involves a link between heritable differences and reproductive success; interpretation still depends on the study design.",
+						"type": "check",
+						"nodeId": "frequency-not-proof"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786439760000
+		},
+		{
+			"id": "msg_demo_biology-evolution_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-evolution_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"A repeatable heritable difference in reproductive success\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I look for the mechanism rather than only the outcome.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "Which evidence most directly supports selection over a simple drift-only explanation?",
+				"options": [
+					{
+						"index": 1,
+						"label": "One frequency increase"
+					},
+					{
+						"index": 2,
+						"label": "A repeatable heritable difference in reproductive success"
+					},
+					{
+						"index": 3,
+						"label": "A smaller population alone"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "A repeatable heritable difference in reproductive success",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I look for the mechanism rather than only the outcome.",
+				"answeredAt": "2026-08-11T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Selection involves a link between heritable differences and reproductive success; interpretation still depends on the study design.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786439820000
+		},
+		{
+			"id": "msg_demo_biology-evolution_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786439880000
+		},
+		{
+			"id": "msg_demo_biology-evolution_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Expression regulation changes which genes are used; evolutionary change concerns inherited population differences over generations. Avoid explaining either process as an organism deciding what would be useful."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786439940000
+		}
+	]
+}

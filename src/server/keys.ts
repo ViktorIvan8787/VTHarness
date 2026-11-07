@@ -127,7 +127,10 @@ export function initAuthEnv(): void {
 
 /** Is this env-var name one the keys system manages (curated, provider,
  *  or held in the file)? */
+const RETIRED_SEARCH_KEYS = new Set(["TAVILY_API_KEY", "BRAVE_API_KEY", "EXA_API_KEY", "FIRECRAWL_API_KEY", "OLLAMA_API_KEY"]);
+
 function isManagedName(name: string): boolean {
+	if (RETIRED_SEARCH_KEYS.has(name) && !isProviderEnvVar(name)) return false;
 	return name !== CUSTOM_AUTH_BINDING && (isWritableAuthKey(name) || name in authStore.authVars());
 }
 
@@ -151,6 +154,7 @@ export function resolveKeyStatuses(
 	const rows: AuthKeyStatus[] = [];
 	for (const id of ids) {
 		if (id === CUSTOM_AUTH_BINDING) continue;
+		if (RETIRED_SEARCH_KEYS.has(id) && !providerEnvVars.has(id)) continue;
 		const envValue = env[id];
 		const fileValue = fileVars[id];
 		const isRealEnv = realEnv.has(id);

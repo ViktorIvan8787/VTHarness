@@ -1,6 +1,6 @@
 # VT-Harness: one-minute hackathon demo
 
-The samples tell one story: a learner connects predictions, loss, neural-network layers, backpropagation, generalisation, and gradient descent. Six teaching sessions and two practice sessions contribute 36 concepts and 23 reasoning chains. Every graph concept links back to a passage in a teaching session.
+The demo contains **23 synthetic sessions: 16 teaching sessions and seven practice sessions**, with **96 concepts and 53 reasoning chains**. It retains the neural-network learning story for the one-minute pitch and adds undergraduate Maths, Physics, Biology, History, and Medicine. Every graph concept links back to a passage in a teaching session. Medicine uses fictional physiology and probability exercises; History clearly distinguishes invented source exercises from real archival material.
 
 All sample conversations, quiz answers, and learning records are **synthetic demonstration data**. They are not a real learner's history or evidence of measured educational outcomes. New messages use the real provider you configure.
 
@@ -19,7 +19,7 @@ The launcher imports existing nonsecret settings on its first run and uses the s
 
 New messages and practice problems use your configured provider and its normal limits/billing. Browsing the saved lessons and graph needs no model generation. A model response has variable latency, so the prepared sessions carry the core one-minute story.
 
-Open the graph and the main lesson once before presenting so the development server compiles them. Zoom the graph out until all six coloured lesson clusters fit above the composer; the app remembers the camera in that browser. Rehearse the live question with the provider and network you intend to use. If you have rehearsed changes you want to discard, stop the server and reset:
+Open the graph and the main lesson once before presenting so the development server compiles them. Fit the expanded graph to the viewport, then zoom into a lesson cluster; the app remembers the camera in that browser. Keep the gradient-descent lesson ready for the one-minute pitch. Rehearse the live question with the provider and network you intend to use. If you have rehearsed changes you want to discard, stop the server and reset:
 
 ```bash
 npm run demo:reset
@@ -27,6 +27,8 @@ npm run demo
 ```
 
 Reset restores the sample conversations and graph, including layout, and removes demo-created sessions/jobs. It preserves demo settings and provider connections. A reset is refused while the demo launcher is running. Normal restarts keep your demo work; they do not reset it. Your regular learning data is separate.
+
+If your demo profile was created before the university examples were added, it keeps that existing history until you explicitly reset it. Copy `demo/.runtime/data/` elsewhere first if you want to keep rehearsal conversations before loading the expanded samples.
 
 ## 60-second pitch
 
@@ -55,10 +57,25 @@ The seed's key arithmetic: initial prediction 3, target 5, loss 4, and weight gr
 | Practice: one update without a hint | [/chat/chat_demo_practice-updates](http://localhost:3006/chat/chat_demo_practice-updates) |
 | Practice: spot a misleading training score | [/chat/chat_demo_practice-generalisation](http://localhost:3006/chat/chat_demo_practice-generalisation) |
 
+## University examples
+
+Each row adds two teaching sessions, twelve concepts, and one completed transfer practice. Teaching sessions include a plan, an initial probe, a wrongly answered prediction, a misconception repair, and a successful follow-up check. The existing neural-network pitch links above remain available.
+
+| Discipline | Lessons | Practice |
+| --- | --- | --- |
+| Maths | [Eigenvectors](http://localhost:3006/chat/chat_demo_maths-eigenvectors) · [Differential equations](http://localhost:3006/chat/chat_demo_maths-differential-equations) | [Eigenvectors through time](http://localhost:3006/chat/chat_demo_practice-maths) |
+| Physics | [Spring oscillations](http://localhost:3006/chat/chat_demo_physics-oscillations) · [Energy conservation](http://localhost:3006/chat/chat_demo_physics-energy) | [Predict an oscillator's speed](http://localhost:3006/chat/chat_demo_practice-physics) |
+| Biology | [Gene regulation](http://localhost:3006/chat/chat_demo_biology-gene-regulation) · [Selection and drift](http://localhost:3006/chat/chat_demo_biology-evolution) | [Regulation or evolution?](http://localhost:3006/chat/chat_demo_practice-biology) |
+| History | [French Revolution](http://localhost:3006/chat/chat_demo_history-french-revolution) · [Source criticism](http://localhost:3006/chat/chat_demo_history-source-criticism) | [Critique an argument about 1789](http://localhost:3006/chat/chat_demo_practice-history) |
+| Medicine | [Cardiovascular physiology](http://localhost:3006/chat/chat_demo_medicine-cardiovascular) · [Diagnostic probability](http://localhost:3006/chat/chat_demo_medicine-diagnostic-probability) | [Rebuild a screening table](http://localhost:3006/chat/chat_demo_practice-medicine) |
+
+For an alternative pitch, show one wrongly answered prediction, the explanation that repairs it, then its linked practice session and graph cluster. Maths links its eigenvector and differential-equation lessons; Physics links force, frequency, and energy. No subject-similarity links are inserted merely to join unrelated disciplines.
+
 ## Folder contents
 
 - `seed/` contains the committed sessions, graph ledgers, layout, coverage records, and a manifest. It contains no credentials or pinned live model.
 - `content.ts` contains the authored lesson text, questions, concepts, and practice problems.
+- `disciplines.ts` contains the five university disciplines, their worked examples, reasoning chains, source references, and practice problems.
 - `dataset.ts` constructs records using the application's native transcript and grading helpers.
 - `generate.ts` regenerates `seed/`: `node --import tsx demo/generate.ts`.
 - `start.mjs` and `runtime.mjs` initialise/reset the demo and launch Next.js.

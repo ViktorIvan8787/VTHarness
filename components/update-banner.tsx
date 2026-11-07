@@ -4,16 +4,16 @@
  * The auto-update banner (Wave C, owner 2026-10-10: silent download +
  * restart-banner UX). The shell pushes "vt:update-status" once a staged
  * update exists (electron/main.cjs update-downloaded). Snapshot retrieval
- * also covers a late load. The card offers Restart alongside Settings.
+ * also covers a late load. The card offers Restart and Dismiss controls.
  * Browser builds have no window.vt and never see a push: renders null.
  *
  * Dismissing hides this version for the mounted window only; the update
- * still installs on quit (autoInstallOnAppQuit) or via Settings.
+ * still installs on quit (autoInstallOnAppQuit) or via Restart.
  */
 
 import { useState } from "react";
 import { XIcon } from "lucide-react";
-import { useUpdateState } from "@/components/settings/update-settings.tsx";
+import { useUpdateState } from "@/components/update-state.ts";
 
 export default function UpdateBanner() {
 	const { state: ready } = useUpdateState();

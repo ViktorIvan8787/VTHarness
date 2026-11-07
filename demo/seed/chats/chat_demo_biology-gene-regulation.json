@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_biology-gene-regulation",
+	"title": "Biology: reading the lac operon as a control system",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-10T09:00:00.000Z",
+	"updatedAt": "2026-08-10T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "lac-operon",
+				"title": "Coordinated transcription",
+				"summary": "The E. coli lac operon groups genes involved in lactose metabolism under shared transcriptional control."
+			},
+			{
+				"id": "lac-repressor",
+				"title": "Repression at the operator",
+				"summary": "Without inducer, the lac repressor binds the operator and suppresses transcription."
+			},
+			{
+				"id": "lac-induction",
+				"title": "Lactose relieves repression",
+				"summary": "Allolactose derived from lactose binds the lac repressor and reduces its operator binding."
+			},
+			{
+				"id": "lac-cap",
+				"title": "Glucose-sensitive activation",
+				"summary": "In the standard lac operon model, low glucose favours cAMP-CAP activation of transcription."
+			},
+			{
+				"id": "lac-high",
+				"title": "Combining the two signals",
+				"summary": "In the standard model, lac expression is high when lactose is present and glucose is low: repression is relieved and CAP activation is available."
+			},
+			{
+				"id": "lac-low",
+				"title": "Derepression is not full activation",
+				"summary": "With lactose and abundant glucose, lac repression can be relieved while CAP activation remains weak, producing lower expression than under low glucose."
+			}
+		],
+		"edges": [
+			{
+				"from": "lac-operon",
+				"to": "lac-repressor"
+			},
+			{
+				"from": "lac-repressor",
+				"to": "lac-induction"
+			},
+			{
+				"from": "lac-induction",
+				"to": "lac-cap"
+			},
+			{
+				"from": "lac-cap",
+				"to": "lac-high"
+			},
+			{
+				"from": "lac-high",
+				"to": "lac-low"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_biology-gene-regulation_0",
+			"role": "user",
+			"content": "Why does a bacterium need both a repressor and an activator to regulate lactose-use genes?",
+			"timestamp": 1786352400000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786352460000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-gene-regulation_2",
+					"name": "probe",
+					"arguments": {
+						"question": "What does a repressor bound at the lac operator do?",
+						"options": [
+							{
+								"label": "Suppress transcription",
+								"value": "choice-0"
+							},
+							{
+								"label": "Change the DNA sequence",
+								"value": "choice-1"
+							},
+							{
+								"label": "Guarantee maximum transcription",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "It restricts transcription rather than editing the genome."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786352520000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-gene-regulation_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Suppress transcription\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"Regulating use of a gene differs from changing the gene.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "What does a repressor bound at the lac operator do?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Suppress transcription"
+					},
+					{
+						"index": 2,
+						"label": "Change the DNA sequence"
+					},
+					{
+						"index": 3,
+						"label": "Guarantee maximum transcription"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Suppress transcription",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "Regulating use of a gene differs from changing the gene.",
+				"answeredAt": "2026-08-10T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "It restricts transcription rather than editing the genome.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786352580000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-gene-regulation_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "Coordinated transcription",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Predict qualitative lac operon expression from lactose and glucose availability."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786352640000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-gene-regulation_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786352700000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_biology-gene-regulation"
+			},
+			"timestamp": 1786352760000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Predict qualitative lac operon expression from lactose and glucose availability. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-gene-regulation_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  lac-operon[Coordinated transcription]\n  lac-repressor[Repression at the operator]\n  lac-induction[Lactose relieves repression]\n  lac-cap[Glucose-sensitive activation]\n  lac-high[Combining the two signals]\n  lac-low[Derepression is not full activation]\n  lac-operon --> lac-repressor\n  lac-repressor --> lac-induction\n  lac-induction --> lac-cap\n  lac-cap --> lac-high\n  lac-high --> lac-low"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786352820000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-gene-regulation_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: lac-operon, lac-repressor, lac-induction, lac-cap, lac-high, lac-low"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "lac-operon",
+							"title": "Coordinated transcription",
+							"summary": "The E. coli lac operon groups genes involved in lactose metabolism under shared transcriptional control."
+						},
+						{
+							"id": "lac-repressor",
+							"title": "Repression at the operator",
+							"summary": "Without inducer, the lac repressor binds the operator and suppresses transcription."
+						},
+						{
+							"id": "lac-induction",
+							"title": "Lactose relieves repression",
+							"summary": "Allolactose derived from lactose binds the lac repressor and reduces its operator binding."
+						},
+						{
+							"id": "lac-cap",
+							"title": "Glucose-sensitive activation",
+							"summary": "In the standard lac operon model, low glucose favours cAMP-CAP activation of transcription."
+						},
+						{
+							"id": "lac-high",
+							"title": "Combining the two signals",
+							"summary": "In the standard model, lac expression is high when lactose is present and glucose is low: repression is relieved and CAP activation is available."
+						},
+						{
+							"id": "lac-low",
+							"title": "Derepression is not full activation",
+							"summary": "With lactose and abundant glucose, lac repression can be relieved while CAP activation remains weak, producing lower expression than under low glucose."
+						}
+					],
+					"edges": [
+						{
+							"from": "lac-operon",
+							"to": "lac-repressor"
+						},
+						{
+							"from": "lac-repressor",
+							"to": "lac-induction"
+						},
+						{
+							"from": "lac-induction",
+							"to": "lac-cap"
+						},
+						{
+							"from": "lac-cap",
+							"to": "lac-high"
+						},
+						{
+							"from": "lac-high",
+							"to": "lac-low"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786352880000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_biology-gene-regulation_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-10T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "lac-operon",
+							"title": "Coordinated transcription",
+							"status": "upcoming"
+						},
+						{
+							"id": "lac-repressor",
+							"title": "Repression at the operator",
+							"status": "upcoming"
+						},
+						{
+							"id": "lac-induction",
+							"title": "Lactose relieves repression",
+							"status": "upcoming"
+						},
+						{
+							"id": "lac-cap",
+							"title": "Glucose-sensitive activation",
+							"status": "upcoming"
+						},
+						{
+							"id": "lac-high",
+							"title": "Combining the two signals",
+							"status": "upcoming"
+						},
+						{
+							"id": "lac-low",
+							"title": "Derepression is not full activation",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "lac-operon",
+							"to": "lac-repressor"
+						},
+						{
+							"from": "lac-repressor",
+							"to": "lac-induction"
+						},
+						{
+							"from": "lac-induction",
+							"to": "lac-cap"
+						},
+						{
+							"from": "lac-cap",
+							"to": "lac-high"
+						},
+						{
+							"from": "lac-high",
+							"to": "lac-low"
+						}
+					]
+				}
+			},
+			"timestamp": 1786352940000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786353000000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Two inputs, one transcription response\nTreat lactose availability and glucose availability as separate inputs. Lactose can remove repression through its inducer; low glucose supports activation. Predict each input's effect before predicting their combined output. This qualitative model describes regulation, not a literal digital on/off switch.\n\nReference: [OpenStax: prokaryotic gene regulation](https://openstax.org/books/biology/pages/16-2-prokaryotic-gene-regulation).\n\n### Coordinated transcription\nThe E. coli lac operon groups genes involved in lactose metabolism under shared transcriptional control.\n\n### Repression at the operator\nWithout inducer, the lac repressor binds the operator and suppresses transcription.\n\n### Lactose relieves repression\nAllolactose derived from lactose binds the lac repressor and reduces its operator binding."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786353060000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-gene-regulation_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "Lactose is present and glucose is abundant. Is lac expression maximal?",
+						"options": [
+							{
+								"label": "Yes: lactose alone is sufficient",
+								"value": "choice-0"
+							},
+							{
+								"label": "No: strong CAP activation is missing",
+								"value": "choice-1"
+							},
+							{
+								"label": "No genes can be transcribed",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Relieving repression and activating transcription are different inputs.",
+						"type": "predict",
+						"nodeId": "lac-induction"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786353120000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-gene-regulation_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Yes: lactose alone is sufficient\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I treated removing the brake as the same thing as pressing the accelerator.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "Lactose is present and glucose is abundant. Is lac expression maximal?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Yes: lactose alone is sufficient"
+					},
+					{
+						"index": 2,
+						"label": "No: strong CAP activation is missing"
+					},
+					{
+						"index": 3,
+						"label": "No genes can be transcribed"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Yes: lactose alone is sufficient",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I treated removing the brake as the same thing as pressing the accelerator.",
+				"answeredAt": "2026-08-10T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Relieving repression and activating transcription are different inputs.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786353180000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_14",
+			"role": "user",
+			"content": "Does lactose make the bacterium mutate so that the genes turn on?",
+			"timestamp": 1786353240000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Induction changes regulatory protein activity and transcription without requiring a new DNA sequence. Basal expression and transport make the real system more nuanced than a binary switch. Regulation can be reversible as conditions change.\n\n### Glucose-sensitive activation\nIn the standard lac operon model, low glucose favours cAMP-CAP activation of transcription.\n\n### Combining the two signals\nIn the standard model, lac expression is high when lactose is present and glucose is low: repression is relieved and CAP activation is available.\n\n### Derepression is not full activation\nWith lactose and abundant glucose, lac repression can be relieved while CAP activation remains weak, producing lower expression than under low glucose."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786353300000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_biology-gene-regulation_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "Which condition favours high lac expression in this model?",
+						"options": [
+							{
+								"label": "Lactose absent; glucose abundant",
+								"value": "choice-0"
+							},
+							{
+								"label": "Lactose present; glucose low",
+								"value": "choice-1"
+							},
+							{
+								"label": "Both absent",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "The inducer relieves repression and low glucose favours CAP activation.",
+						"type": "check",
+						"nodeId": "lac-low"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786353360000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_biology-gene-regulation_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"Lactose present; glucose low\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I check the repressor and activator separately, then combine them.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "Which condition favours high lac expression in this model?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Lactose absent; glucose abundant"
+					},
+					{
+						"index": 2,
+						"label": "Lactose present; glucose low"
+					},
+					{
+						"index": 3,
+						"label": "Both absent"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Lactose present; glucose low",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I check the repressor and activator separately, then combine them.",
+				"answeredAt": "2026-08-10T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "The inducer relieves repression and low glucose favours CAP activation.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786353420000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786353480000
+		},
+		{
+			"id": "msg_demo_biology-gene-regulation_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Separate environmental signals, molecular mechanisms, and measured expression. The same habit helps interpret gene-expression data without mistaking correlation for a mutation or a permanent change."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786353540000
+		}
+	]
+}

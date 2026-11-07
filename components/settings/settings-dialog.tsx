@@ -1,25 +1,5 @@
 "use client";
-/**
- * THE SETTINGS DIALOG (settings-app wave, 2026-09-20): the thin settings
- * page graduated into the designed surface — a centered modal over
- * everything, left section nav + one scrolling content column.
- *
- * Owner decisions this wave:
- * - Dialog, not a page: opens over whatever screen you're on (the payoff:
- *   appearance edits restyle the chat LIVE behind the dialog). Escape,
- *   backdrop, and ✕ all close. Modal-only — /settings redirects, so
- *   nothing links into a dead surface.
- * - Left section nav in the app's mono chrome (text-only, session-list
- *   language — active = bg-accent), no icons, matching the minimal-color
- *   doctrine.
- * - The dialog is surface-agnostic by construction: the sections talk to
- *   /api/settings* and localStorage only, so this shell can be re-mounted
- *   as a true OS window in the Electron round with near-zero churn.
- *
- * The record + the single `write` seam moved here from the thin page:
- * one record instance for the whole dialog, sections write through it,
- * switching sections never refetches.
- */
+/** Settings modal with Providers, Agent, and Graph sharing one record and write seam. */
 
 import {
 	createContext,
@@ -34,37 +14,28 @@ import { useBackdropDismiss } from "@/components/backdrop-dismiss";
 import {
 	CURRENT_SETTINGS_VERSION,
 	type AgentSettings,
-	type AppearanceSettings,
 	type CompactionSettings,
 	type GraphSettings,
 	type UserSettings,
 } from "@/src/core";
-import { useAppearance } from "./appearance.tsx";
 import { SettingsSection } from "./controls.tsx";
-import { UpdateSettings } from "./update-settings.tsx";
 import { AgentSection } from "./agent-section.tsx";
 import type { ModelsSettings } from "@/src/core";
 import { MENU_CLOSE_EVENT, MENU_OPEN_EVENT } from "@/components/menu-shell";
 import { notifySettingsSaved } from "@/components/settings-signal";
 import { KeysSection } from "./keys-section.tsx";
 import { Hint } from "@/components/ui/hint";
-import { AppearanceSection, GraphSection } from "./appearance-section.tsx";
-import { KeyboardSection } from "./keyboard-section.tsx";
+import { GraphSection } from "./graph-section.tsx";
 import { ChatGPTUIProvider } from "./chatgpt-connection.tsx";
 import { NativeSubscriptionUIProvider } from "./subscription-connections.tsx";
 
-/** Owner (2026-09-20): hints earn their place — mechanics-explaining
- *  prose is out; only the keyboard note stays (storage location is a
- *  real question users ask). */
 const SECTIONS = [
 	{ id: "keys", label: "Providers" },
 	{ id: "agent", label: "Agent" },
-	{ id: "appearance", label: "Appearance" },
 	{ id: "graph", label: "Graph" },
-	{ id: "keyboard", label: "Keyboard", hint: "Stored on this device" },
-	{ id: "general", label: "General" },
 ] as const;
 type SectionId = (typeof SECTIONS)[number]["id"];
+const sectionId = (section?: string): SectionId => SECTIONS.find(item => item.id === section)?.id ?? "keys";
 
 /** `open(section?, row?)` — the optional ROW deep-links into the Keys
  *  section with that row unfolded (zero-keys wave: the dictation error's
@@ -85,7 +56,7 @@ export function SettingsDialogProvider({
 	const [landOn, setLandOn] = useState<SectionId>("keys");
 	const [landOnRow, setLandOnRow] = useState<string | null>(null);
 	const open = useCallback((section?: string, row?: string) => {
-		setLandOn(section ? section as SectionId : "keys");
+		setLandOn(sectionId(section));
 		setLandOnRow(row ?? null);
 		setShow(true);
 	}, []);
@@ -142,7 +113,6 @@ export function SettingsDialogBody({
 	 *  retargets follow it exactly like initialSection below. */
 	initialRow?: string | null;
 }) {
-	const { onAppearanceChange } = useAppearance();
 	const [record, setRecord] = useState<UserSettings | null | undefined>(
 		undefined,
 	);
@@ -180,14 +150,14 @@ export function SettingsDialogBody({
 			window.removeEventListener(MENU_CLOSE_EVENT, onClose);
 		};
 	}, []);
-	const [active, setActive] = useState<SectionId>(initialSection);
+	const [active, setActive] = useState<SectionId>(sectionId(initialSection));
 	// A deep-link fired while the dialog is ALREADY open (first exercised by
 	// the wave-6 embedding picker's "Add a provider key first…" link — the
 	// picker itself died with wave 7, the mechanism is general) changes
 	// initialSection under our feet — follow it, or the link silently does
 	// nothing.
 	useEffect(() => {
-		setActive(initialSection);
+		setActive(sectionId(initialSection));
 	}, [initialSection]);
 
 	// Fetch once per dialog mount. 200 {settings: null} is FIRST BOOT
@@ -228,7 +198,7 @@ export function SettingsDialogBody({
 	 *  schema mistake caught by the validation surface). */
 	const write = useCallback(
 		async (
-			section: "general" | "agent" | "models" | "appearance" | "graph" | "compaction",
+			section: "agent" | "models" | "graph" | "compaction",
 			body: object,
 		) => {
 			setError(null);
@@ -257,10 +227,8 @@ export function SettingsDialogBody({
 					stored ?? ({ ...(prev ?? {}), [section]: body }) as UserSettings,
 			);
 			notifySettingsSaved(section);
-			if (section === "appearance")
-				onAppearanceChange(body as AppearanceSettings);
 		},
-		[onAppearanceChange],
+		[],
 	);
 
 	return (
@@ -357,19 +325,7 @@ export function SettingsDialogBody({
 						</p>
 					) : (
 						<div>
-							{active === "general" && (
-								<SettingsSection
-									title="General"
-									testid="section-general"
-								>
-									<UpdateSettings
-										autoUpdate={record.general?.autoUpdate ?? true}
-										onAutoUpdateChange={(on) =>
-											void write("general", { ...record.general, autoUpdate: on })
-										}
-									/>
-								</SettingsSection>
-							)}
+
 							{active === "keys" && (
 								<SettingsSection title="Providers" testid="section-keys">
 									<KeysSection initialRow={initialRow ?? undefined} />
@@ -398,19 +354,7 @@ export function SettingsDialogBody({
 									/>
 								</SettingsSection>
 							)}
-							{active === "appearance" && (
-								<SettingsSection
-									title="Appearance"
-									testid="section-appearance"
-								>
-									<AppearanceSection
-										appearance={record.appearance}
-										onSectionChange={(next: AppearanceSettings) =>
-											void write("appearance", next)
-										}
-									/>
-								</SettingsSection>
-							)}
+
 							{active === "graph" && (
 								<SettingsSection
 									title="Graph"
@@ -424,15 +368,7 @@ export function SettingsDialogBody({
 									/>
 								</SettingsSection>
 							)}
-							{active === "keyboard" && (
-								<SettingsSection
-									title="Keyboard"
-									hint="Stored on this device"
-									testid="section-keyboard"
-								>
-									<KeyboardSection />
-								</SettingsSection>
-							)}
+
 						</div>
 					)}
 				</div>

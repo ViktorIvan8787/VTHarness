@@ -1,3 +1,4 @@
+import { FACTORY_SETTINGS } from "../src/core/settings.ts";
 /**
  * Tests for the resolution layer (settings-storage wave, 2026-09-19;
  * model-slots wave 2026-09-20; BYOK all-the-way-down wave 2026-09-22):
@@ -27,7 +28,6 @@ describe("resolveSettings", () => {
 		assert.deepEqual(eff.general, { autoUpdate: true });
 		assert.deepEqual(eff.agent.tools, {});
 		assert.deepEqual(eff.agent.prompts, {});
-		assert.deepEqual(eff.agent.search, {});
 		// BYOK (owner, 2026-09-22): no factory floor — every role undefined,
 		// every slot null. No phantom ids anywhere.
 		for (const role of BACKGROUND_MODEL_ROLES) {
@@ -36,19 +36,19 @@ describe("resolveSettings", () => {
 		assert.equal(eff.models.strong, null);
 		assert.equal(eff.models.cheap, null);
 		assert.equal(eff.models.vision, null);
-		assert.equal(eff.appearance.mode, "dark");
-		assert.equal(eff.appearance.background, null);
-		assert.equal(eff.appearance.fontFamily, null);
-		assert.equal(eff.appearance.proseFontSize, 16);
-		assert.equal(eff.appearance.sessionNameSerif, true);
-		assert.equal(eff.appearance.mdRendering.headingWeight, 900);
+		assert.equal(eff.appearance.mode, FACTORY_SETTINGS.appearance.mode);
+		assert.equal(eff.appearance.background, FACTORY_SETTINGS.appearance.background);
+		assert.equal(eff.appearance.fontFamily, FACTORY_SETTINGS.appearance.fontFamily);
+		assert.equal(eff.appearance.proseFontSize, FACTORY_SETTINGS.appearance.proseFontSize);
+		assert.equal(eff.appearance.sessionNameSerif, FACTORY_SETTINGS.appearance.sessionNameSerif);
+		assert.equal(eff.appearance.mdRendering.headingWeight, FACTORY_SETTINGS.appearance.mdRendering.headingWeight);
 		// wave 7 collapse: the master switch ONLY + the redesign's chunk
 		// budget — absent record resolves the factory 4096 (halved back
 		// from the digest-era 8192, owner, 2026-10-13)
 		assert.deepEqual(eff.graph, { enabled: true, rendering: true, extractionChunkTokens: 4096 });
 	});
 
-	it("explicit record values win over every factory default", () => {
+	it("configurable record values win while appearance stays at the factory defaults", () => {
 		const record: UserSettings = {
 			version: 1,
 			general: { autoUpdate: false },
@@ -56,7 +56,6 @@ describe("resolveSettings", () => {
 				models: { researcher: { model: { provider: "openrouter", id: "qwen/qwen3.8-flash" } } },
 				tools: { research: false },
 				prompts: { "system-prompt.md": true },
-				search: { engine: "tavily" },
 			},
 			appearance: { mode: "light", proseFontSize: 20, mdRendering: { headingWeight: 600 } },
 			graph: { enabled: false },
@@ -70,12 +69,11 @@ describe("resolveSettings", () => {
 			// build resolves it from DEFAULT_THINKING_ORDER, not a pin).
 			thinkingLevel: undefined,
 		});
-		assert.deepEqual(eff.agent.search, { engine: "tavily" });
 		assert.deepEqual(eff.agent.tools, { research: false });
 		assert.deepEqual(eff.agent.prompts, { "system-prompt.md": true });
-		assert.equal(eff.appearance.mode, "light");
-		assert.equal(eff.appearance.proseFontSize, 20);
-		assert.equal(eff.appearance.mdRendering.headingWeight, 600);
+		assert.equal(eff.appearance.mode, FACTORY_SETTINGS.appearance.mode);
+		assert.equal(eff.appearance.proseFontSize, FACTORY_SETTINGS.appearance.proseFontSize);
+		assert.equal(eff.appearance.mdRendering.headingWeight, FACTORY_SETTINGS.appearance.mdRendering.headingWeight);
 		// wave 7 collapse: the section IS the master switch (absent budget
 		// field = factory 4096 — a pre-redesign record resolves cleanly).
 		assert.deepEqual(eff.graph, { enabled: false, rendering: true, extractionChunkTokens: 4096 });

@@ -13,10 +13,9 @@
 
 import path from "node:path";
 import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
-import { isHexColor, type ChatSettings } from "../core";
+import type { ChatSettings } from "../core";
 import type {
 	AgentSettings,
-	AppearanceSettings,
 	BackgroundModelRole,
 	CompactionSettings,
 	CustomModelOverride,
@@ -29,7 +28,6 @@ import type {
 } from "../core/settings.ts";
 import { BACKGROUND_MODEL_ROLES, CACHE_RETENTIONS, COMPACTION_THRESHOLD_FLOOR, CUSTOM_MODEL_PIN_FLOOR, EXTRACTION_CHUNK_TOKENS_FLOOR, MODEL_SLOTS } from "../core/settings.ts";
 import { WRITABLE_TOOL_KEYS } from "../core/pending.ts";
-import { isSearchEngineId, SEARCH_ENGINES } from "../core/search.ts";
 import { isDictationLanguage } from "../core/dictation.ts";
 import { parseFileAccessSettings } from "../core/file-access.ts";
 
@@ -189,16 +187,6 @@ export function parseAgentSettingsBody(body: unknown): SettingsBodyResult<AgentS
 	const prompts = parseBooleanMap(raw.prompts, "prompts");
 	if (prompts.error) return { ok: false, error: prompts.error };
 	if (prompts.map) settings.prompts = prompts.map;
-	if (raw.search !== undefined) {
-		const search = asRecord(raw.search);
-		if (!search) return { ok: false, error: "search must be an object" };
-		if (search.engine !== undefined) {
-			if (!isSearchEngineId(search.engine)) {
-				return { ok: false, error: `search.engine must be ${SEARCH_ENGINES.map((engine) => `"${engine.id}"`).join(", ")}` };
-			}
-			settings.search = { engine: search.engine };
-		}
-	}
 	// Prober graph tools (wave 7, owner ruling 2026-09-23): an agent-section
 	// subsection, not a tool-toggles key — the mechanism is agent capability
 	// (tool registration), the subject is the graph. Strict write side:
@@ -218,85 +206,6 @@ export function parseAgentSettingsBody(body: unknown): SettingsBodyResult<AgentS
 			return { ok: false, error: "fileAccess.folders must be absolute on the server filesystem (or start with ~/)" };
 		}
 		settings.fileAccess = parsed.settings;
-	}
-	return { ok: true, settings };
-}
-
-/** A hex-or-null color field (appearance colors): null = default. */
-function parseHexOrNull(value: unknown, field: string): { color?: string | null; error?: string } {
-	if (value === null) return { color: null };
-	if (typeof value !== "string" || !isHexColor(value)) {
-		return { error: `${field} must be a #hex color or null` };
-	}
-	return { color: value };
-}
-
-/** appearance: { mode?, background?, fontFamily?, proseFontSize?,
- *  sessionNameSerif?, mdRendering? } */
-export function parseAppearanceSettingsBody(body: unknown): SettingsBodyResult<AppearanceSettings> {
-	const raw = asRecord(body);
-	if (!raw) return { ok: false, error: "Invalid JSON body" };
-	const settings: AppearanceSettings = {};
-	if (raw.mode !== undefined) {
-		if (raw.mode !== "dark" && raw.mode !== "light") {
-			return { ok: false, error: "mode must be \"dark\" or \"light\"" };
-		}
-		settings.mode = raw.mode;
-	}
-	if (raw.background !== undefined) {
-		const parsed = parseHexOrNull(raw.background, "background");
-		if (parsed.error) return { ok: false, error: parsed.error };
-		settings.background = parsed.color ?? null;
-	}
-	if (raw.fontFamily !== undefined) {
-		if (raw.fontFamily !== null && (typeof raw.fontFamily !== "string" || !raw.fontFamily.trim())) {
-			return { ok: false, error: "fontFamily must be a non-empty string or null" };
-		}
-		settings.fontFamily = raw.fontFamily as string | null;
-	}
-	if (raw.proseFontSize !== undefined) {
-		if (
-			typeof raw.proseFontSize !== "number" ||
-			!Number.isInteger(raw.proseFontSize) ||
-			raw.proseFontSize < 12 ||
-			raw.proseFontSize > 24
-		) {
-			return { ok: false, error: "proseFontSize must be an integer between 12 and 24" };
-		}
-		settings.proseFontSize = raw.proseFontSize;
-	}
-	if (raw.sessionNameSerif !== undefined) {
-		if (typeof raw.sessionNameSerif !== "boolean") {
-			return { ok: false, error: "sessionNameSerif must be a boolean" };
-		}
-		settings.sessionNameSerif = raw.sessionNameSerif;
-	}
-	if (raw.mdRendering !== undefined) {
-		const md = asRecord(raw.mdRendering);
-		if (!md) return { ok: false, error: "mdRendering must be an object" };
-		const rendering: NonNullable<AppearanceSettings["mdRendering"]> = {};
-		if (md.headingWeight !== undefined) {
-			if (
-				typeof md.headingWeight !== "number" ||
-				!Number.isInteger(md.headingWeight) ||
-				md.headingWeight < 100 ||
-				md.headingWeight > 900
-			) {
-				return { ok: false, error: "mdRendering.headingWeight must be an integer between 100 and 900" };
-			}
-			rendering.headingWeight = md.headingWeight;
-		}
-		if (md.boldColor !== undefined) {
-			const parsed = parseHexOrNull(md.boldColor, "mdRendering.boldColor");
-			if (parsed.error) return { ok: false, error: parsed.error };
-			rendering.boldColor = parsed.color ?? null;
-		}
-		if (md.italicColor !== undefined) {
-			const parsed = parseHexOrNull(md.italicColor, "mdRendering.italicColor");
-			if (parsed.error) return { ok: false, error: parsed.error };
-			rendering.italicColor = parsed.color ?? null;
-		}
-		if (Object.keys(rendering).length) settings.mdRendering = rendering;
 	}
 	return { ok: true, settings };
 }
@@ -461,7 +370,6 @@ export const SETTINGS_SECTIONS = {
 	general: parseGeneralSettingsBody,
 	chat: parseSettingsBody,
 	agent: parseAgentSettingsBody,
-	appearance: parseAppearanceSettingsBody,
 	graph: parseGraphSettingsBody,
 	compaction: parseCompactionSettingsBody,
 	models: parseModelsSettingsBody,

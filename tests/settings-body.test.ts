@@ -12,7 +12,6 @@ import { describe, it } from "node:test";
 import {
 	parseAgentSettingsBody,
 	parseModelsSettingsBody,
-	parseAppearanceSettingsBody,
 	parseGeneralSettingsBody,
 	parseCompactionSettingsBody,
 	parseGraphSettingsBody,
@@ -66,29 +65,6 @@ describe("parseAgentSettingsBody", () => {
 		// cross-validation — the parser only sees shapes.
 	});
 
-	it("search: recognizes Exa, Firecrawl, and Ollama and rejects unknown engines", () => {
-		const ok = parseAgentSettingsBody({ search: { engine: "tavily" } });
-		assert.ok(ok.ok);
-		assert.deepEqual(ok.settings.search, { engine: "tavily" });
-		const exa = parseAgentSettingsBody({ search: { engine: "exa" } });
-		assert.ok(exa.ok);
-		assert.deepEqual(exa.settings.search, { engine: "exa" });
-		const fc = parseAgentSettingsBody({ search: { engine: "firecrawl" } });
-		assert.ok(fc.ok);
-		assert.deepEqual(fc.settings.search, { engine: "firecrawl" });
-		const ollama = parseAgentSettingsBody({ search: { engine: "ollama" } });
-		assert.ok(ollama.ok);
-		assert.deepEqual(ollama.settings.search, { engine: "ollama" });
-		assert.equal(parseAgentSettingsBody({ search: { engine: "deepseek" } }).ok, false);
-		assert.equal(parseAgentSettingsBody({ search: { engine: "chatgpt" } }).ok, false);
-		const clear = parseAgentSettingsBody({ search: {} });
-		assert.ok(clear.ok);
-		assert.equal(clear.settings.search, undefined, "absent engine = back to auto-detect");
-		assert.equal(parseAgentSettingsBody({ search: { engine: "google" } }).ok, false);
-		assert.equal(parseAgentSettingsBody({ search: "tavily" }).ok, false, "search must be an object");
-		assert.equal(parseAgentSettingsBody({ search: { engine: 1 } }).ok, false);
-	});
-
 	it("graphTools: strict object subsection, enabled boolean when present — wave 7, 2026-09-23", () => {
 		const off = parseAgentSettingsBody({ graphTools: { enabled: false } });
 		assert.ok(off.ok);
@@ -105,59 +81,6 @@ describe("parseAgentSettingsBody", () => {
 		const r = parseAgentSettingsBody({});
 		assert.ok(r.ok);
 		assert.deepEqual(r.settings, {});
-	});
-});
-
-describe("parseAppearanceSettingsBody", () => {
-	it("parses every field; hex-or-null colors; clamps happen at sanitize, rejects here", () => {
-		const r = parseAppearanceSettingsBody({
-			mode: "light",
-			background: "#ffffff",
-			fontFamily: "Some Font",
-			proseFontSize: 20,
-			sessionNameSerif: false,
-			mdRendering: { headingWeight: 700, boldColor: "#ff8800", italicColor: null },
-		});
-		assert.ok(r.ok);
-		assert.deepEqual(r.settings, {
-			mode: "light",
-			background: "#ffffff",
-			fontFamily: "Some Font",
-			proseFontSize: 20,
-			sessionNameSerif: false,
-			mdRendering: { headingWeight: 700, boldColor: "#ff8800", italicColor: null },
-		});
-	});
-
-	it("rejects bad enums, ranges, and colors — with specific messages, never clamps", () => {
-		const cases: unknown[] = [
-			{ mode: "sepia" },
-			{ background: "blue" },
-			{ background: 42 },
-			{ fontFamily: "" },
-			{ fontFamily: 12 },
-			{ proseFontSize: 30 },
-			{ proseFontSize: 64.5 },
-			{ sessionNameSerif: 1 },
-			{ mdRendering: { headingWeight: 1000 } },
-			{ mdRendering: { boldColor: "red" } },
-		];
-		for (const body of cases) {
-			assert.equal(parseAppearanceSettingsBody(body).ok, false, JSON.stringify(body));
-		}
-		// boundary values that MUST pass: 12 and 24, 100 and 900, #fff
-		assert.ok(parseAppearanceSettingsBody({ proseFontSize: 12 }));
-		assert.ok(parseAppearanceSettingsBody({ proseFontSize: 24 }));
-		assert.ok(parseAppearanceSettingsBody({ mdRendering: { headingWeight: 100 } }));
-		assert.ok(parseAppearanceSettingsBody({ mdRendering: { headingWeight: 900 } }));
-		assert.ok(parseAppearanceSettingsBody({ background: "#abc" }));
-		// null = "the mode's default" — explicit, valid
-		assert.ok(parseAppearanceSettingsBody({ background: null, fontFamily: null }));
-	});
-
-	it("rejects non-object bodies and non-object mdRendering", () => {
-		assert.equal(parseAppearanceSettingsBody([1]).ok, false);
-		assert.equal(parseAppearanceSettingsBody({ mdRendering: "big" }).ok, false);
 	});
 });
 
@@ -252,7 +175,7 @@ describe("SETTINGS_SECTIONS (the route's section map)", () => {
 		// connected through POST /api/custom-provider.
 		assert.deepEqual(
 			Object.keys(SETTINGS_SECTIONS),
-			["general", "chat", "agent", "appearance", "graph", "compaction", "models", "dictation", "claudeCode"],
+			["general", "chat", "agent", "graph", "compaction", "models", "dictation", "claudeCode"],
 		);
 	});
 });

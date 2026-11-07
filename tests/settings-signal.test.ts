@@ -47,7 +47,7 @@ describe("settings-signal — the seam's contract", () => {
 			if (s === "models") got.push(s);
 		});
 		notifySettingsSaved("general");
-		notifySettingsSaved("appearance");
+		notifySettingsSaved("graph");
 		assert.deepEqual(got, []);
 		notifySettingsSaved("models");
 		assert.deepEqual(got, ["models"]);

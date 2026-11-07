@@ -13,7 +13,7 @@ Open **Settings → Providers** and configure a connection:
 
 Choose **Strong**, **Cheap**, and **Vision** models in Settings. There are no factory model selections. New sessions start with Strong; background roles use their assigned slots or role overrides. A model selected inside an existing session belongs to that session and does not change background-role choices.
 
-Optional web search supports Tavily, Brave, Exa, Firecrawl, and hosted Ollama search; configure a key for the engine you want to use. Research can still fetch known URLs without a search key. Dictation has its own service key below.
+Background research can read supplied web-page and PDF URLs. Optional dictation uses its own Deepgram key below.
 
 ## Start a session
 
@@ -70,4 +70,4 @@ API-key files sit beside `data`, not inside it. They are plaintext with restrict
 
 Click the context/cost row beneath the composer for Session stats. Dollar figures estimate known API costs; subscription, CLI, and custom-endpoint usage are not treated as free. See [context, caching, and costs](compaction-accounting.md) for the details.
 
-Packaged apps support updates under **Settings → General**. Development builds do not run the updater. Report problems through [GitHub Issues](https://github.com/ViktorIvan8787/GreatUniHack/issues), with reproduction steps and the app/OS version rather than private learning records or keys.
+Packaged desktop apps retain automatic updates and the app menu’s **Check for Updates** command. Development builds do not run the updater. Report problems through [GitHub Issues](https://github.com/ViktorIvan8787/GreatUniHack/issues), with reproduction steps and the app/OS version rather than private learning records or keys.

@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_medicine-diagnostic-probability",
+	"title": "Medicine: why a positive test is not a diagnosis",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-15T09:00:00.000Z",
+	"updatedAt": "2026-08-15T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "test-sensitivity",
+				"title": "Sensitivity conditions on disease",
+				"summary": "Sensitivity is the probability of a positive result among people who have the condition."
+			},
+			{
+				"id": "test-specificity",
+				"title": "Specificity conditions on no disease",
+				"summary": "Specificity is the probability of a negative result among people who do not have the condition."
+			},
+			{
+				"id": "test-prevalence",
+				"title": "A fictional screening population",
+				"summary": "In a fictional population of 1000 with 1% prevalence, 10 people have the condition and 990 do not."
+			},
+			{
+				"id": "test-counts",
+				"title": "Convert rates into counts",
+				"summary": "At 90% sensitivity and 90% specificity in that fictional population, expected counts are 9 true positives and 99 false positives."
+			},
+			{
+				"id": "test-ppv",
+				"title": "Predictive value conditions on the result",
+				"summary": "Positive predictive value in the fictional example is 9/(9+99), approximately 8.3%, rather than 90%."
+			},
+			{
+				"id": "test-base-rate",
+				"title": "The base rate changes the answer",
+				"summary": "Holding sensitivity and specificity fixed, positive predictive value increases as prevalence increases."
+			}
+		],
+		"edges": [
+			{
+				"from": "test-sensitivity",
+				"to": "test-specificity"
+			},
+			{
+				"from": "test-specificity",
+				"to": "test-prevalence"
+			},
+			{
+				"from": "test-prevalence",
+				"to": "test-counts"
+			},
+			{
+				"from": "test-counts",
+				"to": "test-ppv"
+			},
+			{
+				"from": "test-ppv",
+				"to": "test-base-rate"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_0",
+			"role": "user",
+			"content": "If a screening test has 90% sensitivity, why doesn't a positive result mean a 90% chance of disease?",
+			"timestamp": 1786784400000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786784460000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-diagnostic-probability_2",
+					"name": "probe",
+					"arguments": {
+						"question": "Sensitivity answers which question?",
+						"options": [
+							{
+								"label": "Among people with the condition, how many test positive?",
+								"value": "choice-0"
+							},
+							{
+								"label": "Among positives, how many have the condition?",
+								"value": "choice-1"
+							},
+							{
+								"label": "How common is the condition?",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "The conditioning group is people with the condition."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786784520000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-diagnostic-probability_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Among people with the condition, how many test positive?\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I name the denominator before choosing a percentage.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "Sensitivity answers which question?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Among people with the condition, how many test positive?"
+					},
+					{
+						"index": 2,
+						"label": "Among positives, how many have the condition?"
+					},
+					{
+						"index": 3,
+						"label": "How common is the condition?"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Among people with the condition, how many test positive?",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I name the denominator before choosing a percentage.",
+				"answeredAt": "2026-08-15T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "The conditioning group is people with the condition.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786784580000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-diagnostic-probability_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "Sensitivity conditions on disease",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Calculate positive predictive value from a fictional screening table and explain the role of prevalence."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786784640000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-diagnostic-probability_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786784700000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_medicine-diagnostic-probability"
+			},
+			"timestamp": 1786784760000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Calculate positive predictive value from a fictional screening table and explain the role of prevalence. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-diagnostic-probability_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  test-sensitivity[Sensitivity conditions on disease]\n  test-specificity[Specificity conditions on no disease]\n  test-prevalence[A fictional screening population]\n  test-counts[Convert rates into counts]\n  test-ppv[Predictive value conditions on the result]\n  test-base-rate[The base rate changes the answer]\n  test-sensitivity --> test-specificity\n  test-specificity --> test-prevalence\n  test-prevalence --> test-counts\n  test-counts --> test-ppv\n  test-ppv --> test-base-rate"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786784820000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-diagnostic-probability_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: test-sensitivity, test-specificity, test-prevalence, test-counts, test-ppv, test-base-rate"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "test-sensitivity",
+							"title": "Sensitivity conditions on disease",
+							"summary": "Sensitivity is the probability of a positive result among people who have the condition."
+						},
+						{
+							"id": "test-specificity",
+							"title": "Specificity conditions on no disease",
+							"summary": "Specificity is the probability of a negative result among people who do not have the condition."
+						},
+						{
+							"id": "test-prevalence",
+							"title": "A fictional screening population",
+							"summary": "In a fictional population of 1000 with 1% prevalence, 10 people have the condition and 990 do not."
+						},
+						{
+							"id": "test-counts",
+							"title": "Convert rates into counts",
+							"summary": "At 90% sensitivity and 90% specificity in that fictional population, expected counts are 9 true positives and 99 false positives."
+						},
+						{
+							"id": "test-ppv",
+							"title": "Predictive value conditions on the result",
+							"summary": "Positive predictive value in the fictional example is 9/(9+99), approximately 8.3%, rather than 90%."
+						},
+						{
+							"id": "test-base-rate",
+							"title": "The base rate changes the answer",
+							"summary": "Holding sensitivity and specificity fixed, positive predictive value increases as prevalence increases."
+						}
+					],
+					"edges": [
+						{
+							"from": "test-sensitivity",
+							"to": "test-specificity"
+						},
+						{
+							"from": "test-specificity",
+							"to": "test-prevalence"
+						},
+						{
+							"from": "test-prevalence",
+							"to": "test-counts"
+						},
+						{
+							"from": "test-counts",
+							"to": "test-ppv"
+						},
+						{
+							"from": "test-ppv",
+							"to": "test-base-rate"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786784880000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_medicine-diagnostic-probability_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-15T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "test-sensitivity",
+							"title": "Sensitivity conditions on disease",
+							"status": "upcoming"
+						},
+						{
+							"id": "test-specificity",
+							"title": "Specificity conditions on no disease",
+							"status": "upcoming"
+						},
+						{
+							"id": "test-prevalence",
+							"title": "A fictional screening population",
+							"status": "upcoming"
+						},
+						{
+							"id": "test-counts",
+							"title": "Convert rates into counts",
+							"status": "upcoming"
+						},
+						{
+							"id": "test-ppv",
+							"title": "Predictive value conditions on the result",
+							"status": "upcoming"
+						},
+						{
+							"id": "test-base-rate",
+							"title": "The base rate changes the answer",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "test-sensitivity",
+							"to": "test-specificity"
+						},
+						{
+							"from": "test-specificity",
+							"to": "test-prevalence"
+						},
+						{
+							"from": "test-prevalence",
+							"to": "test-counts"
+						},
+						{
+							"from": "test-counts",
+							"to": "test-ppv"
+						},
+						{
+							"from": "test-ppv",
+							"to": "test-base-rate"
+						}
+					]
+				}
+			},
+			"timestamp": 1786784940000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786785000000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Build the denominator\nThis fictional test screens 1000 people. Ten have the condition: nine test positive. Of the 990 without it, 10% test positive: 99. The positive-result group therefore has 108 people, of whom nine have the condition. These illustrative rates are not claims about any real test.\n\nReference: [BMJ: principles for high-quality testing](https://ebm.bmj.com/content/18/1/5.long).\n\n### Sensitivity conditions on disease\nSensitivity is the probability of a positive result among people who have the condition.\n\n### Specificity conditions on no disease\nSpecificity is the probability of a negative result among people who do not have the condition.\n\n### A fictional screening population\nIn a fictional population of 1000 with 1% prevalence, 10 people have the condition and 990 do not."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786785060000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-diagnostic-probability_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "At 1% prevalence with 90% sensitivity and specificity, what is the approximate chance of the condition after a positive?",
+						"options": [
+							{
+								"label": "90%",
+								"value": "choice-0"
+							},
+							{
+								"label": "8.3%",
+								"value": "choice-1"
+							},
+							{
+								"label": "1% exactly",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "There are 9 expected true positives and 99 expected false positives; 9/108 is about 8.3%.",
+						"type": "predict",
+						"nodeId": "test-prevalence"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786785120000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-diagnostic-probability_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"90%\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I reversed the conditional probability and ignored the base rate.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "At 1% prevalence with 90% sensitivity and specificity, what is the approximate chance of the condition after a positive?",
+				"options": [
+					{
+						"index": 1,
+						"label": "90%"
+					},
+					{
+						"index": 2,
+						"label": "8.3%"
+					},
+					{
+						"index": 3,
+						"label": "1% exactly"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "90%",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I reversed the conditional probability and ignored the base rate.",
+				"answeredAt": "2026-08-15T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "There are 9 expected true positives and 99 expected false positives; 9/108 is about 8.3%.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786785180000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_14",
+			"role": "user",
+			"content": "If most positives in this example are false, does that mean screening can never help?",
+			"timestamp": 1786785240000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "That conclusion does not follow. Usefulness also depends on the condition, harms, follow-up, and evidence about outcomes. This exercise only illustrates conditional probability; it does not recommend a screening programme or diagnose an individual.\n\n### Convert rates into counts\nAt 90% sensitivity and 90% specificity in that fictional population, expected counts are 9 true positives and 99 false positives.\n\n### Predictive value conditions on the result\nPositive predictive value in the fictional example is 9/(9+99), approximately 8.3%, rather than 90%.\n\n### The base rate changes the answer\nHolding sensitivity and specificity fixed, positive predictive value increases as prevalence increases."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786785300000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-diagnostic-probability_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "Prevalence is now 10% in 1000 people, with the same test rates. What is PPV?",
+						"options": [
+							{
+								"label": "50%",
+								"value": "choice-0"
+							},
+							{
+								"label": "90%",
+								"value": "choice-1"
+							},
+							{
+								"label": "10%",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "There are 90 expected true positives and 90 expected false positives, so PPV = 90/180 = 50%.",
+						"type": "check",
+						"nodeId": "test-base-rate"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786785360000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-diagnostic-probability_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"50%\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I rebuild the table rather than reusing the old predictive value.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "Prevalence is now 10% in 1000 people, with the same test rates. What is PPV?",
+				"options": [
+					{
+						"index": 1,
+						"label": "50%"
+					},
+					{
+						"index": 2,
+						"label": "90%"
+					},
+					{
+						"index": 3,
+						"label": "10%"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "50%",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I rebuild the table rather than reusing the old predictive value.",
+				"answeredAt": "2026-08-15T09:17:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "There are 90 expected true positives and 90 expected false positives, so PPV = 90/180 = 50%.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786785420000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786785480000
+		},
+		{
+			"id": "msg_demo_medicine-diagnostic-probability_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Write the population and the denominator explicitly. Sensitivity asks about results given disease; predictive value asks about disease given a result. This is a reusable lesson in Bayesian reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786785540000
+		}
+	]
+}

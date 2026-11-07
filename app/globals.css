@@ -50,10 +50,7 @@
 	--border: #434343;
 	--input: #434343;
 	--ring: #8d8d8d;
-	/* Emphasis inks default to the REGULAR TEXT COLOR (owner ruling,
-	   appearance wave 2026-09-26 — the old #ee928c/#6fa9d6 factory
-	   emphasis colors are gone). Explicit overrides land via the
-	   appearance settings vars. */
+	/* Emphasis uses the regular text color. */
 	--vt-ink-strong: var(--foreground);
 	--vt-ink-italic: var(--foreground);
 	/* THE READING SIZE = the ladder's 16px rung (--text-lg). Can't be
@@ -63,7 +60,7 @@
 	   the reskin's hand-tuned 16.5 to the ladder's 16.) */
 	--vt-prose-size: 16px;
 	--vt-prose-leading: 1.5;
-	/* Markdown heading weight (appearance settings; 900 = the Black cut). */
+	/* Markdown heading weight: 900 = the Black cut. */
 	--vt-heading-weight: 900;
 }
 
@@ -98,7 +95,7 @@
 	   the reskin's hand-tuned 16.5 to the ladder's 16.) */
 	--vt-prose-size: 16px;
 	--vt-prose-leading: 1.5;
-	/* Markdown heading weight (appearance settings; 900 = the Black cut). */
+	/* Markdown heading weight: 900 = the Black cut. */
 	--vt-heading-weight: 900;
 }
 
@@ -129,12 +126,8 @@
 	   legibility floor; quiet labels get their quiet from color +
 	   tracking, not a notch of size. Reading prose = the 16px rung via
 	   --vt-prose-size.) */
-	/* --font-title lives in the NON-inline @theme below: inline tokens get
-	   their literal values baked into the utilities (.font-title{font-family:
-	   vt-cmu,serif}), which made the appearance "session names in serif"
-	   toggle write a runtime --font-title no consumer ever read (owner, fix
-	   wave: toggle looked dead). Non-inline emits :root { --font-title: … }
-	   and the utility reads var(--font-title) — appearance overrides win. */
+	/* --font-title lives in the non-inline @theme below so title utilities
+	   share its runtime variable. */
 	--text-xs: 11px;
 	--text-xs--line-height: 1.4;
 	--text-sm: 12.5px;

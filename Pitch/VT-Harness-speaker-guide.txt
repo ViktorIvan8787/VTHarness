@@ -1,0 +1,239 @@
+VT-HARNESS — ONE-MINUTE PITCH GUIDE
+
+FILES
+VT-Harness-60-second-pitch.pptx: editable presentation with speaker notes.
+VT-Harness-60-second-pitch.pdf: portable backup of the same seven slides.
+screenshots/: actual app screenshots used in the deck, plus the lesson-plan capture.
+some ideas.docx: your original pitch notes, kept unchanged.
+
+Present slides 1–5 during the minute. Slides 6–7 are optional references for
+questions afterward. Advance manually using the timings below. The deck does
+not require the demo server, network access, or a live model response to present.
+The local links in the appendix do require the running demo.
+
+THE 60-SECOND SCRIPT
+
+SLIDE 1 — 0:00–0:08 — INTRODUCTION
+“AI can explain a topic, but students still need to discover what they
+misunderstand. VT-Harness starts there.”
+
+Cue: introduce the project, then advance. The graph image gives the audience a
+first view of the product. Do not try to explain its individual labels yet.
+
+SLIDE 2 — 0:08–0:23 — TEACHING
+“It probes your understanding and builds a lesson plan. You predict before the
+explanation, and your reasoning reveals the misconception. Here, the learner
+chooses the wrong gradient update, so the tutor repairs that specific mistake.”
+
+Cue: indicate the wrong 0.2 choice, then the thinking field. Finish by pointing
+to the corrected calculation. Explain the learning interaction rather than
+teaching the full calculus example during the pitch.
+
+SLIDE 3 — 0:23–0:34 — PRACTICE
+“Then practice tests a fresh problem, with adaptive hints when needed. You can
+see the learner’s thinking and the checked solution.”
+
+Cue: indicate the SOLVED verdict and model solution. The prepared example was
+solved without hints. Hints are an available capability, not a step shown in
+this particular completed example.
+
+SLIDE 4 — 0:34–0:46 — MEMORY
+“Learning accumulates in a local graph of concepts and reasoning chains,
+linked to source lessons. The demo spans Maths, Physics, Biology, History and
+Medicine, alongside neural networks.”
+
+Cue: point to the selected graph concept and its session link. The graph
+connects claims with the premises used to support them. You do not need to
+read its mathematical statement or recite all the counts.
+
+SLIDE 5 — 0:46–1:00 — CAPABILITIES AND CLOSE
+“Bring files, PDFs or URLs, think aloud with dictation, and use visuals or
+interactive demos. Choose your own AI provider. VT-Harness carries that
+learning into the next session.”
+
+Cue: gesture across the capabilities, then finish looking at the audience.
+Stop on this slide. Use the appendix only if there is time for questions.
+
+REHEARSAL
+
+The script is approximately 130 words. Rehearse aloud with a stopwatch, leaving
+brief pauses at slide changes. The timings are targets, not automatic slide
+transitions. If your normal delivery is slower, use the shorter version below
+instead of rushing the technical example.
+
+SHORTER VERSION
+
+“VT-Harness is an AI tutor that starts from what you understand.
+It probes your reasoning, builds a lesson plan, and asks you to predict before
+it explains. Here, a wrong answer reveals a specific misconception.
+Practice then checks a fresh problem, with hints when needed.
+Concepts and reasoning chains persist in a local graph, linked to their
+lessons, so future sessions can use them.
+Our examples span Maths, Physics, Biology, History, Medicine and neural networks.
+You can bring files or URLs, dictate your thinking, and use visuals or
+interactive demos with your chosen AI provider.”
+
+PREPARATION
+
+1. Open the PowerPoint and confirm that the screenshots and mathematical
+   symbols display correctly on the presenting machine. Use slideshow mode.
+2. Keep the PDF ready as a backup. Both files include the two appendix slides.
+3. Present the prepared screenshots for the core minute. A live model answer
+   has variable latency and is optional after the pitch.
+4. If you want to show the app afterward, run npm run demo from the project
+   folder and open http://localhost:3006. Warm up the graph, gradient-descent
+   lesson and practice session before presenting.
+5. Confirm your provider works during rehearsal. Avoid signing out, changing
+   credentials, or resetting the demo immediately before presenting.
+6. If an older demo profile lacks the university examples, stop its server
+   and run npm run demo:reset, then npm run demo. Reset replaces rehearsal
+   history while preserving model settings and provider credentials. Copy
+   demo/.runtime/data/ elsewhere first if you need to retain rehearsal work.
+7. Ctrl+C in the demo terminal stops the server. The deck still works afterward.
+
+ACTUAL EXAMPLES IN THE SLIDES
+
+Teaching: gradient descent
+The original weight is 1, gradient is −8 and learning rate is 0.1.
+The learner incorrectly chooses 0.2. The corrected update is
+1 − 0.1 × (−8) = 1.8. The thinking field shows the misconception:
+the learner confuses a negative slope with an instruction to decrease the weight.
+The lesson explains the distinction and includes a later successful check.
+
+Practice: a new update
+The fresh problem uses x = 3, target = 6, initial weight = 1 and learning rate
+0.05. The gradient is −18, giving a new weight of 1.9. The prediction becomes
+5.7 and squared loss changes from 9 to 0.09. These are arithmetic results from
+one illustrative example, not evidence of measured student improvement.
+
+Graph: “A descent direction”
+The concept has a statement, supporting relationships and a link back to the
+teaching session. Click that session link in the app to inspect the passage.
+The graph stores propositions and reasoning chains, not an ability rating.
+
+University example in appendix
+The Medicine lesson uses a fictional screening population to distinguish
+sensitivity from positive predictive value. The learner's wrong prediction
+makes a base-rate misconception visible. This is university teaching material,
+not clinical guidance or a claim about a real diagnostic test.
+
+DEMO FACTS
+
+23 synthetic sessions: 16 teaching sessions and 7 practice sessions.
+96 concepts and 53 reasoning chains.
+Five university disciplines each add two lessons and one practice session.
+The original neural-network story remains available.
+All saved learner messages, quiz answers and outcomes are synthetic.
+These counts describe demonstration content, not actual users, studies or
+measured educational results. New live messages use the configured provider.
+
+CAPABILITY REFERENCE FOR QUESTIONS
+
+Teaching
+- Initial probing uses answers, confidence and the learner's written thinking.
+- A visible dependency plan sets the route to the learner's goal.
+- Predictions, explanations and checks expose and address misconceptions.
+- Sessions continue from their saved conversation history.
+
+Practice
+- Separate sessions pose problems using selected graph material or a topic.
+- Problems, feedback and hints can adapt to the learner's reasoning.
+- Thinking fields expose the approach rather than only the final answer.
+- The committed model solution appears when the problem concludes.
+
+Memory
+- The persistent graph records propositions and reasoning chains.
+- Concepts link back to source sessions and passages.
+- Future teaching and practice can read that graph.
+- Graph search, chain browsing and note import help inspect the material.
+- The graph does not store a validated mastery score or an ability rating.
+
+Materials and explanations
+- Background readers can read supplied web-page and PDF URLs.
+- The desktop app attaches local file/folder paths using the picker or drag
+  and drop. This does not upload or relocate the originals.
+- In a normal browser, paste a full server-accessible file path when needed.
+- A separate graph import flow accepts Markdown, plain text and PDFs.
+- Tools can show images, produce annotated visuals and build interactive demos.
+- Optional dictation sends speech to Deepgram and inserts text for review.
+- Web search is not part of the current app.
+
+Provider and developer control
+- Choose provider API keys, supported subscription sign-ins, an installed
+  Claude Code CLI, or a custom OpenAI-compatible endpoint, including a local
+  model server. VT-Harness does not download local models for you.
+- Choose Strong, Cheap and Vision slots, with role-specific options available.
+- Inspect/edit system prompts and configure agent tools.
+- Context and cost displays expose available usage information. Cost figures
+  estimate known API costs, not unknown subscription, CLI or custom charges.
+- Records live locally. External models and services still receive the context
+  needed for a task. Local storage is not an offline-processing guarantee.
+- The project is open source under AGPL-3.0. Provider billing still applies.
+- The app runs as a web development server and supports desktop packaging.
+
+CONCISE BACKUP ANSWERS
+
+“What is different from a normal AI chat?”
+“The product makes the learning process explicit: probing, a visible plan,
+predictions and checks, separate practice, and a graph future sessions can read.”
+
+“Does it know exactly what I understand?”
+“It uses your answers, confidence and thinking to adapt. That is a working
+assessment, not a validated measurement. The graph itself stores claims and
+reasoning relationships rather than mastery scores.”
+
+“Does this prove students learn faster or use fewer tokens?”
+“No measured result is claimed here. The deck demonstrates the implemented
+workflow and synthetic examples. Learning outcomes and resource savings would
+need a separate evaluation.”
+
+“Is it private or offline?”
+“Learning records stay on the machine, but the providers you select process
+requests. A local model endpoint is an option. Dictation and supplied-URL
+reading can also use external services.”
+
+“Can I bring my existing subscription?”
+“Supported sign-in connections include ChatGPT, GitHub Copilot and Grok.
+Availability and limits depend on the provider. API keys, Claude Code and a
+custom endpoint are other supported routes.”
+
+“Is the Medicine example real patient data?”
+“No. It is an invented screening exercise with synthetic learner answers.”
+
+“Can we see a live continuation?”
+“Yes. Open the gradient-descent lesson and ask: ‘What happens in our example
+if the learning rate is 1 instead of 0.1?’ The prepared presentation does not
+depend on the response finishing within the minute.”
+
+LOCAL DEMO LINKS
+
+Graph: http://localhost:3006
+Main lesson: http://localhost:3006/chat/chat_demo_gradient-descent
+Practice: http://localhost:3006/chat/chat_demo_practice-updates
+Maths: http://localhost:3006/chat/chat_demo_maths-eigenvectors
+Maths practice: http://localhost:3006/chat/chat_demo_practice-maths
+Physics: http://localhost:3006/chat/chat_demo_physics-oscillations
+Physics practice: http://localhost:3006/chat/chat_demo_practice-physics
+Biology: http://localhost:3006/chat/chat_demo_biology-gene-regulation
+Biology practice: http://localhost:3006/chat/chat_demo_practice-biology
+History: http://localhost:3006/chat/chat_demo_history-french-revolution
+History practice: http://localhost:3006/chat/chat_demo_practice-history
+Medicine: http://localhost:3006/chat/chat_demo_medicine-diagnostic-probability
+Medicine practice: http://localhost:3006/chat/chat_demo_practice-medicine
+
+PROJECT
+https://github.com/ViktorIvan8787/GreatUniHack
+
+EVIDENCE AND SCREENSHOTS
+
+The deck uses actual screenshots from the running local demo. Crops preserve
+the displayed app content. The learner history is synthetic. No AI-generated
+product mockups replace the app screenshots.
+
+Product capabilities: README.md and docs/getting-started.md.
+Provider behaviour: docs/development.md, docs/claude-code.md and
+docs/custom-providers.md.
+Demo counts and examples: demo/seed/manifest.json, demo/content.ts,
+demo/disciplines.ts and the native session records in demo/seed/chats/.
+Original pitch motivation: Pitch/some ideas.docx.
+Per-slide sources and timing also appear in the PowerPoint speaker notes.

@@ -545,19 +545,13 @@ function setupAutoUpdater() {
 	});
 }
 
-/** One result surface for manual checks. Preload buffers the navigation
- * request until React subscribes, including when all macOS windows closed. */
+/** Bring the app forward for manual checks without opening a settings tab. */
 function checkForUpdatesFromMenu() {
 	try {
 		const win = BrowserWindow.getAllWindows()[0] ?? reopenWindow?.();
 		if (win) {
 			if (win.isMinimized()) win.restore();
 			win.focus();
-			const openSettings = () => {
-				try { win.webContents.send("vt:open-settings", "general"); } catch { /* window closed */ }
-			};
-			if (win.webContents.isLoadingMainFrame()) win.webContents.once("did-finish-load", openSettings);
-			else openSettings();
 		}
 	} catch {
 		/* Navigation failure must not prevent the manual check. */

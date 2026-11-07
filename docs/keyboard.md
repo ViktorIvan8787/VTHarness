@@ -24,15 +24,11 @@ in-app cheat sheet. See [Getting started](getting-started.md) for setup.
 Surface-specific actions require their surface to be mounted. Bare shortcuts
 such as **?** and **F2** do not fire while typing; modifier shortcuts still do.
 
-**Settings → Keyboard** displays the registry and offers Rebind, per-action
-Reset, and Reset all controls. Overrides are stored on this device in
-localStorage (`vt:keymap`), not in the learning-data settings file. Contextual
-question keys are shown as **Fixed — part of this screen**, not rebindable.
-Tab and Esc also have dedicated handling outside ordinary registry dispatch.
+The Keyboard settings editor has been removed. Shortcuts and any existing device-local bindings continue to work. Contextual question keys, Tab, and Esc keep their existing handling.
 
 ## Keyboard layouts
 
-Shortcut matching and Settings rebinding use the same normalization. With
+Shortcut matching uses layout-aware normalization. With
 **Ctrl, ⌘, or Alt/Option** held, a single non-ASCII character falls back to its
 physical **A–Z or comma** key position when the event supplies that code. For
 example, Russian Ctrl+`л` at `KeyK` matches **Mod+K**, and ⌘+`б` at `Comma`

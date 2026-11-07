@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_medicine-cardiovascular",
+	"title": "Medicine: flow, pressure, and the cardiovascular system",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-14T09:00:00.000Z",
+	"updatedAt": "2026-08-14T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "cardiac-sv",
+				"title": "Stroke volume",
+				"summary": "Stroke volume is the blood volume ejected by a ventricle in one beat."
+			},
+			{
+				"id": "cardiac-output",
+				"title": "Cardiac output",
+				"summary": "Cardiac output equals heart rate multiplied by stroke volume."
+			},
+			{
+				"id": "cardiac-example",
+				"title": "An output calculation",
+				"summary": "A heart rate of 75 beats/min and stroke volume of 80 mL/beat give cardiac output of 6 L/min."
+			},
+			{
+				"id": "cardiac-pressure",
+				"title": "Pressure difference drives flow",
+				"summary": "A lumped steady-flow systemic model relates MAP minus right atrial pressure to cardiac output times systemic vascular resistance."
+			},
+			{
+				"id": "cardiac-resistance",
+				"title": "Fixed-flow resistance comparison",
+				"summary": "In a pressure-flow model with fixed cardiac output and right atrial pressure, increasing systemic vascular resistance increases MAP."
+			},
+			{
+				"id": "cardiac-feedback",
+				"title": "A conditional model is not a complete patient",
+				"summary": "A fixed-flow pressure calculation does not predict a whole patient response when cardiac output and vascular regulation also change."
+			}
+		],
+		"edges": [
+			{
+				"from": "cardiac-sv",
+				"to": "cardiac-output"
+			},
+			{
+				"from": "cardiac-output",
+				"to": "cardiac-example"
+			},
+			{
+				"from": "cardiac-example",
+				"to": "cardiac-pressure"
+			},
+			{
+				"from": "cardiac-pressure",
+				"to": "cardiac-resistance"
+			},
+			{
+				"from": "cardiac-resistance",
+				"to": "cardiac-feedback"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_medicine-cardiovascular_0",
+			"role": "user",
+			"content": "For a university physiology exercise, how can cardiac output change without heart rate changing?",
+			"timestamp": 1786698000000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786698060000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-cardiovascular_2",
+					"name": "probe",
+					"arguments": {
+						"question": "Which two quantities multiply to give cardiac output?",
+						"options": [
+							{
+								"label": "Heart rate and stroke volume",
+								"value": "choice-0"
+							},
+							{
+								"label": "Pressure and heart rate",
+								"value": "choice-1"
+							},
+							{
+								"label": "Resistance and stroke volume",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Beats/min multiplied by mL/beat yields mL/min."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786698120000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-cardiovascular_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Heart rate and stroke volume\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The beat units cancel, leaving volume per time.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "Which two quantities multiply to give cardiac output?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Heart rate and stroke volume"
+					},
+					{
+						"index": 2,
+						"label": "Pressure and heart rate"
+					},
+					{
+						"index": 3,
+						"label": "Resistance and stroke volume"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Heart rate and stroke volume",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "The beat units cancel, leaving volume per time.",
+				"answeredAt": "2026-08-14T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Beats/min multiplied by mL/beat yields mL/min.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786698180000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-cardiovascular_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "Stroke volume",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Connect cardiac output with a simplified pressure-flow model in a fictional physiology exercise."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786698240000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-cardiovascular_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786698300000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_medicine-cardiovascular"
+			},
+			"timestamp": 1786698360000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Connect cardiac output with a simplified pressure-flow model in a fictional physiology exercise. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-cardiovascular_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  cardiac-sv[Stroke volume]\n  cardiac-output[Cardiac output]\n  cardiac-example[An output calculation]\n  cardiac-pressure[Pressure difference drives flow]\n  cardiac-resistance[Fixed-flow resistance comparison]\n  cardiac-feedback[A conditional model is not a complete patient]\n  cardiac-sv --> cardiac-output\n  cardiac-output --> cardiac-example\n  cardiac-example --> cardiac-pressure\n  cardiac-pressure --> cardiac-resistance\n  cardiac-resistance --> cardiac-feedback"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786698420000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-cardiovascular_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: cardiac-sv, cardiac-output, cardiac-example, cardiac-pressure, cardiac-resistance, cardiac-feedback"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "cardiac-sv",
+							"title": "Stroke volume",
+							"summary": "Stroke volume is the blood volume ejected by a ventricle in one beat."
+						},
+						{
+							"id": "cardiac-output",
+							"title": "Cardiac output",
+							"summary": "Cardiac output equals heart rate multiplied by stroke volume."
+						},
+						{
+							"id": "cardiac-example",
+							"title": "An output calculation",
+							"summary": "A heart rate of 75 beats/min and stroke volume of 80 mL/beat give cardiac output of 6 L/min."
+						},
+						{
+							"id": "cardiac-pressure",
+							"title": "Pressure difference drives flow",
+							"summary": "A lumped steady-flow systemic model relates MAP minus right atrial pressure to cardiac output times systemic vascular resistance."
+						},
+						{
+							"id": "cardiac-resistance",
+							"title": "Fixed-flow resistance comparison",
+							"summary": "In a pressure-flow model with fixed cardiac output and right atrial pressure, increasing systemic vascular resistance increases MAP."
+						},
+						{
+							"id": "cardiac-feedback",
+							"title": "A conditional model is not a complete patient",
+							"summary": "A fixed-flow pressure calculation does not predict a whole patient response when cardiac output and vascular regulation also change."
+						}
+					],
+					"edges": [
+						{
+							"from": "cardiac-sv",
+							"to": "cardiac-output"
+						},
+						{
+							"from": "cardiac-output",
+							"to": "cardiac-example"
+						},
+						{
+							"from": "cardiac-example",
+							"to": "cardiac-pressure"
+						},
+						{
+							"from": "cardiac-pressure",
+							"to": "cardiac-resistance"
+						},
+						{
+							"from": "cardiac-resistance",
+							"to": "cardiac-feedback"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786698480000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_medicine-cardiovascular_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-14T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "cardiac-sv",
+							"title": "Stroke volume",
+							"status": "upcoming"
+						},
+						{
+							"id": "cardiac-output",
+							"title": "Cardiac output",
+							"status": "upcoming"
+						},
+						{
+							"id": "cardiac-example",
+							"title": "An output calculation",
+							"status": "upcoming"
+						},
+						{
+							"id": "cardiac-pressure",
+							"title": "Pressure difference drives flow",
+							"status": "upcoming"
+						},
+						{
+							"id": "cardiac-resistance",
+							"title": "Fixed-flow resistance comparison",
+							"status": "upcoming"
+						},
+						{
+							"id": "cardiac-feedback",
+							"title": "A conditional model is not a complete patient",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "cardiac-sv",
+							"to": "cardiac-output"
+						},
+						{
+							"from": "cardiac-output",
+							"to": "cardiac-example"
+						},
+						{
+							"from": "cardiac-example",
+							"to": "cardiac-pressure"
+						},
+						{
+							"from": "cardiac-pressure",
+							"to": "cardiac-resistance"
+						},
+						{
+							"from": "cardiac-resistance",
+							"to": "cardiac-feedback"
+						}
+					]
+				}
+			},
+			"timestamp": 1786698540000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786698600000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Keep the units visible\nThis is a fictional physiology exercise. At 75 beats/min and 80 mL/beat, output is 6000 mL/min, or 6 L/min. Holding rate fixed while changing stroke volume changes flow. Pressure additionally depends on resistance and the downstream pressure.\n\nReference: [NIH: mean arterial pressure definition](https://cde.nlm.nih.gov/deView?tinyId=OP3qopmP0oX).\n\n### Stroke volume\nStroke volume is the blood volume ejected by a ventricle in one beat.\n\n### Cardiac output\nCardiac output equals heart rate multiplied by stroke volume.\n\n### An output calculation\nA heart rate of 75 beats/min and stroke volume of 80 mL/beat give cardiac output of 6 L/min."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786698660000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-cardiovascular_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "At 75 beats/min, stroke volume falls from 80 to 60 mL/beat. What happens to output?",
+						"options": [
+							{
+								"label": "It stays at 6 L/min",
+								"value": "choice-0"
+							},
+							{
+								"label": "It falls to 4.5 L/min",
+								"value": "choice-1"
+							},
+							{
+								"label": "It rises to 8 L/min",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "75 × 60 = 4500 mL/min = 4.5 L/min.",
+						"type": "predict",
+						"nodeId": "cardiac-example"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786698720000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-cardiovascular_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"It stays at 6 L/min\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I assumed an unchanged heart rate meant unchanged flow.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "At 75 beats/min, stroke volume falls from 80 to 60 mL/beat. What happens to output?",
+				"options": [
+					{
+						"index": 1,
+						"label": "It stays at 6 L/min"
+					},
+					{
+						"index": 2,
+						"label": "It falls to 4.5 L/min"
+					},
+					{
+						"index": 3,
+						"label": "It rises to 8 L/min"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "It stays at 6 L/min",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I assumed an unchanged heart rate meant unchanged flow.",
+				"answeredAt": "2026-08-14T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "75 × 60 = 4500 mL/min = 4.5 L/min.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786698780000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_14",
+			"role": "user",
+			"content": "Can I infer cardiac output just from a single blood-pressure value?",
+			"timestamp": 1786698840000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Not from this equation alone: both resistance and downstream pressure also matter. Its fixed-variable comparisons are model exercises, not treatment instructions. Physiological feedback can alter several variables together.\n\n### Pressure difference drives flow\nA lumped steady-flow systemic model relates MAP minus right atrial pressure to cardiac output times systemic vascular resistance.\n\n### Fixed-flow resistance comparison\nIn a pressure-flow model with fixed cardiac output and right atrial pressure, increasing systemic vascular resistance increases MAP.\n\n### A conditional model is not a complete patient\nA fixed-flow pressure calculation does not predict a whole patient response when cardiac output and vascular regulation also change."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786698900000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_medicine-cardiovascular_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "In the simplified model, CO = 5 L/min, resistance = 18 mmHg·min/L, and right atrial pressure = 5 mmHg. What is MAP?",
+						"options": [
+							{
+								"label": "90 mmHg",
+								"value": "choice-0"
+							},
+							{
+								"label": "95 mmHg",
+								"value": "choice-1"
+							},
+							{
+								"label": "23 mmHg",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "MAP = 5 + 5 × 18 = 95 mmHg. These are fictional exercise values.",
+						"type": "check",
+						"nodeId": "cardiac-feedback"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786698960000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_medicine-cardiovascular_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"95 mmHg\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I add the downstream pressure after calculating the pressure difference.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "In the simplified model, CO = 5 L/min, resistance = 18 mmHg·min/L, and right atrial pressure = 5 mmHg. What is MAP?",
+				"options": [
+					{
+						"index": 1,
+						"label": "90 mmHg"
+					},
+					{
+						"index": 2,
+						"label": "95 mmHg"
+					},
+					{
+						"index": 3,
+						"label": "23 mmHg"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "95 mmHg",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I add the downstream pressure after calculating the pressure difference.",
+				"answeredAt": "2026-08-14T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "MAP = 5 + 5 × 18 = 95 mmHg. These are fictional exercise values.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786699020000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786699080000
+		},
+		{
+			"id": "msg_demo_medicine-cardiovascular_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Always distinguish a measured quantity, a derived quantity, and a modelling assumption. The next lesson uses the same discipline to separate a test characteristic from the probability of disease after a result."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786699140000
+		}
+	]
+}

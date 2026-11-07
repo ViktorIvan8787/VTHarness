@@ -24,7 +24,7 @@ test("initial demo imports saved model settings without copying credentials or c
 	const before = fs.readFileSync(f.settingsFile);
 	const { dataDir, initialized } = prepareDemo(f.runtime, f.settingsFile);
 	assert.equal(initialized, true);
-	assert.equal(fs.readdirSync(path.join(dataDir, "chats")).length, 8);
+	assert.equal(fs.readdirSync(path.join(dataDir, "chats")).length, 23);
 	assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dataDir, "settings.json"), "utf8")).models, f.models);
 	assert.equal(JSON.parse(fs.readFileSync(path.join(dataDir, "settings.json"), "utf8")).graph.rendering, true);
 	assert.equal(fs.existsSync(path.join(dataDir, "chatgpt-credentials.json")), false);

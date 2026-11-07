@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_history-source-criticism",
+	"title": "History: what a source can and cannot establish",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-08-13T09:00:00.000Z",
+	"updatedAt": "2026-08-13T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "source-provenance",
+				"title": "Provenance frames a source",
+				"summary": "The author, date, location, and audience of a historical document help establish the conditions in which it was produced."
+			},
+			{
+				"id": "source-purpose",
+				"title": "Purpose shapes a claim",
+				"summary": "A document's intended audience and purpose can influence which events it describes and how it presents them."
+			},
+			{
+				"id": "source-inference",
+				"title": "Match the claim to the evidence",
+				"summary": "A document that asserts a crowd's motives directly evidences the author's assertion, but does not by itself establish every participant's motive."
+			},
+			{
+				"id": "source-corroboration",
+				"title": "Independent corroboration",
+				"summary": "Independent sources can strengthen a historical inference when they support it through distinct access to the events."
+			},
+			{
+				"id": "source-dependence",
+				"title": "Repeated reports can share one origin",
+				"summary": "Two newspapers copying the same report are not two independent eyewitness accounts."
+			},
+			{
+				"id": "source-bias",
+				"title": "Bias can itself be evidence",
+				"summary": "A partisan source can provide evidence of its author's framing while requiring caution about the events or motives it describes."
+			}
+		],
+		"edges": [
+			{
+				"from": "source-provenance",
+				"to": "source-purpose"
+			},
+			{
+				"from": "source-purpose",
+				"to": "source-inference"
+			},
+			{
+				"from": "source-inference",
+				"to": "source-corroboration"
+			},
+			{
+				"from": "source-corroboration",
+				"to": "source-dependence"
+			},
+			{
+				"from": "source-dependence",
+				"to": "source-bias"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_history-source-criticism_0",
+			"role": "user",
+			"content": "My source is biased. Should I discard it, or can it still support a useful historical argument?",
+			"timestamp": 1786611600000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786611660000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-source-criticism_2",
+					"name": "probe",
+					"arguments": {
+						"question": "What should you establish before treating a letter as eyewitness evidence?",
+						"options": [
+							{
+								"label": "Who wrote it, when, and with what access",
+								"value": "choice-0"
+							},
+							{
+								"label": "Whether you agree with it",
+								"value": "choice-1"
+							},
+							{
+								"label": "Whether it is old enough",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Contemporaneity alone does not prove that the writer witnessed the reported event."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786611720000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-source-criticism_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Who wrote it, when, and with what access\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I separate the document's date from the writer's access.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "What should you establish before treating a letter as eyewitness evidence?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Who wrote it, when, and with what access"
+					},
+					{
+						"index": 2,
+						"label": "Whether you agree with it"
+					},
+					{
+						"index": 3,
+						"label": "Whether it is old enough"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Who wrote it, when, and with what access",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I separate the document's date from the writer's access.",
+				"answeredAt": "2026-08-13T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Contemporaneity alone does not prove that the writer witnessed the reported event.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786611780000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-source-criticism_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "Provenance frames a source",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Evaluate provenance, purpose, and corroboration before using a historical document as evidence."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786611840000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-source-criticism_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1786611900000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_history-source-criticism"
+			},
+			"timestamp": 1786611960000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Evaluate provenance, purpose, and corroboration before using a historical document as evidence. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-source-criticism_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  source-provenance[Provenance frames a source]\n  source-purpose[Purpose shapes a claim]\n  source-inference[Match the claim to the evidence]\n  source-corroboration[Independent corroboration]\n  source-dependence[Repeated reports can share one origin]\n  source-bias[Bias can itself be evidence]\n  source-provenance --> source-purpose\n  source-purpose --> source-inference\n  source-inference --> source-corroboration\n  source-corroboration --> source-dependence\n  source-dependence --> source-bias"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786612020000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-source-criticism_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: source-provenance, source-purpose, source-inference, source-corroboration, source-dependence, source-bias"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "source-provenance",
+							"title": "Provenance frames a source",
+							"summary": "The author, date, location, and audience of a historical document help establish the conditions in which it was produced."
+						},
+						{
+							"id": "source-purpose",
+							"title": "Purpose shapes a claim",
+							"summary": "A document's intended audience and purpose can influence which events it describes and how it presents them."
+						},
+						{
+							"id": "source-inference",
+							"title": "Match the claim to the evidence",
+							"summary": "A document that asserts a crowd's motives directly evidences the author's assertion, but does not by itself establish every participant's motive."
+						},
+						{
+							"id": "source-corroboration",
+							"title": "Independent corroboration",
+							"summary": "Independent sources can strengthen a historical inference when they support it through distinct access to the events."
+						},
+						{
+							"id": "source-dependence",
+							"title": "Repeated reports can share one origin",
+							"summary": "Two newspapers copying the same report are not two independent eyewitness accounts."
+						},
+						{
+							"id": "source-bias",
+							"title": "Bias can itself be evidence",
+							"summary": "A partisan source can provide evidence of its author's framing while requiring caution about the events or motives it describes."
+						}
+					],
+					"edges": [
+						{
+							"from": "source-provenance",
+							"to": "source-purpose"
+						},
+						{
+							"from": "source-purpose",
+							"to": "source-inference"
+						},
+						{
+							"from": "source-inference",
+							"to": "source-corroboration"
+						},
+						{
+							"from": "source-corroboration",
+							"to": "source-dependence"
+						},
+						{
+							"from": "source-dependence",
+							"to": "source-bias"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1786612080000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_history-source-criticism_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-08-13T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "source-provenance",
+							"title": "Provenance frames a source",
+							"status": "upcoming"
+						},
+						{
+							"id": "source-purpose",
+							"title": "Purpose shapes a claim",
+							"status": "upcoming"
+						},
+						{
+							"id": "source-inference",
+							"title": "Match the claim to the evidence",
+							"status": "upcoming"
+						},
+						{
+							"id": "source-corroboration",
+							"title": "Independent corroboration",
+							"status": "upcoming"
+						},
+						{
+							"id": "source-dependence",
+							"title": "Repeated reports can share one origin",
+							"status": "upcoming"
+						},
+						{
+							"id": "source-bias",
+							"title": "Bias can itself be evidence",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "source-provenance",
+							"to": "source-purpose"
+						},
+						{
+							"from": "source-purpose",
+							"to": "source-inference"
+						},
+						{
+							"from": "source-inference",
+							"to": "source-corroboration"
+						},
+						{
+							"from": "source-corroboration",
+							"to": "source-dependence"
+						},
+						{
+							"from": "source-dependence",
+							"to": "source-bias"
+						}
+					]
+				}
+			},
+			"timestamp": 1786612140000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1786612200000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### A fictional source exercise\nImagine a fictional diplomatic letter reporting unrest and a fictional newspaper copying it. Neither text below is an archival quotation. Their agreement is not independent confirmation because both descend from one report. Compare with a separately produced account, asking what each observer could see.\n\nFor real documents to analyse, use [The National Archives' 1789 source collection](https://www.nationalarchives.gov.uk/education/teaching-resources/french-revolution/).\n\n### Provenance frames a source\nThe author, date, location, and audience of a historical document help establish the conditions in which it was produced.\n\n### Purpose shapes a claim\nA document's intended audience and purpose can influence which events it describes and how it presents them.\n\n### Match the claim to the evidence\nA document that asserts a crowd's motives directly evidences the author's assertion, but does not by itself establish every participant's motive."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786612260000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-source-criticism_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "Two papers print the same dispatch. Have you found two independent witnesses?",
+						"options": [
+							{
+								"label": "Yes",
+								"value": "choice-0"
+							},
+							{
+								"label": "No: they may share the same source",
+								"value": "choice-1"
+							},
+							{
+								"label": "Newspapers can never be evidence",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Trace the reports' origins before counting independent support.",
+						"type": "predict",
+						"nodeId": "source-inference"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786612320000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-source-criticism_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Yes\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"I counted publications instead of independent observations.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "Two papers print the same dispatch. Have you found two independent witnesses?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Yes"
+					},
+					{
+						"index": 2,
+						"label": "No: they may share the same source"
+					},
+					{
+						"index": 3,
+						"label": "Newspapers can never be evidence"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Yes",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I counted publications instead of independent observations.",
+				"answeredAt": "2026-08-13T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Trace the reports' origins before counting independent support.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1786612380000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_14",
+			"role": "user",
+			"content": "If a source takes sides, isn't every sentence worthless?",
+			"timestamp": 1786612440000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Reliability depends on the question. A partisan document may poorly establish an opponent's motives but strongly reveal its own rhetoric, intended audience, or political priorities. Support each inference with the right evidence and acknowledge uncertainty.\n\n### Independent corroboration\nIndependent sources can strengthen a historical inference when they support it through distinct access to the events.\n\n### Repeated reports can share one origin\nTwo newspapers copying the same report are not two independent eyewitness accounts.\n\n### Bias can itself be evidence\nA partisan source can provide evidence of its author's framing while requiring caution about the events or motives it describes."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786612500000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_history-source-criticism_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "What can a partisan pamphlet most directly show?",
+						"options": [
+							{
+								"label": "What every citizen believed",
+								"value": "choice-0"
+							},
+							{
+								"label": "How its author presented an issue to an audience",
+								"value": "choice-1"
+							},
+							{
+								"label": "Nothing because it is biased",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Its framing is evidence even when its claims need corroboration.",
+						"type": "check",
+						"nodeId": "source-bias"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1786612560000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_history-source-criticism_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"How its author presented an issue to an audience\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I match the inference to what the document actually establishes.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "What can a partisan pamphlet most directly show?",
+				"options": [
+					{
+						"index": 1,
+						"label": "What every citizen believed"
+					},
+					{
+						"index": 2,
+						"label": "How its author presented an issue to an audience"
+					},
+					{
+						"index": 3,
+						"label": "Nothing because it is biased"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "How its author presented an issue to an audience",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I match the inference to what the document actually establishes.",
+				"answeredAt": "2026-08-13T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Its framing is evidence even when its claims need corroboration.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1786612620000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to what we learned earlier?",
+			"timestamp": 1786612680000
+		},
+		{
+			"id": "msg_demo_history-source-criticism_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Apply this to the Revolution essay: distinguish a source's claims from your conclusions, check independence before counting corroboration, and avoid making a document speak for an entire population."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1786612740000
+		}
+	]
+}

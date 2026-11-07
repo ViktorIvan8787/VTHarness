@@ -13,7 +13,6 @@ import {
 	CURRENT_SETTINGS_VERSION,
 	FACTORY_SETTINGS,
 	BACKGROUND_MODEL_ROLES,
-	isHexColor,
 	sanitizeUserSettings,
 } from "../src/core/settings.ts";
 
@@ -43,15 +42,6 @@ describe("FACTORY_SETTINGS (the compiled factory layer)", () => {
 	});
 });
 
-describe("isHexColor", () => {
-	it("accepts #rgb and #rrggbb (case-insensitive), rejects everything else", () => {
-		for (const good of ["#fff", "#FFF", "#141414", "#8B5CF6"]) assert.equal(isHexColor(good), true, good);
-		for (const bad of ["fff", "#ffff", "#gggggg", "141414", "#12345", "", "white"]) {
-			assert.equal(isHexColor(bad), false, bad);
-		}
-	});
-});
-
 describe("sanitizeUserSettings", () => {
 	it("round-trips a fully valid record field-for-field", () => {
 		const record = {
@@ -64,19 +54,10 @@ describe("sanitizeUserSettings", () => {
 				},
 				tools: { research: false, quiz: true },
 				prompts: { "system-prompt.md": true, "teacher/20-teaching.md": false },
-				search: { engine: "brave" },
 			},
 			models: {
 				strong: { model: { provider: "zai", id: "glm-5.3-flash" }, thinkingLevel: "low" },
 				cheap: { thinkingLevel: "medium" },
-			},
-			appearance: {
-				mode: "light",
-				background: "#ffffff",
-				fontFamily: "Some Font",
-				proseFontSize: 18,
-				sessionNameSerif: false,
-				mdRendering: { headingWeight: 700, boldColor: "#ff8800", italicColor: null },
 			},
 			graph: { enabled: false },
 		};
@@ -107,7 +88,7 @@ describe("sanitizeUserSettings", () => {
 		assert.ok(out);
 		assert.deepEqual(out.general, {});
 		assert.deepEqual(out.agent, {});
-		assert.deepEqual(out.appearance, {});
+		assert.equal(out.appearance, undefined);
 		assert.deepEqual(out.graph, {});
 
 		// extractionChunkTokens (extraction-UX redesign, 2026-09-24):
@@ -123,37 +104,6 @@ describe("sanitizeUserSettings", () => {
 		for (const junk of [0, -1000, NaN, Infinity, "4096", null, true]) {
 			const dropped = sanitizeUserSettings({ version: 1, graph: { extractionChunkTokens: junk } });
 			assert.equal(dropped?.graph?.extractionChunkTokens, undefined, `junk ${String(junk)} drops`);
-		}
-	});
-
-	it("out-of-range numbers CLAMP (proseFontSize, headingWeight)", () => {
-		const out = sanitizeUserSettings({
-			appearance: { proseFontSize: 99, mdRendering: { headingWeight: 999 } },
-		});
-		assert.ok(out);
-		assert.equal(out.appearance?.proseFontSize, 24);
-		assert.equal(out.appearance?.mdRendering?.headingWeight, 900);
-		const low = sanitizeUserSettings({ appearance: { proseFontSize: 4, mdRendering: { headingWeight: 5 } } });
-		assert.ok(low);
-		assert.equal(low.appearance?.proseFontSize, 12);
-		assert.equal(low.appearance?.mdRendering?.headingWeight, 100);
-	});
-
-	it("invalid colors become null (the factory default), valid ones pass", () => {
-		const out = sanitizeUserSettings({
-			appearance: { background: "blue", mdRendering: { boldColor: "#f00", italicColor: 42 } },
-		});
-		assert.ok(out);
-		assert.equal(out.appearance?.background, null);
-		assert.equal(out.appearance?.mdRendering?.boldColor, "#f00");
-		assert.equal(out.appearance?.mdRendering?.italicColor, null);
-	});
-
-	it("empty strings/whitespace fontFamily → null (Source Sans 3); wrong-type → null too (the default)", () => {
-		for (const bad of ["", "   ", 12, { name: "x" }]) {
-			const out = sanitizeUserSettings({ appearance: { fontFamily: bad } });
-			assert.ok(out);
-			assert.equal(out.appearance?.fontFamily, null, JSON.stringify(bad));
 		}
 	});
 
@@ -174,21 +124,6 @@ describe("sanitizeUserSettings", () => {
 		assert.deepEqual(models.researcher, { model: { provider: "openrouter", id: "x/y" } });
 		assert.deepEqual(models.extractor, { thinkingLevel: "high" });
 		assert.equal("auditor" in models, false);
-	});
-
-	it("search engine pin survives; unknown engine ids drop (auto-detect resumes) — search wave, 2026-09-20", () => {
-		const good = sanitizeUserSettings({ version: 1, agent: { search: { engine: "tavily" } } });
-		assert.deepEqual(good?.agent?.search, { engine: "tavily" });
-		const exa = sanitizeUserSettings({ version: 1, agent: { search: { engine: "exa" } } });
-		assert.deepEqual(exa?.agent?.search, { engine: "exa" });
-		const fc = sanitizeUserSettings({ version: 1, agent: { search: { engine: "firecrawl" } } });
-		assert.deepEqual(fc?.agent?.search, { engine: "firecrawl" });
-		const ollama = sanitizeUserSettings({ version: 1, agent: { search: { engine: "ollama" } } });
-		assert.deepEqual(ollama?.agent?.search, { engine: "ollama" });
-		const bad = sanitizeUserSettings({ version: 1, agent: { search: { engine: "google" } } });
-		assert.equal(bad?.agent?.search, undefined);
-		const notObject = sanitizeUserSettings({ version: 1, agent: { search: "tavily" } });
-		assert.equal(notObject?.agent?.search, undefined);
 	});
 
 	it("graphTools subsection: boolean survives; bad shapes drop (default ON resumes) — wave 7, 2026-09-23", () => {
