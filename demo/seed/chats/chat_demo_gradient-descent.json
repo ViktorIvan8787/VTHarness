@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_gradient-descent",
+	"title": "Gradient descent: learning from mistakes",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-11-05T09:00:00.000Z",
+	"updatedAt": "2026-11-05T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "gradient",
+				"title": "The gradient",
+				"summary": "The gradient of a differentiable scalar loss contains its partial derivative with respect to each parameter."
+			},
+			{
+				"id": "local-change",
+				"title": "A local approximation",
+				"summary": "For a differentiable loss, L(w + delta) = L(w) + gradient(L,w) dot delta + o(norm(delta)) as delta approaches zero."
+			},
+			{
+				"id": "descent-direction",
+				"title": "A descent direction",
+				"summary": "For a nonzero gradient and a displacement delta = -eta × gradient, the first-order loss change is -eta × norm(gradient)^2, which is negative for eta > 0."
+			},
+			{
+				"id": "small-step",
+				"title": "A sufficiently small step",
+				"summary": "At a point with nonzero gradient, differentiability implies that sufficiently small steps in the negative-gradient direction reduce the loss."
+			},
+			{
+				"id": "update",
+				"title": "One gradient update",
+				"summary": "The scalar gradient-descent update w_new = w - eta × g gives w_new = 1.8 when w = 1, eta = 0.1 and g = -8."
+			},
+			{
+				"id": "learning-rate",
+				"title": "The learning rate",
+				"summary": "The learning rate scales a gradient step; a step that is too large can increase the loss even when the negative gradient is a local descent direction."
+			}
+		],
+		"edges": [
+			{
+				"from": "gradient",
+				"to": "local-change"
+			},
+			{
+				"from": "local-change",
+				"to": "descent-direction"
+			},
+			{
+				"from": "descent-direction",
+				"to": "small-step"
+			},
+			{
+				"from": "small-step",
+				"to": "update"
+			},
+			{
+				"from": "update",
+				"to": "learning-rate"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_gradient-descent_0",
+			"role": "user",
+			"content": "I know what a derivative is, but why do we subtract the gradient? I want to understand the direction, not memorise the formula.",
+			"timestamp": 1793869200000
+		},
+		{
+			"id": "msg_demo_gradient-descent_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793869260000
+		},
+		{
+			"id": "msg_demo_gradient-descent_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_gradient-descent_2",
+					"name": "probe",
+					"arguments": {
+						"question": "If a function has a negative derivative at the current point, what happens for a sufficiently small positive input change?",
+						"options": [
+							{
+								"label": "The function decreases",
+								"value": "choice-0"
+							},
+							{
+								"label": "The function increases",
+								"value": "choice-1"
+							},
+							{
+								"label": "The derivative says nothing locally",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "A negative derivative means the function decreases for sufficiently small positive changes around that point."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793869320000
+		},
+		{
+			"id": "msg_demo_gradient-descent_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_gradient-descent_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"The function decreases\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I picture a downhill slope when moving to the right. I am less sure how that becomes an update rule.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "If a function has a negative derivative at the current point, what happens for a sufficiently small positive input change?",
+				"options": [
+					{
+						"index": 1,
+						"label": "The function decreases"
+					},
+					{
+						"index": 2,
+						"label": "The function increases"
+					},
+					{
+						"index": 3,
+						"label": "The derivative says nothing locally"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "The function decreases",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I picture a downhill slope when moving to the right. I am less sure how that becomes an update rule.",
+				"answeredAt": "2026-11-05T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "A negative derivative means the function decreases for sufficiently small positive changes around that point.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793869380000
+		},
+		{
+			"id": "msg_demo_gradient-descent_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_gradient-descent_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "The gradient",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Explain why subtracting a gradient can reduce a loss, and perform one update."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793869440000
+		},
+		{
+			"id": "msg_demo_gradient-descent_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_gradient-descent_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1793869500000
+		},
+		{
+			"id": "msg_demo_gradient-descent_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_gradient-descent"
+			},
+			"timestamp": 1793869560000
+		},
+		{
+			"id": "msg_demo_gradient-descent_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Explain why subtracting a gradient can reduce a loss, and perform one update. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_gradient-descent_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  gradient[The gradient]\n  local-change[A local approximation]\n  descent-direction[A descent direction]\n  small-step[A sufficiently small step]\n  update[One gradient update]\n  learning-rate[The learning rate]\n  gradient --> local-change\n  local-change --> descent-direction\n  descent-direction --> small-step\n  small-step --> update\n  update --> learning-rate"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793869620000
+		},
+		{
+			"id": "msg_demo_gradient-descent_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_gradient-descent_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: gradient, local-change, descent-direction, small-step, update, learning-rate"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "gradient",
+							"title": "The gradient",
+							"summary": "The gradient of a differentiable scalar loss contains its partial derivative with respect to each parameter."
+						},
+						{
+							"id": "local-change",
+							"title": "A local approximation",
+							"summary": "For a differentiable loss, L(w + delta) = L(w) + gradient(L,w) dot delta + o(norm(delta)) as delta approaches zero."
+						},
+						{
+							"id": "descent-direction",
+							"title": "A descent direction",
+							"summary": "For a nonzero gradient and a displacement delta = -eta × gradient, the first-order loss change is -eta × norm(gradient)^2, which is negative for eta > 0."
+						},
+						{
+							"id": "small-step",
+							"title": "A sufficiently small step",
+							"summary": "At a point with nonzero gradient, differentiability implies that sufficiently small steps in the negative-gradient direction reduce the loss."
+						},
+						{
+							"id": "update",
+							"title": "One gradient update",
+							"summary": "The scalar gradient-descent update w_new = w - eta × g gives w_new = 1.8 when w = 1, eta = 0.1 and g = -8."
+						},
+						{
+							"id": "learning-rate",
+							"title": "The learning rate",
+							"summary": "The learning rate scales a gradient step; a step that is too large can increase the loss even when the negative gradient is a local descent direction."
+						}
+					],
+					"edges": [
+						{
+							"from": "gradient",
+							"to": "local-change"
+						},
+						{
+							"from": "local-change",
+							"to": "descent-direction"
+						},
+						{
+							"from": "descent-direction",
+							"to": "small-step"
+						},
+						{
+							"from": "small-step",
+							"to": "update"
+						},
+						{
+							"from": "update",
+							"to": "learning-rate"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1793869680000
+		},
+		{
+			"id": "msg_demo_gradient-descent_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_gradient-descent_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-11-05T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "gradient",
+							"title": "The gradient",
+							"status": "upcoming"
+						},
+						{
+							"id": "local-change",
+							"title": "A local approximation",
+							"status": "upcoming"
+						},
+						{
+							"id": "descent-direction",
+							"title": "A descent direction",
+							"status": "upcoming"
+						},
+						{
+							"id": "small-step",
+							"title": "A sufficiently small step",
+							"status": "upcoming"
+						},
+						{
+							"id": "update",
+							"title": "One gradient update",
+							"status": "upcoming"
+						},
+						{
+							"id": "learning-rate",
+							"title": "The learning rate",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "gradient",
+							"to": "local-change"
+						},
+						{
+							"from": "local-change",
+							"to": "descent-direction"
+						},
+						{
+							"from": "descent-direction",
+							"to": "small-step"
+						},
+						{
+							"from": "small-step",
+							"to": "update"
+						},
+						{
+							"from": "update",
+							"to": "learning-rate"
+						}
+					]
+				}
+			},
+			"timestamp": 1793869740000
+		},
+		{
+			"id": "msg_demo_gradient-descent_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1793869800000
+		},
+		{
+			"id": "msg_demo_gradient-descent_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### One update you can check by hand\nReuse our earlier example: `x = 2`, `y = 5`, `b = 1`, and `w = 1`. The prediction is 3, the squared loss is 4, and backpropagation gives a weight gradient of −8. We hold b fixed in this example so that only one parameter changes. Before doing the arithmetic, predict which way w should move.\n\n### The gradient\nThe gradient of a differentiable scalar loss contains its partial derivative with respect to each parameter.\n\n### A local approximation\nFor a differentiable loss, L(w + delta) = L(w) + gradient(L,w) dot delta + o(norm(delta)) as delta approaches zero.\n\n### A descent direction\nFor a nonzero gradient and a displacement delta = -eta × gradient, the first-order loss change is -eta × norm(gradient)^2, which is negative for eta > 0."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793869860000
+		},
+		{
+			"id": "msg_demo_gradient-descent_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_gradient-descent_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "Our weight is 1 and its gradient is -8. With learning rate 0.1, which new weight follows gradient descent?",
+						"options": [
+							{
+								"label": "0.2",
+								"value": "choice-0"
+							},
+							{
+								"label": "1.8",
+								"value": "choice-1"
+							},
+							{
+								"label": "-8",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "The update subtracts the gradient: 1 - 0.1 × (-8) = 1.8. A negative slope calls for increasing the weight locally.",
+						"type": "predict",
+						"nodeId": "descent-direction"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793869920000
+		},
+		{
+			"id": "msg_demo_gradient-descent_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_gradient-descent_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"0.2\"}],\"correct\":false,\"confidence\":60,\"thinking\":\"My first instinct was to decrease the weight because the gradient was negative. I need to separate the slope from the move.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "Our weight is 1 and its gradient is -8. With learning rate 0.1, which new weight follows gradient descent?",
+				"options": [
+					{
+						"index": 1,
+						"label": "0.2"
+					},
+					{
+						"index": 2,
+						"label": "1.8"
+					},
+					{
+						"index": 3,
+						"label": "-8"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "0.2",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "My first instinct was to decrease the weight because the gradient was negative. I need to separate the slope from the move.",
+				"answeredAt": "2026-11-05T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "The update subtracts the gradient: 1 - 0.1 × (-8) = 1.8. A negative slope calls for increasing the weight locally.",
+				"correct": false,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1793869980000
+		},
+		{
+			"id": "msg_demo_gradient-descent_14",
+			"role": "user",
+			"content": "I picked 0.2 because I thought a negative gradient meant moving left. Why is that backwards?",
+			"timestamp": 1793870040000
+		},
+		{
+			"id": "msg_demo_gradient-descent_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "The gradient describes how the loss changes as the weight increases. A negative slope means increasing the weight lowers the loss locally. We therefore subtract the negative gradient: `w_new = 1 − 0.1 × (−8) = 1.8`. The prediction becomes 4.6, much closer to the target of 5.\n\nThe local approximation explains this in many dimensions too: choose a change opposite to the gradient, and their dot product is negative. The learning rate controls how far we trust that local picture.\n\n### A sufficiently small step\nAt a point with nonzero gradient, differentiability implies that sufficiently small steps in the negative-gradient direction reduce the loss.\n\n### One gradient update\nThe scalar gradient-descent update w_new = w - eta × g gives w_new = 1.8 when w = 1, eta = 0.1 and g = -8.\n\n### The learning rate\nThe learning rate scales a gradient step; a step that is too large can increase the loss even when the negative gradient is a local descent direction."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793870100000
+		},
+		{
+			"id": "msg_demo_gradient-descent_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_gradient-descent_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "Now w = 1.8, b = 1 and x = 2. The target is 5. What is the new squared error?",
+						"options": [
+							{
+								"label": "0.16",
+								"value": "choice-0"
+							},
+							{
+								"label": "4",
+								"value": "choice-1"
+							},
+							{
+								"label": "8",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "The new prediction is 1.8 × 2 + 1 = 4.6. The residual is -0.4, whose square is 0.16; the old loss was 4.",
+						"type": "check",
+						"nodeId": "learning-rate"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793870160000
+		},
+		{
+			"id": "msg_demo_gradient-descent_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_gradient-descent_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"0.16\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"Increasing the weight moved the prediction toward the target. I can check the direction by recalculating the actual loss.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "Now w = 1.8, b = 1 and x = 2. The target is 5. What is the new squared error?",
+				"options": [
+					{
+						"index": 1,
+						"label": "0.16"
+					},
+					{
+						"index": 2,
+						"label": "4"
+					},
+					{
+						"index": 3,
+						"label": "8"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "0.16",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "Increasing the weight moved the prediction toward the target. I can check the direction by recalculating the actual loss.",
+				"answeredAt": "2026-11-05T09:17:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "The new prediction is 1.8 × 2 + 1 = 4.6. The residual is -0.4, whose square is 0.16; the old loss was 4.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793870220000
+		},
+		{
+			"id": "msg_demo_gradient-descent_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to the rest of the training process?",
+			"timestamp": 1793870280000
+		},
+		{
+			"id": "msg_demo_gradient-descent_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "**The repaired idea:** the gradient describes the slope; the optimiser chooses the move. Subtracting a negative slope moves right.\n\nWe connected the forward pass, squared error, the chain rule, and a gradient update. Try asking next: “What happens if the learning rate is 1 instead of 0.1?”"
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793870340000
+		}
+	]
+}

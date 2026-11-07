@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_data",
+	"title": "From data to predictions",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-10-31T09:00:00.000Z",
+	"updatedAt": "2026-10-31T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "features",
+				"title": "Features",
+				"summary": "A supervised example pairs measured input features x with a target label y."
+			},
+			{
+				"id": "predictor",
+				"title": "A parameterised prediction",
+				"summary": "A scalar affine predictor computes a prediction as y_hat = w × x + b, where w and b are adjustable parameters."
+			},
+			{
+				"id": "forward",
+				"title": "A forward pass",
+				"summary": "A forward pass evaluates a model with its current parameters, without changing those parameters."
+			},
+			{
+				"id": "prediction",
+				"title": "A concrete prediction",
+				"summary": "For y_hat = w × x + b with x = 2, w = 1 and b = 1, the prediction is 3."
+			},
+			{
+				"id": "residual",
+				"title": "Prediction error",
+				"summary": "For a prediction of 3 and target 5, the residual prediction minus target is -2."
+			},
+			{
+				"id": "squared",
+				"title": "Squared error",
+				"summary": "Squared-error loss is (prediction - target)^2, so prediction 3 and target 5 give loss 4."
+			}
+		],
+		"edges": [
+			{
+				"from": "features",
+				"to": "predictor"
+			},
+			{
+				"from": "predictor",
+				"to": "forward"
+			},
+			{
+				"from": "forward",
+				"to": "prediction"
+			},
+			{
+				"from": "prediction",
+				"to": "residual"
+			},
+			{
+				"from": "residual",
+				"to": "squared"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_data_0",
+			"role": "user",
+			"content": "I can write Python, but I don't understand what a neural network actually learns. Can we start with one tiny example?",
+			"timestamp": 1793437200000
+		},
+		{
+			"id": "msg_demo_data_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793437260000
+		},
+		{
+			"id": "msg_demo_data_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_data_2",
+					"name": "probe",
+					"arguments": {
+						"question": "What changes when this model is trained?",
+						"options": [
+							{
+								"label": "Its adjustable parameters",
+								"value": "choice-0"
+							},
+							{
+								"label": "The target labels",
+								"value": "choice-1"
+							},
+							{
+								"label": "The arithmetic rules",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Training changes the model's parameters to improve its predictions; the training labels provide the reference."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793437320000
+		},
+		{
+			"id": "msg_demo_data_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_data_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Its adjustable parameters\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The model must adjust its numbers rather than rewrite the answers in the data.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "What changes when this model is trained?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Its adjustable parameters"
+					},
+					{
+						"index": 2,
+						"label": "The target labels"
+					},
+					{
+						"index": 3,
+						"label": "The arithmetic rules"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Its adjustable parameters",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "The model must adjust its numbers rather than rewrite the answers in the data.",
+				"answeredAt": "2026-10-31T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Training changes the model's parameters to improve its predictions; the training labels provide the reference.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793437380000
+		},
+		{
+			"id": "msg_demo_data_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_data_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "Features",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Explain what a model learns from labelled examples."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793437440000
+		},
+		{
+			"id": "msg_demo_data_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_data_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1793437500000
+		},
+		{
+			"id": "msg_demo_data_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_data"
+			},
+			"timestamp": 1793437560000
+		},
+		{
+			"id": "msg_demo_data_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Explain what a model learns from labelled examples. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_data_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  features[Features]\n  predictor[A parameterised prediction]\n  forward[A forward pass]\n  prediction[A concrete prediction]\n  residual[Prediction error]\n  squared[Squared error]\n  features --> predictor\n  predictor --> forward\n  forward --> prediction\n  prediction --> residual\n  residual --> squared"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793437620000
+		},
+		{
+			"id": "msg_demo_data_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_data_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: features, predictor, forward, prediction, residual, squared"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "features",
+							"title": "Features",
+							"summary": "A supervised example pairs measured input features x with a target label y."
+						},
+						{
+							"id": "predictor",
+							"title": "A parameterised prediction",
+							"summary": "A scalar affine predictor computes a prediction as y_hat = w × x + b, where w and b are adjustable parameters."
+						},
+						{
+							"id": "forward",
+							"title": "A forward pass",
+							"summary": "A forward pass evaluates a model with its current parameters, without changing those parameters."
+						},
+						{
+							"id": "prediction",
+							"title": "A concrete prediction",
+							"summary": "For y_hat = w × x + b with x = 2, w = 1 and b = 1, the prediction is 3."
+						},
+						{
+							"id": "residual",
+							"title": "Prediction error",
+							"summary": "For a prediction of 3 and target 5, the residual prediction minus target is -2."
+						},
+						{
+							"id": "squared",
+							"title": "Squared error",
+							"summary": "Squared-error loss is (prediction - target)^2, so prediction 3 and target 5 give loss 4."
+						}
+					],
+					"edges": [
+						{
+							"from": "features",
+							"to": "predictor"
+						},
+						{
+							"from": "predictor",
+							"to": "forward"
+						},
+						{
+							"from": "forward",
+							"to": "prediction"
+						},
+						{
+							"from": "prediction",
+							"to": "residual"
+						},
+						{
+							"from": "residual",
+							"to": "squared"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1793437680000
+		},
+		{
+			"id": "msg_demo_data_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_data_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-10-31T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "features",
+							"title": "Features",
+							"status": "upcoming"
+						},
+						{
+							"id": "predictor",
+							"title": "A parameterised prediction",
+							"status": "upcoming"
+						},
+						{
+							"id": "forward",
+							"title": "A forward pass",
+							"status": "upcoming"
+						},
+						{
+							"id": "prediction",
+							"title": "A concrete prediction",
+							"status": "upcoming"
+						},
+						{
+							"id": "residual",
+							"title": "Prediction error",
+							"status": "upcoming"
+						},
+						{
+							"id": "squared",
+							"title": "Squared error",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "features",
+							"to": "predictor"
+						},
+						{
+							"from": "predictor",
+							"to": "forward"
+						},
+						{
+							"from": "forward",
+							"to": "prediction"
+						},
+						{
+							"from": "prediction",
+							"to": "residual"
+						},
+						{
+							"from": "residual",
+							"to": "squared"
+						}
+					]
+				}
+			},
+			"timestamp": 1793437740000
+		},
+		{
+			"id": "msg_demo_data_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1793437800000
+		},
+		{
+			"id": "msg_demo_data_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### One example, no magic\nSuppose the input is two hours of study and the target is a score of five. Our toy model currently predicts three. The forward pass is just `1 × 2 + 1 = 3`. The learning problem is to decide how to change the two adjustable numbers so that the next prediction is better.\n\n### Features\nA supervised example pairs measured input features x with a target label y.\n\n### A parameterised prediction\nA scalar affine predictor computes a prediction as y_hat = w × x + b, where w and b are adjustable parameters.\n\n### A forward pass\nA forward pass evaluates a model with its current parameters, without changing those parameters."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793437860000
+		},
+		{
+			"id": "msg_demo_data_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_data_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "For x = 2, w = 1 and b = 1, what does the forward pass predict?",
+						"options": [
+							{
+								"label": "2",
+								"value": "choice-0"
+							},
+							{
+								"label": "3",
+								"value": "choice-1"
+							},
+							{
+								"label": "5",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Substitute into w × x + b: 1 × 2 + 1 = 3.",
+						"type": "predict",
+						"nodeId": "forward"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793437920000
+		},
+		{
+			"id": "msg_demo_data_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_data_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"3\"}],\"correct\":true,\"confidence\":60,\"thinking\":\"I multiply the input by the weight and then add the bias.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "For x = 2, w = 1 and b = 1, what does the forward pass predict?",
+				"options": [
+					{
+						"index": 1,
+						"label": "2"
+					},
+					{
+						"index": 2,
+						"label": "3"
+					},
+					{
+						"index": 3,
+						"label": "5"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "3",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I multiply the input by the weight and then add the bias.",
+				"answeredAt": "2026-10-31T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Substitute into w × x + b: 1 × 2 + 1 = 3.",
+				"correct": true,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1793437980000
+		},
+		{
+			"id": "msg_demo_data_14",
+			"role": "user",
+			"content": "So does the forward pass already update the weight when it sees that the answer is wrong?",
+			"timestamp": 1793438040000
+		},
+		{
+			"id": "msg_demo_data_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "The forward pass only makes a prediction. Comparing it with the label gives an error; a later gradient calculation and update use that error to change parameters. Keeping prediction and update separate lets us explain every step.\n\n### A concrete prediction\nFor y_hat = w × x + b with x = 2, w = 1 and b = 1, the prediction is 3.\n\n### Prediction error\nFor a prediction of 3 and target 5, the residual prediction minus target is -2.\n\n### Squared error\nSquared-error loss is (prediction - target)^2, so prediction 3 and target 5 give loss 4."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793438100000
+		},
+		{
+			"id": "msg_demo_data_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_data_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "The target is 5 and the prediction is 3. What is the squared-error loss?",
+						"options": [
+							{
+								"label": "-2",
+								"value": "choice-0"
+							},
+							{
+								"label": "2",
+								"value": "choice-1"
+							},
+							{
+								"label": "4",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-2",
+						"explanation": "The residual is -2. Squaring it gives 4, a nonnegative penalty.",
+						"type": "check",
+						"nodeId": "squared"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793438160000
+		},
+		{
+			"id": "msg_demo_data_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_data_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":3,\"label\":\"4\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The signed error is useful for direction, but the squared loss measures the penalty.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "The target is 5 and the prediction is 3. What is the squared-error loss?",
+				"options": [
+					{
+						"index": 1,
+						"label": "-2"
+					},
+					{
+						"index": 2,
+						"label": "2"
+					},
+					{
+						"index": 3,
+						"label": "4"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "4",
+						"value": "choice-2",
+						"index": 3
+					}
+				],
+				"thinking": "The signed error is useful for direction, but the squared loss measures the penalty.",
+				"answeredAt": "2026-10-31T09:17:00.000Z",
+				"correctIndices": [
+					3
+				],
+				"explanation": "The residual is -2. Squaring it gives 4, a nonnegative penalty.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793438220000
+		},
+		{
+			"id": "msg_demo_data_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to the rest of the training process?",
+			"timestamp": 1793438280000
+		},
+		{
+			"id": "msg_demo_data_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "You can now distinguish four things: the input, the target, the prediction, and the parameters. Next we need a signal that tells us which parameter changes reduce the error."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793438340000
+		}
+	]
+}

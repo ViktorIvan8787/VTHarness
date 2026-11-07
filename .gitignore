@@ -1,0 +1,16 @@
+/node_modules/
+/.next/
+/.next-demo/
+/dist/
+/data/
+/.fresh-data/
+/demo/.runtime/
+/auth.json*
+/chatgpt-credentials.json*
+/github-copilot-credentials.json*
+/xai-credentials.json*
+.env*
+!.env.example
+*.tsbuildinfo
+__pycache__/
+.DS_Store

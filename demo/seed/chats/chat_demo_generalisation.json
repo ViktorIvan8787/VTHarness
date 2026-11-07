@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_generalisation",
+	"title": "Training that generalises",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-11-04T09:00:00.000Z",
+	"updatedAt": "2026-11-04T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "training-fit",
+				"title": "Training fit",
+				"summary": "Training loss measures error on the examples used to fit the model, rather than directly measuring error on unseen examples."
+			},
+			{
+				"id": "heldout",
+				"title": "Held-out evaluation",
+				"summary": "Evaluation on a held-out sample measures performance on examples that were not used for parameter updates."
+			},
+			{
+				"id": "overfitting",
+				"title": "Overfitting",
+				"summary": "Low training loss alone does not establish low error on unseen data; a model can fit peculiarities of its training examples."
+			},
+			{
+				"id": "validation",
+				"title": "Validation selection",
+				"summary": "A validation set can guide choices such as learning rate, architecture, and the training stopping point."
+			},
+			{
+				"id": "test-set",
+				"title": "A separate test set",
+				"summary": "When validation data guide model choices, a separate untouched test set provides an evaluation that was not used for those choices."
+			},
+			{
+				"id": "early-stop",
+				"title": "Early stopping",
+				"summary": "Selecting an earlier checkpoint using validation performance can avoid retaining later parameter updates that improve training fit while worsening validation performance."
+			}
+		],
+		"edges": [
+			{
+				"from": "training-fit",
+				"to": "heldout"
+			},
+			{
+				"from": "heldout",
+				"to": "overfitting"
+			},
+			{
+				"from": "overfitting",
+				"to": "validation"
+			},
+			{
+				"from": "validation",
+				"to": "test-set"
+			},
+			{
+				"from": "test-set",
+				"to": "early-stop"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_generalisation_0",
+			"role": "user",
+			"content": "My training loss keeps falling. How do I know whether the model is learning anything useful?",
+			"timestamp": 1793782800000
+		},
+		{
+			"id": "msg_demo_generalisation_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793782860000
+		},
+		{
+			"id": "msg_demo_generalisation_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_generalisation_2",
+					"name": "probe",
+					"arguments": {
+						"question": "Which examples directly influence the model's gradient updates?",
+						"options": [
+							{
+								"label": "Training examples",
+								"value": "choice-0"
+							},
+							{
+								"label": "The untouched test examples",
+								"value": "choice-1"
+							},
+							{
+								"label": "Only future examples",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Parameter updates use the training examples. Held-out data have a different role."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793782920000
+		},
+		{
+			"id": "msg_demo_generalisation_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_generalisation_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Training examples\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The model sees the training labels during optimisation, so a training score is not an independent check.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "Which examples directly influence the model's gradient updates?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Training examples"
+					},
+					{
+						"index": 2,
+						"label": "The untouched test examples"
+					},
+					{
+						"index": 3,
+						"label": "Only future examples"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Training examples",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "The model sees the training labels during optimisation, so a training score is not an independent check.",
+				"answeredAt": "2026-11-04T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Parameter updates use the training examples. Held-out data have a different role.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793782980000
+		},
+		{
+			"id": "msg_demo_generalisation_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_generalisation_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "Training fit",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Distinguish learning the training examples from performing well on unseen data."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793783040000
+		},
+		{
+			"id": "msg_demo_generalisation_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_generalisation_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1793783100000
+		},
+		{
+			"id": "msg_demo_generalisation_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_generalisation"
+			},
+			"timestamp": 1793783160000
+		},
+		{
+			"id": "msg_demo_generalisation_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Distinguish learning the training examples from performing well on unseen data. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_generalisation_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  training-fit[Training fit]\n  heldout[Held-out evaluation]\n  overfitting[Overfitting]\n  validation[Validation selection]\n  test-set[A separate test set]\n  early-stop[Early stopping]\n  training-fit --> heldout\n  heldout --> overfitting\n  overfitting --> validation\n  validation --> test-set\n  test-set --> early-stop"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793783220000
+		},
+		{
+			"id": "msg_demo_generalisation_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_generalisation_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: training-fit, heldout, overfitting, validation, test-set, early-stop"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "training-fit",
+							"title": "Training fit",
+							"summary": "Training loss measures error on the examples used to fit the model, rather than directly measuring error on unseen examples."
+						},
+						{
+							"id": "heldout",
+							"title": "Held-out evaluation",
+							"summary": "Evaluation on a held-out sample measures performance on examples that were not used for parameter updates."
+						},
+						{
+							"id": "overfitting",
+							"title": "Overfitting",
+							"summary": "Low training loss alone does not establish low error on unseen data; a model can fit peculiarities of its training examples."
+						},
+						{
+							"id": "validation",
+							"title": "Validation selection",
+							"summary": "A validation set can guide choices such as learning rate, architecture, and the training stopping point."
+						},
+						{
+							"id": "test-set",
+							"title": "A separate test set",
+							"summary": "When validation data guide model choices, a separate untouched test set provides an evaluation that was not used for those choices."
+						},
+						{
+							"id": "early-stop",
+							"title": "Early stopping",
+							"summary": "Selecting an earlier checkpoint using validation performance can avoid retaining later parameter updates that improve training fit while worsening validation performance."
+						}
+					],
+					"edges": [
+						{
+							"from": "training-fit",
+							"to": "heldout"
+						},
+						{
+							"from": "heldout",
+							"to": "overfitting"
+						},
+						{
+							"from": "overfitting",
+							"to": "validation"
+						},
+						{
+							"from": "validation",
+							"to": "test-set"
+						},
+						{
+							"from": "test-set",
+							"to": "early-stop"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1793783280000
+		},
+		{
+			"id": "msg_demo_generalisation_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_generalisation_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-11-04T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "training-fit",
+							"title": "Training fit",
+							"status": "upcoming"
+						},
+						{
+							"id": "heldout",
+							"title": "Held-out evaluation",
+							"status": "upcoming"
+						},
+						{
+							"id": "overfitting",
+							"title": "Overfitting",
+							"status": "upcoming"
+						},
+						{
+							"id": "validation",
+							"title": "Validation selection",
+							"status": "upcoming"
+						},
+						{
+							"id": "test-set",
+							"title": "A separate test set",
+							"status": "upcoming"
+						},
+						{
+							"id": "early-stop",
+							"title": "Early stopping",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "training-fit",
+							"to": "heldout"
+						},
+						{
+							"from": "heldout",
+							"to": "overfitting"
+						},
+						{
+							"from": "overfitting",
+							"to": "validation"
+						},
+						{
+							"from": "validation",
+							"to": "test-set"
+						},
+						{
+							"from": "test-set",
+							"to": "early-stop"
+						}
+					]
+				}
+			},
+			"timestamp": 1793783340000
+		},
+		{
+			"id": "msg_demo_generalisation_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1793783400000
+		},
+		{
+			"id": "msg_demo_generalisation_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### A learning curve tells two stories\nAt checkpoint A, training error is 0.20 and validation error is 0.24. At B they are 0.08 and 0.18. At C they are 0.02 and 0.31. The final checkpoint fits training examples best, but B is the better candidate according to this validation comparison. These are illustrative numbers, not a reported experiment.\n\n### Training fit\nTraining loss measures error on the examples used to fit the model, rather than directly measuring error on unseen examples.\n\n### Held-out evaluation\nEvaluation on a held-out sample measures performance on examples that were not used for parameter updates.\n\n### Overfitting\nLow training loss alone does not establish low error on unseen data; a model can fit peculiarities of its training examples."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793783460000
+		},
+		{
+			"id": "msg_demo_generalisation_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_generalisation_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "Training error falls while validation error rises. What is the most useful next step?",
+						"options": [
+							{
+								"label": "Declare success from training error",
+								"value": "choice-0"
+							},
+							{
+								"label": "Investigate overfitting and compare earlier checkpoints",
+								"value": "choice-1"
+							},
+							{
+								"label": "Train on the test set",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "The growing gap is a reason to investigate generalisation and compare model choices using validation data.",
+						"type": "predict",
+						"nodeId": "overfitting"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793783520000
+		},
+		{
+			"id": "msg_demo_generalisation_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_generalisation_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"Investigate overfitting and compare earlier checkpoints\"}],\"correct\":true,\"confidence\":60,\"thinking\":\"Improving the rehearsed examples is different from improving on new ones.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "Training error falls while validation error rises. What is the most useful next step?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Declare success from training error"
+					},
+					{
+						"index": 2,
+						"label": "Investigate overfitting and compare earlier checkpoints"
+					},
+					{
+						"index": 3,
+						"label": "Train on the test set"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Investigate overfitting and compare earlier checkpoints",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "Improving the rehearsed examples is different from improving on new ones.",
+				"answeredAt": "2026-11-04T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "The growing gap is a reason to investigate generalisation and compare model choices using validation data.",
+				"correct": true,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1793783580000
+		},
+		{
+			"id": "msg_demo_generalisation_14",
+			"role": "user",
+			"content": "If I choose checkpoint B because it wins on validation, can I call its validation score my final independent result?",
+			"timestamp": 1793783640000
+		},
+		{
+			"id": "msg_demo_generalisation_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "The score helped you choose B, so it is part of the selection process. Keep an untouched test set for the final evaluation, and check that the sample and measurement reflect the intended use. No finite held-out score guarantees future performance.\n\n### Validation selection\nA validation set can guide choices such as learning rate, architecture, and the training stopping point.\n\n### A separate test set\nWhen validation data guide model choices, a separate untouched test set provides an evaluation that was not used for those choices.\n\n### Early stopping\nSelecting an earlier checkpoint using validation performance can avoid retaining later parameter updates that improve training fit while worsening validation performance."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793783700000
+		},
+		{
+			"id": "msg_demo_generalisation_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_generalisation_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "Why keep a separate test set after repeatedly tuning on validation results?",
+						"options": [
+							{
+								"label": "To make gradient updates faster",
+								"value": "choice-0"
+							},
+							{
+								"label": "To evaluate without reusing the data that guided those choices",
+								"value": "choice-1"
+							},
+							{
+								"label": "To guarantee zero future errors",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Repeated choices depend on validation performance. A separate test set avoids using the same data for selection and final evaluation.",
+						"type": "check",
+						"nodeId": "early-stop"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793783760000
+		},
+		{
+			"id": "msg_demo_generalisation_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_generalisation_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"To evaluate without reusing the data that guided those choices\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"If I keep choosing what scores best on one set, that set becomes part of the selection process.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "Why keep a separate test set after repeatedly tuning on validation results?",
+				"options": [
+					{
+						"index": 1,
+						"label": "To make gradient updates faster"
+					},
+					{
+						"index": 2,
+						"label": "To evaluate without reusing the data that guided those choices"
+					},
+					{
+						"index": 3,
+						"label": "To guarantee zero future errors"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "To evaluate without reusing the data that guided those choices",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "If I keep choosing what scores best on one set, that set becomes part of the selection process.",
+				"answeredAt": "2026-11-04T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Repeated choices depend on validation performance. A separate test set avoids using the same data for selection and final evaluation.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793783820000
+		},
+		{
+			"id": "msg_demo_generalisation_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to the rest of the training process?",
+			"timestamp": 1793783880000
+		},
+		{
+			"id": "msg_demo_generalisation_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Optimisation and generalisation answer different questions. The loss and gradients tell us how the model fits its training examples; held-out evaluation checks whether the result transfers."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793783940000
+		}
+	]
+}

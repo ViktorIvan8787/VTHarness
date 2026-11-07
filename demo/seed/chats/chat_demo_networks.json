@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_networks",
+	"title": "Why neural networks need nonlinearity",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-11-02T09:00:00.000Z",
+	"updatedAt": "2026-11-02T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "affine-layer",
+				"title": "An affine layer",
+				"summary": "An affine neural-network layer computes W × x + b for a weight matrix W and bias vector b."
+			},
+			{
+				"id": "composition",
+				"title": "Composing affine layers",
+				"summary": "Composing W1 × x + b1 with W2 × z + b2 gives (W2 × W1) × x + W2 × b1 + b2."
+			},
+			{
+				"id": "collapse",
+				"title": "Linear layers collapse",
+				"summary": "Any finite composition of affine layers can be represented by a single affine layer."
+			},
+			{
+				"id": "relu",
+				"title": "ReLU",
+				"summary": "The ReLU activation maps a scalar z to max(0, z)."
+			},
+			{
+				"id": "relu-values",
+				"title": "A bend at zero",
+				"summary": "ReLU maps -1, 0 and 1 to 0, 0 and 1 respectively; those three input-output points do not lie on one straight line."
+			},
+			{
+				"id": "nonlinear",
+				"title": "Nonlinear transformations",
+				"summary": "Because ReLU is not affine, inserting it between affine layers allows models that cannot be represented by a single affine transformation."
+			}
+		],
+		"edges": [
+			{
+				"from": "affine-layer",
+				"to": "composition"
+			},
+			{
+				"from": "composition",
+				"to": "collapse"
+			},
+			{
+				"from": "collapse",
+				"to": "relu"
+			},
+			{
+				"from": "relu",
+				"to": "relu-values"
+			},
+			{
+				"from": "relu-values",
+				"to": "nonlinear"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_networks_0",
+			"role": "user",
+			"content": "If one layer is simple, why can't we get a powerful network just by stacking lots of linear layers?",
+			"timestamp": 1793610000000
+		},
+		{
+			"id": "msg_demo_networks_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793610060000
+		},
+		{
+			"id": "msg_demo_networks_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_networks_2",
+					"name": "probe",
+					"arguments": {
+						"question": "What shape does y = w × x + b describe for scalar x?",
+						"options": [
+							{
+								"label": "A straight line",
+								"value": "choice-0"
+							},
+							{
+								"label": "Every possible curve",
+								"value": "choice-1"
+							},
+							{
+								"label": "Only a horizontal line",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "It is a line with slope w and intercept b; choosing different parameters changes that line."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793610120000
+		},
+		{
+			"id": "msg_demo_networks_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_networks_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"A straight line\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The slope is constant, even if I change the weight.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "What shape does y = w × x + b describe for scalar x?",
+				"options": [
+					{
+						"index": 1,
+						"label": "A straight line"
+					},
+					{
+						"index": 2,
+						"label": "Every possible curve"
+					},
+					{
+						"index": 3,
+						"label": "Only a horizontal line"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "A straight line",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "The slope is constant, even if I change the weight.",
+				"answeredAt": "2026-11-02T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "It is a line with slope w and intercept b; choosing different parameters changes that line.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793610180000
+		},
+		{
+			"id": "msg_demo_networks_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_networks_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "An affine layer",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Explain why stacking linear layers alone does not create a nonlinear model."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793610240000
+		},
+		{
+			"id": "msg_demo_networks_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_networks_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1793610300000
+		},
+		{
+			"id": "msg_demo_networks_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_networks"
+			},
+			"timestamp": 1793610360000
+		},
+		{
+			"id": "msg_demo_networks_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Explain why stacking linear layers alone does not create a nonlinear model. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_networks_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  affine-layer[An affine layer]\n  composition[Composing affine layers]\n  collapse[Linear layers collapse]\n  relu[ReLU]\n  relu-values[A bend at zero]\n  nonlinear[Nonlinear transformations]\n  affine-layer --> composition\n  composition --> collapse\n  collapse --> relu\n  relu --> relu-values\n  relu-values --> nonlinear"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793610420000
+		},
+		{
+			"id": "msg_demo_networks_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_networks_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: affine-layer, composition, collapse, relu, relu-values, nonlinear"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "affine-layer",
+							"title": "An affine layer",
+							"summary": "An affine neural-network layer computes W × x + b for a weight matrix W and bias vector b."
+						},
+						{
+							"id": "composition",
+							"title": "Composing affine layers",
+							"summary": "Composing W1 × x + b1 with W2 × z + b2 gives (W2 × W1) × x + W2 × b1 + b2."
+						},
+						{
+							"id": "collapse",
+							"title": "Linear layers collapse",
+							"summary": "Any finite composition of affine layers can be represented by a single affine layer."
+						},
+						{
+							"id": "relu",
+							"title": "ReLU",
+							"summary": "The ReLU activation maps a scalar z to max(0, z)."
+						},
+						{
+							"id": "relu-values",
+							"title": "A bend at zero",
+							"summary": "ReLU maps -1, 0 and 1 to 0, 0 and 1 respectively; those three input-output points do not lie on one straight line."
+						},
+						{
+							"id": "nonlinear",
+							"title": "Nonlinear transformations",
+							"summary": "Because ReLU is not affine, inserting it between affine layers allows models that cannot be represented by a single affine transformation."
+						}
+					],
+					"edges": [
+						{
+							"from": "affine-layer",
+							"to": "composition"
+						},
+						{
+							"from": "composition",
+							"to": "collapse"
+						},
+						{
+							"from": "collapse",
+							"to": "relu"
+						},
+						{
+							"from": "relu",
+							"to": "relu-values"
+						},
+						{
+							"from": "relu-values",
+							"to": "nonlinear"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1793610480000
+		},
+		{
+			"id": "msg_demo_networks_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_networks_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-11-02T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "affine-layer",
+							"title": "An affine layer",
+							"status": "upcoming"
+						},
+						{
+							"id": "composition",
+							"title": "Composing affine layers",
+							"status": "upcoming"
+						},
+						{
+							"id": "collapse",
+							"title": "Linear layers collapse",
+							"status": "upcoming"
+						},
+						{
+							"id": "relu",
+							"title": "ReLU",
+							"status": "upcoming"
+						},
+						{
+							"id": "relu-values",
+							"title": "A bend at zero",
+							"status": "upcoming"
+						},
+						{
+							"id": "nonlinear",
+							"title": "Nonlinear transformations",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "affine-layer",
+							"to": "composition"
+						},
+						{
+							"from": "composition",
+							"to": "collapse"
+						},
+						{
+							"from": "collapse",
+							"to": "relu"
+						},
+						{
+							"from": "relu",
+							"to": "relu-values"
+						},
+						{
+							"from": "relu-values",
+							"to": "nonlinear"
+						}
+					]
+				}
+			},
+			"timestamp": 1793610540000
+		},
+		{
+			"id": "msg_demo_networks_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1793610600000
+		},
+		{
+			"id": "msg_demo_networks_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Depth needs a change of shape\nWrite down two scalar layers: `z = 2x + 1` and `y = 3z − 2`. Expanding them gives `y = 6x + 1`. Adding more affine layers repeats this pattern. Now insert `max(0, z)` between them. The output can bend where z crosses zero, so the earlier collapse no longer applies.\n\n### An affine layer\nAn affine neural-network layer computes W × x + b for a weight matrix W and bias vector b.\n\n### Composing affine layers\nComposing W1 × x + b1 with W2 × z + b2 gives (W2 × W1) × x + W2 × b1 + b2.\n\n### Linear layers collapse\nAny finite composition of affine layers can be represented by a single affine layer."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793610660000
+		},
+		{
+			"id": "msg_demo_networks_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_networks_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "If z = 2 × x + 1 and y = 3 × z - 2, what is y?",
+						"options": [
+							{
+								"label": "6 × x + 1",
+								"value": "choice-0"
+							},
+							{
+								"label": "6 × x - 2",
+								"value": "choice-1"
+							},
+							{
+								"label": "A nonlinear curve",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Substitute z: 3 × (2 × x + 1) - 2 = 6 × x + 1. The result is still affine.",
+						"type": "predict",
+						"nodeId": "collapse"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793610720000
+		},
+		{
+			"id": "msg_demo_networks_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_networks_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"6 × x + 1\"}],\"correct\":true,\"confidence\":60,\"thinking\":\"There are two operations, but after substitution the shape is still a line.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "If z = 2 × x + 1 and y = 3 × z - 2, what is y?",
+				"options": [
+					{
+						"index": 1,
+						"label": "6 × x + 1"
+					},
+					{
+						"index": 2,
+						"label": "6 × x - 2"
+					},
+					{
+						"index": 3,
+						"label": "A nonlinear curve"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "6 × x + 1",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "There are two operations, but after substitution the shape is still a line.",
+				"answeredAt": "2026-11-02T09:13:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Substitute z: 3 × (2 × x + 1) - 2 = 6 × x + 1. The result is still affine.",
+				"correct": true,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1793610780000
+		},
+		{
+			"id": "msg_demo_networks_14",
+			"role": "user",
+			"content": "Then a deeper network must always be better because it has more bends?",
+			"timestamp": 1793610840000
+		},
+		{
+			"id": "msg_demo_networks_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Nonlinearity gives the model the ability to express different functions; it does not guarantee that training will find a useful one. Data, architecture, optimisation, and evaluation still matter. More capacity can also fit noise.\n\n### ReLU\nThe ReLU activation maps a scalar z to max(0, z).\n\n### A bend at zero\nReLU maps -1, 0 and 1 to 0, 0 and 1 respectively; those three input-output points do not lie on one straight line.\n\n### Nonlinear transformations\nBecause ReLU is not affine, inserting it between affine layers allows models that cannot be represented by a single affine transformation."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793610900000
+		},
+		{
+			"id": "msg_demo_networks_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_networks_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "What do ReLU(-1), ReLU(0) and ReLU(1) equal?",
+						"options": [
+							{
+								"label": "-1, 0, 1",
+								"value": "choice-0"
+							},
+							{
+								"label": "0, 0, 1",
+								"value": "choice-1"
+							},
+							{
+								"label": "1, 0, 1",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "ReLU keeps positive inputs and clips negative inputs to zero, creating a bend at zero.",
+						"type": "check",
+						"nodeId": "nonlinear"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793610960000
+		},
+		{
+			"id": "msg_demo_networks_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_networks_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"0, 0, 1\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The negative input is clipped. That bend is what a single straight line cannot reproduce.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "What do ReLU(-1), ReLU(0) and ReLU(1) equal?",
+				"options": [
+					{
+						"index": 1,
+						"label": "-1, 0, 1"
+					},
+					{
+						"index": 2,
+						"label": "0, 0, 1"
+					},
+					{
+						"index": 3,
+						"label": "1, 0, 1"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "0, 0, 1",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "The negative input is clipped. That bend is what a single straight line cannot reproduce.",
+				"answeredAt": "2026-11-02T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "ReLU keeps positive inputs and clips negative inputs to zero, creating a bend at zero.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793611020000
+		},
+		{
+			"id": "msg_demo_networks_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to the rest of the training process?",
+			"timestamp": 1793611080000
+		},
+		{
+			"id": "msg_demo_networks_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "We have a forward computation made of small steps. Backpropagation will work backwards through those same steps to calculate how each weight affects the loss."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793611140000
+		}
+	]
+}

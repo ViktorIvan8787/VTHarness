@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_backprop",
+	"title": "Backpropagation is the chain rule",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-11-03T09:00:00.000Z",
+	"updatedAt": "2026-11-03T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "chain-rule",
+				"title": "The chain rule",
+				"summary": "For differentiable scalar functions z = f(w) and L = g(z), dL/dw = (dL/dz) × (dz/dw)."
+			},
+			{
+				"id": "local-derivatives",
+				"title": "Local derivatives",
+				"summary": "The derivative of a composed computation can be assembled from derivatives of its individual operations."
+			},
+			{
+				"id": "backward-product",
+				"title": "Propagating sensitivity",
+				"summary": "For y_hat = w × x + b and squared-error loss, a backward pass multiplies 2 × (y_hat-y) by x to obtain the weight gradient."
+			},
+			{
+				"id": "fanout",
+				"title": "Adding paths",
+				"summary": "When a parameter affects a differentiable loss through multiple computation paths, its total derivative is the sum of the path contributions."
+			},
+			{
+				"id": "reverse-order",
+				"title": "Reverse traversal",
+				"summary": "Reverse-mode differentiation propagates loss sensitivities through a computation graph in reverse dependency order."
+			},
+			{
+				"id": "reuse",
+				"title": "Reusing intermediate gradients",
+				"summary": "Reverse-mode differentiation reuses accumulated intermediate sensitivities instead of independently recalculating each complete path for every parameter."
+			}
+		],
+		"edges": [
+			{
+				"from": "chain-rule",
+				"to": "local-derivatives"
+			},
+			{
+				"from": "local-derivatives",
+				"to": "backward-product"
+			},
+			{
+				"from": "backward-product",
+				"to": "fanout"
+			},
+			{
+				"from": "fanout",
+				"to": "reverse-order"
+			},
+			{
+				"from": "reverse-order",
+				"to": "reuse"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_backprop_0",
+			"role": "user",
+			"content": "Backpropagation sounds complicated. Can you connect it to the derivative example we already worked through?",
+			"timestamp": 1793696400000
+		},
+		{
+			"id": "msg_demo_backprop_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793696460000
+		},
+		{
+			"id": "msg_demo_backprop_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_backprop_2",
+					"name": "probe",
+					"arguments": {
+						"question": "If w changes z, and z changes L, how do the two local rates combine?",
+						"options": [
+							{
+								"label": "Multiply",
+								"value": "choice-0"
+							},
+							{
+								"label": "Always add",
+								"value": "choice-1"
+							},
+							{
+								"label": "Take the larger rate",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Along one path the chain rule multiplies the local derivatives."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793696520000
+		},
+		{
+			"id": "msg_demo_backprop_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_backprop_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Multiply\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"A unit change is scaled once at each step along the path.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "If w changes z, and z changes L, how do the two local rates combine?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Multiply"
+					},
+					{
+						"index": 2,
+						"label": "Always add"
+					},
+					{
+						"index": 3,
+						"label": "Take the larger rate"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Multiply",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "A unit change is scaled once at each step along the path.",
+				"answeredAt": "2026-11-03T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Along one path the chain rule multiplies the local derivatives.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793696580000
+		},
+		{
+			"id": "msg_demo_backprop_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_backprop_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "The chain rule",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Trace a loss gradient backwards through a small computation graph."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793696640000
+		},
+		{
+			"id": "msg_demo_backprop_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_backprop_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1793696700000
+		},
+		{
+			"id": "msg_demo_backprop_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_backprop"
+			},
+			"timestamp": 1793696760000
+		},
+		{
+			"id": "msg_demo_backprop_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Trace a loss gradient backwards through a small computation graph. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_backprop_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  chain-rule[The chain rule]\n  local-derivatives[Local derivatives]\n  backward-product[Propagating sensitivity]\n  fanout[Adding paths]\n  reverse-order[Reverse traversal]\n  reuse[Reusing intermediate gradients]\n  chain-rule --> local-derivatives\n  local-derivatives --> backward-product\n  backward-product --> fanout\n  fanout --> reverse-order\n  reverse-order --> reuse"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793696820000
+		},
+		{
+			"id": "msg_demo_backprop_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_backprop_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: chain-rule, local-derivatives, backward-product, fanout, reverse-order, reuse"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "chain-rule",
+							"title": "The chain rule",
+							"summary": "For differentiable scalar functions z = f(w) and L = g(z), dL/dw = (dL/dz) × (dz/dw)."
+						},
+						{
+							"id": "local-derivatives",
+							"title": "Local derivatives",
+							"summary": "The derivative of a composed computation can be assembled from derivatives of its individual operations."
+						},
+						{
+							"id": "backward-product",
+							"title": "Propagating sensitivity",
+							"summary": "For y_hat = w × x + b and squared-error loss, a backward pass multiplies 2 × (y_hat-y) by x to obtain the weight gradient."
+						},
+						{
+							"id": "fanout",
+							"title": "Adding paths",
+							"summary": "When a parameter affects a differentiable loss through multiple computation paths, its total derivative is the sum of the path contributions."
+						},
+						{
+							"id": "reverse-order",
+							"title": "Reverse traversal",
+							"summary": "Reverse-mode differentiation propagates loss sensitivities through a computation graph in reverse dependency order."
+						},
+						{
+							"id": "reuse",
+							"title": "Reusing intermediate gradients",
+							"summary": "Reverse-mode differentiation reuses accumulated intermediate sensitivities instead of independently recalculating each complete path for every parameter."
+						}
+					],
+					"edges": [
+						{
+							"from": "chain-rule",
+							"to": "local-derivatives"
+						},
+						{
+							"from": "local-derivatives",
+							"to": "backward-product"
+						},
+						{
+							"from": "backward-product",
+							"to": "fanout"
+						},
+						{
+							"from": "fanout",
+							"to": "reverse-order"
+						},
+						{
+							"from": "reverse-order",
+							"to": "reuse"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1793696880000
+		},
+		{
+			"id": "msg_demo_backprop_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_backprop_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-11-03T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "chain-rule",
+							"title": "The chain rule",
+							"status": "upcoming"
+						},
+						{
+							"id": "local-derivatives",
+							"title": "Local derivatives",
+							"status": "upcoming"
+						},
+						{
+							"id": "backward-product",
+							"title": "Propagating sensitivity",
+							"status": "upcoming"
+						},
+						{
+							"id": "fanout",
+							"title": "Adding paths",
+							"status": "upcoming"
+						},
+						{
+							"id": "reverse-order",
+							"title": "Reverse traversal",
+							"status": "upcoming"
+						},
+						{
+							"id": "reuse",
+							"title": "Reusing intermediate gradients",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "chain-rule",
+							"to": "local-derivatives"
+						},
+						{
+							"from": "local-derivatives",
+							"to": "backward-product"
+						},
+						{
+							"from": "backward-product",
+							"to": "fanout"
+						},
+						{
+							"from": "fanout",
+							"to": "reverse-order"
+						},
+						{
+							"from": "reverse-order",
+							"to": "reuse"
+						}
+					]
+				}
+			},
+			"timestamp": 1793696940000
+		},
+		{
+			"id": "msg_demo_backprop_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1793697000000
+		},
+		{
+			"id": "msg_demo_backprop_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Multiply along a path; add at a junction\nWe already found `dL/dw = (dL/dŷ)(dŷ/dw)`. That is a tiny backward pass. For a larger network the same rule is applied repeatedly, starting at the scalar loss. If a value is used twice, the two effects on the loss must both count, so their gradient contributions are added.\n\n### The chain rule\nFor differentiable scalar functions z = f(w) and L = g(z), dL/dw = (dL/dz) × (dz/dw).\n\n### Local derivatives\nThe derivative of a composed computation can be assembled from derivatives of its individual operations.\n\n### Propagating sensitivity\nFor y_hat = w × x + b and squared-error loss, a backward pass multiplies 2 × (y_hat-y) by x to obtain the weight gradient."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793697060000
+		},
+		{
+			"id": "msg_demo_backprop_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_backprop_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "A local derivative is 3 and the incoming loss sensitivity is -2. What passes backwards?",
+						"options": [
+							{
+								"label": "1",
+								"value": "choice-0"
+							},
+							{
+								"label": "-6",
+								"value": "choice-1"
+							},
+							{
+								"label": "6",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Multiply the incoming sensitivity by the local derivative: -2 × 3 = -6.",
+						"type": "predict",
+						"nodeId": "backward-product"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793697120000
+		},
+		{
+			"id": "msg_demo_backprop_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_backprop_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"-6\"}],\"correct\":true,\"confidence\":60,\"thinking\":\"The negative sign survives because only one factor is negative.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "A local derivative is 3 and the incoming loss sensitivity is -2. What passes backwards?",
+				"options": [
+					{
+						"index": 1,
+						"label": "1"
+					},
+					{
+						"index": 2,
+						"label": "-6"
+					},
+					{
+						"index": 3,
+						"label": "6"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "-6",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "The negative sign survives because only one factor is negative.",
+				"answeredAt": "2026-11-03T09:13:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Multiply the incoming sensitivity by the local derivative: -2 × 3 = -6.",
+				"correct": true,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1793697180000
+		},
+		{
+			"id": "msg_demo_backprop_14",
+			"role": "user",
+			"content": "Does backpropagation itself decide the new values of the weights?",
+			"timestamp": 1793697240000
+		},
+		{
+			"id": "msg_demo_backprop_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Backpropagation calculates gradients. An optimiser then uses those gradients to choose an update. Keeping those jobs separate explains why the same backward pass can feed gradient descent or a different optimiser.\n\n### Adding paths\nWhen a parameter affects a differentiable loss through multiple computation paths, its total derivative is the sum of the path contributions.\n\n### Reverse traversal\nReverse-mode differentiation propagates loss sensitivities through a computation graph in reverse dependency order.\n\n### Reusing intermediate gradients\nReverse-mode differentiation reuses accumulated intermediate sensitivities instead of independently recalculating each complete path for every parameter."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793697300000
+		},
+		{
+			"id": "msg_demo_backprop_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_backprop_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "A shared weight receives gradient contributions 2 and -5 from two paths. What is its total gradient?",
+						"options": [
+							{
+								"label": "-10",
+								"value": "choice-0"
+							},
+							{
+								"label": "-3",
+								"value": "choice-1"
+							},
+							{
+								"label": "7",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "Contributions arriving at a shared parameter add: 2 + (-5) = -3.",
+						"type": "check",
+						"nodeId": "reuse"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793697360000
+		},
+		{
+			"id": "msg_demo_backprop_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_backprop_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"-3\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"I multiply along one path, but add when separate paths meet.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "A shared weight receives gradient contributions 2 and -5 from two paths. What is its total gradient?",
+				"options": [
+					{
+						"index": 1,
+						"label": "-10"
+					},
+					{
+						"index": 2,
+						"label": "-3"
+					},
+					{
+						"index": 3,
+						"label": "7"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "-3",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "I multiply along one path, but add when separate paths meet.",
+				"answeredAt": "2026-11-03T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "Contributions arriving at a shared parameter add: 2 + (-5) = -3.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793697420000
+		},
+		{
+			"id": "msg_demo_backprop_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to the rest of the training process?",
+			"timestamp": 1793697480000
+		},
+		{
+			"id": "msg_demo_backprop_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "You can now explain the training loop without a black box: forward pass, compute loss, backpropagate gradients, update parameters, repeat."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793697540000
+		}
+	]
+}

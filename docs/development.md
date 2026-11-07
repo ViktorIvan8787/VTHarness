@@ -10,9 +10,12 @@ CI and release builds use **Node 26**. Use the lockfile and a compatible native 
 npm ci
 npm run dev            # normally http://localhost:3000
 npm run desktop:dev    # Next dev + Electron on localhost:3000
+npm run demo           # prefilled hackathon demo on localhost:3006
 ```
 
 No key is needed to open the UI. Configure connections and the Strong/Cheap/Vision slots before model-driven use; there are no factory model selections. OpenRouter is supported, not mandatory.
+
+For the prefilled pitch data and a timed walkthrough, see [the hackathon demo](../demo/README.md). `npm run demo` keeps sample sessions/graph in a separate working directory, imports existing model settings on first launch, and reuses normal provider credentials. Stop it before `npm run demo:reset`; resetting restores samples and keeps demo settings.
 
 ```sh
 npm run build          # Next production build, including standalone output

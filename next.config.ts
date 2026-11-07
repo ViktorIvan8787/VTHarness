@@ -5,6 +5,8 @@ import { MAX_IMPORT_BODY_BYTES } from "./lib/notes-import-limits.ts";
 const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as { version: string; homepage: string };
 
 const nextConfig: NextConfig = {
+	// Keep a demo server's cache/lock separate from ordinary npm run dev.
+	distDir: process.env.VT_DEMO_MODE === "1" ? ".next-demo" : ".next",
 	// Public build metadata only; no new runtime Electron version API.
 	env: { VT_VERSION: pkg.version, VT_HOMEPAGE: pkg.homepage },
 	// Leave multipart headroom above the 25 MiB file allowance. This is a
@@ -51,6 +53,8 @@ const nextConfig: NextConfig = {
 	// stay intact, and the script guards against leaked data/keys.
 	outputFileTracingExcludes: {
 		"*": [
+			".next-demo/**/*",
+			"demo/.runtime/**/*",
 			"**/data/**/*",
 			"auth.json",
 			"chatgpt-credentials.json*",

@@ -1,0 +1,232 @@
+{
+	"id": "chat_demo_practice-updates",
+	"title": "Practice: one update without a hint",
+	"kind": "practice",
+	"version": 1,
+	"createdAt": "2026-11-06T09:00:00.000Z",
+	"updatedAt": "2026-11-06T09:08:00.000Z",
+	"messages": [
+		{
+			"id": "msg_demo_practice-updates_0",
+			"role": "custom",
+			"customType": "graph-context",
+			"content": "[Session context] — picked from the learner's knowledge map when starting this session:\n\nPropositions (id — name: statement; the problem tool's target field uses these ids):\n- [n_demo_weight-gradient] The weight gradient: For L = (w × x + b - y)^2, the weight derivative is dL/dw = 2 × (w × x + b - y) × x.\n- [n_demo_update] One gradient update: The scalar gradient-descent update w_new = w - eta × g gives w_new = 1.8 when w = 1, eta = 0.1 and g = -8.\n- [n_demo_squared] Squared error: Squared-error loss is (prediction - target)^2, so prediction 3 and target 5 give loss 4.",
+			"display": true,
+			"details": {
+				"propositions": [
+					{
+						"id": "n_demo_weight-gradient",
+						"name": "The weight gradient",
+						"statement": "For L = (w × x + b - y)^2, the weight derivative is dL/dw = 2 × (w × x + b - y) × x.",
+						"aliases": [
+							"For L = (w × x + b - y)^2, the weight derivative is dL/dw = 2 × (w × x + b - y) × x."
+						],
+						"createdAt": "2026-11-01T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_loss",
+								"messageId": "msg_demo_loss_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_update",
+						"name": "One gradient update",
+						"statement": "The scalar gradient-descent update w_new = w - eta × g gives w_new = 1.8 when w = 1, eta = 0.1 and g = -8.",
+						"aliases": [
+							"The scalar gradient-descent update w_new = w - eta × g gives w_new = 1.8 when w = 1, eta = 0.1 and g = -8."
+						],
+						"createdAt": "2026-11-05T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_gradient-descent",
+								"messageId": "msg_demo_gradient-descent_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_squared",
+						"name": "Squared error",
+						"statement": "Squared-error loss is (prediction - target)^2, so prediction 3 and target 5 give loss 4.",
+						"aliases": [
+							"Squared-error loss is (prediction - target)^2, so prediction 3 and target 5 give loss 4."
+						],
+						"createdAt": "2026-10-31T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_data",
+								"messageId": "msg_demo_data_15"
+							}
+						]
+					}
+				],
+				"chains": []
+			},
+			"timestamp": 1793955600000
+		},
+		{
+			"id": "msg_demo_practice-updates_1",
+			"role": "user",
+			"content": "Give me a new example so I can check that I understand the update rather than remember the earlier numbers.",
+			"timestamp": 1793955660000
+		},
+		{
+			"id": "msg_demo_practice-updates_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Try this on your own. Write down your reasoning as you go."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-updates_2",
+					"name": "problem",
+					"arguments": {
+						"statement": "A model predicts y_hat = w × x with x = 3, target y = 6, and initial w = 1. The loss is (y_hat-y)^2. Take one gradient-descent step with learning rate 0.05. Find the new weight and compare the old and new losses.",
+						"mode": "composition",
+						"target": [
+							"n_demo_weight-gradient",
+							"n_demo_update",
+							"n_demo_squared"
+						],
+						"modelSolution": "Initially y_hat = 3 and the loss is (3-6)^2 = 9. The gradient is 2 × (3-6) × 3 = -18. The update is w_new = 1 - 0.05 × (-18) = 1.9. The new prediction is 5.7 and the new loss is (5.7-6)^2 = 0.09. The loss fell from 9 to 0.09."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793955720000
+		},
+		{
+			"id": "msg_demo_practice-updates_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-updates_2",
+			"toolName": "problem",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem posed. The learner's thinking and answer will follow."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1793955780000
+		},
+		{
+			"id": "msg_demo_practice-updates_4",
+			"role": "custom",
+			"customType": "practice-thinking",
+			"content": "Your thinking:\nFirst I calculate the prediction, then the residual. I need the extra factor of x when differentiating with respect to w. The negative gradient should increase the weight.",
+			"display": true,
+			"details": {
+				"problemCallId": "call_demo_practice-updates_2",
+				"text": "First I calculate the prediction, then the residual. I need the extra factor of x when differentiating with respect to w. The negative gradient should increase the weight."
+			},
+			"timestamp": 1793955840000
+		},
+		{
+			"id": "msg_demo_practice-updates_5",
+			"role": "user",
+			"content": "The gradient is -18, so the new weight is 1.9. That predicts 5.7 and changes the loss from 9 to 0.09.",
+			"timestamp": 1793955900000
+		},
+		{
+			"id": "msg_demo_practice-updates_6",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-updates_6",
+					"name": "conclude",
+					"arguments": {
+						"outcome": "solved",
+						"verdict": "Solved independently. You included the input factor in the gradient, subtracted the negative gradient, and checked the result by recomputing the loss.",
+						"rung": null,
+						"missClass": null,
+						"retest": false
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793955960000
+		},
+		{
+			"id": "msg_demo_practice-updates_7",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-updates_6",
+			"toolName": "conclude",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem concluded. Say your closing words about the learner's work if useful, then END YOUR TURN — no further tool calls. The next problem is NEVER posed here: it waits for the learner's explicit go-ahead (a *Next problem* message, or their own words asking for the next one). Between problems, answer their questions about the concluded one."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1793956020000
+		},
+		{
+			"id": "msg_demo_practice-updates_8",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Solved independently. You included the input factor in the gradient, subtracted the negative gradient, and checked the result by recomputing the loss.\n\nYou transferred the idea to a fresh problem. We can continue with a harder example whenever you're ready."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793956080000
+		}
+	]
+}

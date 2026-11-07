@@ -36,8 +36,8 @@ describe("standalone JavaScript tracing exclusions and native workaround policy"
 		assert.equal(ignore(`${root}/data/private.json`), true);
 		assert.equal(ignore(`${root}/node_modules/gcp-metadata/build/src/index.js`), false);
 	});
-	it("preserves all secret exclusions exactly", () => {
-		assert.deepEqual(patterns, ["**/data/**/*", "auth.json", "chatgpt-credentials.json*", "github-copilot-credentials.json*", "xai-credentials.json*", ".env*"]);
+	it("preserves secret exclusions and excludes the demo runtime and cache", () => {
+		assert.deepEqual(patterns, [".next-demo/**/*", "demo/.runtime/**/*", "**/data/**/*", "auth.json", "chatgpt-credentials.json*", "github-copilot-credentials.json*", "xai-credentials.json*", ".env*"]);
 	});
 	it("retains exactly the narrow native-Turbopack closure workaround and existing runtime includes", () => {
 		assert.deepEqual(nextConfig.outputFileTracingIncludes!["*"], [

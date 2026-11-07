@@ -1,0 +1,757 @@
+{
+	"id": "chat_demo_loss",
+	"title": "How a loss function gives feedback",
+	"kind": "teach",
+	"version": 1,
+	"createdAt": "2026-11-01T09:00:00.000Z",
+	"updatedAt": "2026-11-01T09:19:00.000Z",
+	"tree": {
+		"nodes": [
+			{
+				"id": "loss-slope",
+				"title": "The loss slope",
+				"summary": "For squared-error loss L = (y_hat - y)^2, the derivative with respect to y_hat is 2 × (y_hat - y)."
+			},
+			{
+				"id": "weight-sensitivity",
+				"title": "Weight sensitivity",
+				"summary": "For y_hat = w × x + b, the derivative of y_hat with respect to w is x."
+			},
+			{
+				"id": "weight-gradient",
+				"title": "The weight gradient",
+				"summary": "For L = (w × x + b - y)^2, the weight derivative is dL/dw = 2 × (w × x + b - y) × x."
+			},
+			{
+				"id": "gradient-example",
+				"title": "A gradient of minus eight",
+				"summary": "With x = 2, w = 1, b = 1 and y = 5, the squared-error weight gradient is -8."
+			},
+			{
+				"id": "empirical-loss",
+				"title": "Average training loss",
+				"summary": "The empirical loss of N examples is the arithmetic mean of their per-example losses."
+			},
+			{
+				"id": "mean-gradient",
+				"title": "Average gradient",
+				"summary": "For differentiable per-example losses, the gradient of their arithmetic mean is the arithmetic mean of their gradients."
+			}
+		],
+		"edges": [
+			{
+				"from": "loss-slope",
+				"to": "weight-sensitivity"
+			},
+			{
+				"from": "weight-sensitivity",
+				"to": "weight-gradient"
+			},
+			{
+				"from": "weight-gradient",
+				"to": "gradient-example"
+			},
+			{
+				"from": "gradient-example",
+				"to": "empirical-loss"
+			},
+			{
+				"from": "empirical-loss",
+				"to": "mean-gradient"
+			}
+		],
+		"version": 1
+	},
+	"messages": [
+		{
+			"id": "msg_demo_loss_0",
+			"role": "user",
+			"content": "We measured the error, but how does one number tell a model which weight to change?",
+			"timestamp": 1793523600000
+		},
+		{
+			"id": "msg_demo_loss_1",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Let's find a useful starting point. I'll ask one short question, then build a plan from your reasoning."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793523660000
+		},
+		{
+			"id": "msg_demo_loss_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_loss_2",
+					"name": "probe",
+					"arguments": {
+						"question": "If the prediction is below the target, what is the sign of prediction minus target?",
+						"options": [
+							{
+								"label": "Negative",
+								"value": "choice-0"
+							},
+							{
+								"label": "Positive",
+								"value": "choice-1"
+							},
+							{
+								"label": "Always zero",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "Subtracting a larger target from a smaller prediction gives a negative residual."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793523720000
+		},
+		{
+			"id": "msg_demo_loss_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_loss_2",
+			"toolName": "probe",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"Negative\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"Three minus five is minus two, so the sign is negative.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "probe",
+				"questionText": "If the prediction is below the target, what is the sign of prediction minus target?",
+				"options": [
+					{
+						"index": 1,
+						"label": "Negative"
+					},
+					{
+						"index": 2,
+						"label": "Positive"
+					},
+					{
+						"index": 3,
+						"label": "Always zero"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "Negative",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "Three minus five is minus two, so the sign is negative.",
+				"answeredAt": "2026-11-01T09:03:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "Subtracting a larger target from a smaller prediction gives a negative residual.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793523780000
+		},
+		{
+			"id": "msg_demo_loss_4",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_loss_4",
+					"name": "probe_done",
+					"arguments": {
+						"assessment": {
+							"strands": [
+								{
+									"strand": "The loss slope",
+									"assessment": "The learner can reason through a concrete example. Build from that example to the new relationship, then check transfer with different numbers or a different case."
+								}
+							],
+							"summary": "Derive the weight gradient of a one-parameter prediction."
+						}
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793523840000
+		},
+		{
+			"id": "msg_demo_loss_5",
+			"role": "toolResult",
+			"toolCallId": "call_demo_loss_4",
+			"toolName": "probe_done",
+			"content": [
+				{
+					"type": "text",
+					"text": "Assessment recorded — it is shown to the learner now and the teacher plans from it. Say your closing sentence and end your turn; the teaching phase takes over from here."
+				}
+			],
+			"details": {
+				"ok": true
+			},
+			"isError": false,
+			"timestamp": 1793523900000
+		},
+		{
+			"id": "msg_demo_loss_6",
+			"role": "custom",
+			"customType": "probe-handoff",
+			"content": "Next: plan the full teaching arc from my current understanding to the goal understanding. Apply the teaching methodology in your system prompt, and find the optimal way to teach me this. Find the unconditional truths, plan the motivated derivations/discoveries, so every reasoning step has to land as obviously true. Take your time here and really think this through. When it's genuinely reasoned out, call plan_init and present the plan; I'll accept it or ask for changes.",
+			"display": true,
+			"details": {
+				"chatId": "chat_demo_loss"
+			},
+			"timestamp": 1793523960000
+		},
+		{
+			"id": "msg_demo_loss_7",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Here is our route: Derive the weight gradient of a one-parameter prediction. We'll use one concrete example throughout and test the idea with a prediction before the explanation."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_loss_7",
+					"name": "plan_init",
+					"arguments": {
+						"mermaid": "graph TD\n  loss-slope[The loss slope]\n  weight-sensitivity[Weight sensitivity]\n  weight-gradient[The weight gradient]\n  gradient-example[A gradient of minus eight]\n  empirical-loss[Average training loss]\n  mean-gradient[Average gradient]\n  loss-slope --> weight-sensitivity\n  weight-sensitivity --> weight-gradient\n  weight-gradient --> gradient-example\n  gradient-example --> empirical-loss\n  empirical-loss --> mean-gradient"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793524020000
+		},
+		{
+			"id": "msg_demo_loss_8",
+			"role": "toolResult",
+			"toolCallId": "call_demo_loss_7",
+			"toolName": "plan_init",
+			"content": [
+				{
+					"type": "text",
+					"text": "Plan saved. The node ids are: loss-slope, weight-sensitivity, weight-gradient, gradient-example, empirical-loss, mean-gradient"
+				}
+			],
+			"details": {
+				"ok": true,
+				"tree": {
+					"nodes": [
+						{
+							"id": "loss-slope",
+							"title": "The loss slope",
+							"summary": "For squared-error loss L = (y_hat - y)^2, the derivative with respect to y_hat is 2 × (y_hat - y)."
+						},
+						{
+							"id": "weight-sensitivity",
+							"title": "Weight sensitivity",
+							"summary": "For y_hat = w × x + b, the derivative of y_hat with respect to w is x."
+						},
+						{
+							"id": "weight-gradient",
+							"title": "The weight gradient",
+							"summary": "For L = (w × x + b - y)^2, the weight derivative is dL/dw = 2 × (w × x + b - y) × x."
+						},
+						{
+							"id": "gradient-example",
+							"title": "A gradient of minus eight",
+							"summary": "With x = 2, w = 1, b = 1 and y = 5, the squared-error weight gradient is -8."
+						},
+						{
+							"id": "empirical-loss",
+							"title": "Average training loss",
+							"summary": "The empirical loss of N examples is the arithmetic mean of their per-example losses."
+						},
+						{
+							"id": "mean-gradient",
+							"title": "Average gradient",
+							"summary": "For differentiable per-example losses, the gradient of their arithmetic mean is the arithmetic mean of their gradients."
+						}
+					],
+					"edges": [
+						{
+							"from": "loss-slope",
+							"to": "weight-sensitivity"
+						},
+						{
+							"from": "weight-sensitivity",
+							"to": "weight-gradient"
+						},
+						{
+							"from": "weight-gradient",
+							"to": "gradient-example"
+						},
+						{
+							"from": "gradient-example",
+							"to": "empirical-loss"
+						},
+						{
+							"from": "empirical-loss",
+							"to": "mean-gradient"
+						}
+					],
+					"version": 1
+				}
+			},
+			"isError": false,
+			"timestamp": 1793524080000
+		},
+		{
+			"id": "msg_demo_loss_9",
+			"role": "custom",
+			"customType": "plan-block",
+			"content": "",
+			"display": true,
+			"details": {
+				"planCallId": "call_demo_loss_7",
+				"block": {
+					"kind": "full",
+					"at": "2026-11-01T09:09:00.000Z",
+					"current": null,
+					"nodes": [
+						{
+							"id": "loss-slope",
+							"title": "The loss slope",
+							"status": "upcoming"
+						},
+						{
+							"id": "weight-sensitivity",
+							"title": "Weight sensitivity",
+							"status": "upcoming"
+						},
+						{
+							"id": "weight-gradient",
+							"title": "The weight gradient",
+							"status": "upcoming"
+						},
+						{
+							"id": "gradient-example",
+							"title": "A gradient of minus eight",
+							"status": "upcoming"
+						},
+						{
+							"id": "empirical-loss",
+							"title": "Average training loss",
+							"status": "upcoming"
+						},
+						{
+							"id": "mean-gradient",
+							"title": "Average gradient",
+							"status": "upcoming"
+						}
+					],
+					"edges": [
+						{
+							"from": "loss-slope",
+							"to": "weight-sensitivity"
+						},
+						{
+							"from": "weight-sensitivity",
+							"to": "weight-gradient"
+						},
+						{
+							"from": "weight-gradient",
+							"to": "gradient-example"
+						},
+						{
+							"from": "gradient-example",
+							"to": "empirical-loss"
+						},
+						{
+							"from": "empirical-loss",
+							"to": "mean-gradient"
+						}
+					]
+				}
+			},
+			"timestamp": 1793524140000
+		},
+		{
+			"id": "msg_demo_loss_10",
+			"role": "user",
+			"content": "That makes sense. Let's work through the example, and please check where my intuition goes wrong.",
+			"timestamp": 1793524200000
+		},
+		{
+			"id": "msg_demo_loss_11",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "### Follow the effect of one weight\nOur prediction is three, the target is five, and the input is two. The loss changes at rate −4 per unit of prediction. The prediction changes at rate 2 per unit of weight. Together that gives −8 per unit of weight. This is feedback with a direction, not just a badness score.\n\n### The loss slope\nFor squared-error loss L = (y_hat - y)^2, the derivative with respect to y_hat is 2 × (y_hat - y).\n\n### Weight sensitivity\nFor y_hat = w × x + b, the derivative of y_hat with respect to w is x.\n\n### The weight gradient\nFor L = (w × x + b - y)^2, the weight derivative is dL/dw = 2 × (w × x + b - y) × x."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793524260000
+		},
+		{
+			"id": "msg_demo_loss_12",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_loss_12",
+					"name": "quiz",
+					"arguments": {
+						"question": "For prediction 3 and target 5, what is the derivative of squared loss with respect to the prediction?",
+						"options": [
+							{
+								"label": "-4",
+								"value": "choice-0"
+							},
+							{
+								"label": "4",
+								"value": "choice-1"
+							},
+							{
+								"label": "-2",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-0",
+						"explanation": "The derivative is 2 × (3 - 5) = -4. Increasing the prediction a little initially decreases the loss.",
+						"type": "predict",
+						"nodeId": "weight-gradient"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793524320000
+		},
+		{
+			"id": "msg_demo_loss_13",
+			"role": "toolResult",
+			"toolCallId": "call_demo_loss_12",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":1,\"label\":\"-4\"}],\"correct\":true,\"confidence\":60,\"thinking\":\"I first guessed the error itself, but differentiating the square introduces a factor of two.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "predict",
+				"questionText": "For prediction 3 and target 5, what is the derivative of squared loss with respect to the prediction?",
+				"options": [
+					{
+						"index": 1,
+						"label": "-4"
+					},
+					{
+						"index": 2,
+						"label": "4"
+					},
+					{
+						"index": 3,
+						"label": "-2"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "-4",
+						"value": "choice-0",
+						"index": 1
+					}
+				],
+				"thinking": "I first guessed the error itself, but differentiating the square introduces a factor of two.",
+				"answeredAt": "2026-11-01T09:13:00.000Z",
+				"correctIndices": [
+					1
+				],
+				"explanation": "The derivative is 2 × (3 - 5) = -4. Increasing the prediction a little initially decreases the loss.",
+				"correct": true,
+				"confidence": 60
+			},
+			"isError": false,
+			"timestamp": 1793524380000
+		},
+		{
+			"id": "msg_demo_loss_14",
+			"role": "user",
+			"content": "A negative gradient sounds like the weight should get smaller. Is that right?",
+			"timestamp": 1793524440000
+		},
+		{
+			"id": "msg_demo_loss_15",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "A negative derivative says increasing the weight makes the loss decrease locally. The update subtracts the gradient, so subtracting a negative value increases the weight. The sign describes the slope of the loss, rather than a command to copy that sign.\n\n### A gradient of minus eight\nWith x = 2, w = 1, b = 1 and y = 5, the squared-error weight gradient is -8.\n\n### Average training loss\nThe empirical loss of N examples is the arithmetic mean of their per-example losses.\n\n### Average gradient\nFor differentiable per-example losses, the gradient of their arithmetic mean is the arithmetic mean of their gradients."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793524500000
+		},
+		{
+			"id": "msg_demo_loss_16",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_loss_16",
+					"name": "quiz",
+					"arguments": {
+						"question": "If dL/dy_hat = -4 and dy_hat/dw = 2, what is dL/dw?",
+						"options": [
+							{
+								"label": "-2",
+								"value": "choice-0"
+							},
+							{
+								"label": "-8",
+								"value": "choice-1"
+							},
+							{
+								"label": "8",
+								"value": "choice-2"
+							}
+						],
+						"correctAnswer": "choice-1",
+						"explanation": "The chain rule multiplies the two local sensitivities: -4 × 2 = -8.",
+						"type": "check",
+						"nodeId": "mean-gradient"
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1793524560000
+		},
+		{
+			"id": "msg_demo_loss_17",
+			"role": "toolResult",
+			"toolCallId": "call_demo_loss_16",
+			"toolName": "quiz",
+			"content": [
+				{
+					"type": "text",
+					"text": "{\"kind\":\"quiz\",\"answers\":[{\"index\":2,\"label\":\"-8\"}],\"correct\":true,\"confidence\":90,\"thinking\":\"The weight changes the prediction, and the prediction changes the loss. I multiply those effects.\"}"
+				}
+			],
+			"details": {
+				"kind": "quiz",
+				"tool": "quiz",
+				"questionType": "check",
+				"questionText": "If dL/dy_hat = -4 and dy_hat/dw = 2, what is dL/dw?",
+				"options": [
+					{
+						"index": 1,
+						"label": "-2"
+					},
+					{
+						"index": 2,
+						"label": "-8"
+					},
+					{
+						"index": 3,
+						"label": "8"
+					}
+				],
+				"dontKnow": false,
+				"answers": [
+					{
+						"label": "-8",
+						"value": "choice-1",
+						"index": 2
+					}
+				],
+				"thinking": "The weight changes the prediction, and the prediction changes the loss. I multiply those effects.",
+				"answeredAt": "2026-11-01T09:17:00.000Z",
+				"correctIndices": [
+					2
+				],
+				"explanation": "The chain rule multiplies the two local sensitivities: -4 × 2 = -8.",
+				"correct": true,
+				"confidence": 90
+			},
+			"isError": false,
+			"timestamp": 1793524620000
+		},
+		{
+			"id": "msg_demo_loss_18",
+			"role": "user",
+			"content": "I can now explain why that answer works instead of only repeating the rule. How does it connect to the rest of the training process?",
+			"timestamp": 1793524680000
+		},
+		{
+			"id": "msg_demo_loss_19",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "For many examples we average their losses and gradients. That gives one update direction that reflects the training batch rather than a single example."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1793524740000
+		}
+	]
+}

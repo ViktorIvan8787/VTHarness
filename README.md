@@ -33,6 +33,34 @@ Future teaching sessions can read the graph instead of starting from scratch. Pr
 
 ## Get started
 
+### Run the npm server
+
+Use Node.js 26. From the project folder:
+
+```bash
+npm ci
+npm run dev
+```
+
+Open **[http://localhost:3000](http://localhost:3000)**. Keep the terminal running; press **Ctrl+C** to stop the server. Configure your provider and the Strong, Cheap, and Vision models in Settings before starting a live session.
+
+For a production server:
+
+```bash
+npm run build
+npm start
+```
+
+### Launch the hackathon demo
+
+```bash
+npm run demo
+```
+
+Open **[http://localhost:3006](http://localhost:3006)** for a prefilled knowledge graph, six teaching sessions, and two practice sessions about how neural networks learn. The sample history is synthetic; live conversations use your existing configured provider. Model selections are imported when available, or you can choose them once in demo Settings during rehearsal.
+
+Demo records live separately from your regular sessions. Stop the demo, then run `npm run demo:reset` to restore the samples while keeping demo model selections. See **[demo/README.md](demo/README.md)** for the 60-second pitch, direct session links, and preparation steps.
+
 Run VT-Harness from source using the [development guide](docs/development.md). Desktop packaging instructions are in [Desktop builds and releases](docs/desktop-release.md).
 
 Choose your models, then start a session with what you want to understand. You can use provider API keys, supported subscription connections in the desktop app, an installed [Claude Code CLI](docs/claude-code.md), or a [custom OpenAI-compatible endpoint](docs/custom-providers.md), including a local model server. Optional dictation and web search use separate service keys. Web research can use a Tavily, Brave, Exa, Firecrawl, or Ollama key in Settings → Providers → Search. Ollama search uses its hosted service, not a local model server.

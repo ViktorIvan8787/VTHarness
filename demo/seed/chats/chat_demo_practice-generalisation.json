@@ -1,0 +1,248 @@
+{
+	"id": "chat_demo_practice-generalisation",
+	"title": "Practice: spot a misleading training score",
+	"kind": "practice",
+	"version": 1,
+	"createdAt": "2026-11-07T09:00:00.000Z",
+	"updatedAt": "2026-11-07T09:08:00.000Z",
+	"messages": [
+		{
+			"id": "msg_demo_practice-generalisation_0",
+			"role": "custom",
+			"customType": "graph-context",
+			"content": "[Session context] — picked from the learner's knowledge map when starting this session:\n\nPropositions (id — name: statement; the problem tool's target field uses these ids):\n- [n_demo_training-fit] Training fit: Training loss measures error on the examples used to fit the model, rather than directly measuring error on unseen examples.\n- [n_demo_overfitting] Overfitting: Low training loss alone does not establish low error on unseen data; a model can fit peculiarities of its training examples.\n- [n_demo_validation] Validation selection: A validation set can guide choices such as learning rate, architecture, and the training stopping point.\n- [n_demo_test-set] A separate test set: When validation data guide model choices, a separate untouched test set provides an evaluation that was not used for those choices.",
+			"display": true,
+			"details": {
+				"propositions": [
+					{
+						"id": "n_demo_training-fit",
+						"name": "Training fit",
+						"statement": "Training loss measures error on the examples used to fit the model, rather than directly measuring error on unseen examples.",
+						"aliases": [
+							"Training loss measures error on the examples used to fit the model, rather than directly measuring error on unseen examples."
+						],
+						"createdAt": "2026-11-04T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_generalisation",
+								"messageId": "msg_demo_generalisation_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_overfitting",
+						"name": "Overfitting",
+						"statement": "Low training loss alone does not establish low error on unseen data; a model can fit peculiarities of its training examples.",
+						"aliases": [
+							"Low training loss alone does not establish low error on unseen data; a model can fit peculiarities of its training examples."
+						],
+						"createdAt": "2026-11-04T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_generalisation",
+								"messageId": "msg_demo_generalisation_11"
+							}
+						]
+					},
+					{
+						"id": "n_demo_validation",
+						"name": "Validation selection",
+						"statement": "A validation set can guide choices such as learning rate, architecture, and the training stopping point.",
+						"aliases": [
+							"A validation set can guide choices such as learning rate, architecture, and the training stopping point."
+						],
+						"createdAt": "2026-11-04T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_generalisation",
+								"messageId": "msg_demo_generalisation_15"
+							}
+						]
+					},
+					{
+						"id": "n_demo_test-set",
+						"name": "A separate test set",
+						"statement": "When validation data guide model choices, a separate untouched test set provides an evaluation that was not used for those choices.",
+						"aliases": [
+							"When validation data guide model choices, a separate untouched test set provides an evaluation that was not used for those choices."
+						],
+						"createdAt": "2026-11-04T09:00:00.000Z",
+						"provenance": [
+							{
+								"chatId": "chat_demo_generalisation",
+								"messageId": "msg_demo_generalisation_15"
+							}
+						]
+					}
+				],
+				"chains": []
+			},
+			"timestamp": 1794042000000
+		},
+		{
+			"id": "msg_demo_practice-generalisation_1",
+			"role": "user",
+			"content": "Let me practise choosing a model from learning curves, without being told which concept to use.",
+			"timestamp": 1794042060000
+		},
+		{
+			"id": "msg_demo_practice-generalisation_2",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Try this on your own. Write down your reasoning as you go."
+				},
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-generalisation_2",
+					"name": "problem",
+					"arguments": {
+						"statement": "Three checkpoints have (training error, validation error): A = (0.25, 0.28), B = (0.10, 0.16), C = (0.01, 0.30). You must choose one checkpoint, then report its performance. Which checkpoint do you choose, what evidence supports that choice, and what data should you use for the final report?",
+						"mode": "composition",
+						"target": [
+							"n_demo_training-fit",
+							"n_demo_overfitting",
+							"n_demo_validation",
+							"n_demo_test-set"
+						],
+						"modelSolution": "Choose B because it has the lowest validation error among the candidates. C's better training fit does not imply better performance on held-out examples; its validation error is higher. After selecting B, evaluate it on a separate untouched test set and report that result with the evaluation conditions."
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1794042120000
+		},
+		{
+			"id": "msg_demo_practice-generalisation_3",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-generalisation_2",
+			"toolName": "problem",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem posed. The learner's thinking and answer will follow."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1794042180000
+		},
+		{
+			"id": "msg_demo_practice-generalisation_4",
+			"role": "custom",
+			"customType": "practice-thinking",
+			"content": "Your thinking:\nC looks impressive only on the examples used for training. B has the best validation result. I should avoid presenting the score that I repeatedly used to choose the model as an independent final check.",
+			"display": true,
+			"details": {
+				"problemCallId": "call_demo_practice-generalisation_2",
+				"text": "C looks impressive only on the examples used for training. B has the best validation result. I should avoid presenting the score that I repeatedly used to choose the model as an independent final check."
+			},
+			"timestamp": 1794042240000
+		},
+		{
+			"id": "msg_demo_practice-generalisation_5",
+			"role": "user",
+			"content": "I choose B using validation error, and evaluate it on a separate test set. C's lower training error alone is not evidence that it will generalise better.",
+			"timestamp": 1794042300000
+		},
+		{
+			"id": "msg_demo_practice-generalisation_6",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "toolCall",
+					"id": "call_demo_practice-generalisation_6",
+					"name": "conclude",
+					"arguments": {
+						"outcome": "solved",
+						"verdict": "Solved independently. You used validation for selection, recognised the training/validation gap, and kept a separate test evaluation.",
+						"rung": null,
+						"missClass": null,
+						"retest": false
+					}
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "toolUse",
+			"timestamp": 1794042360000
+		},
+		{
+			"id": "msg_demo_practice-generalisation_7",
+			"role": "toolResult",
+			"toolCallId": "call_demo_practice-generalisation_6",
+			"toolName": "conclude",
+			"content": [
+				{
+					"type": "text",
+					"text": "Problem concluded. Say your closing words about the learner's work if useful, then END YOUR TURN — no further tool calls. The next problem is NEVER posed here: it waits for the learner's explicit go-ahead (a *Next problem* message, or their own words asking for the next one). Between problems, answer their questions about the concluded one."
+				}
+			],
+			"details": null,
+			"isError": false,
+			"timestamp": 1794042420000
+		},
+		{
+			"id": "msg_demo_practice-generalisation_8",
+			"role": "assistant",
+			"content": [
+				{
+					"type": "text",
+					"text": "Solved independently. You used validation for selection, recognised the training/validation gap, and kept a separate test evaluation.\n\nYou transferred the idea to a fresh problem. We can continue with a harder example whenever you're ready."
+				}
+			],
+			"api": "openai-responses",
+			"provider": "synthetic",
+			"model": "demo-transcript",
+			"usage": {
+				"input": 0,
+				"output": 0,
+				"cacheRead": 0,
+				"cacheWrite": 0,
+				"totalTokens": 0,
+				"cost": {
+					"input": 0,
+					"output": 0,
+					"cacheRead": 0,
+					"cacheWrite": 0,
+					"total": 0
+				}
+			},
+			"stopReason": "stop",
+			"timestamp": 1794042480000
+		}
+	]
+}
