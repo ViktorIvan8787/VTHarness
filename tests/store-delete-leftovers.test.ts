@@ -2,7 +2,7 @@
  * Deletes clear crash leftovers (#403): crashes mid-save can leave
  * `<file>.tmp-<uuid>` beside records, holding their newest bytes. Deleting
  * the record must not leave that copy behind. Runs under its own isolated
- * LH_DATA_DIR (set before any config-loading import).
+ * VT_DATA_DIR (set before any config-loading import).
  */
 
 import assert from "node:assert/strict";
@@ -11,8 +11,8 @@ import os from "node:os";
 import path from "node:path";
 import { after, describe, it } from "node:test";
 
-const TMP_DATA = fs.mkdtempSync(path.join(os.tmpdir(), "lh-delete-leftovers-"));
-process.env.LH_DATA_DIR = TMP_DATA;
+const TMP_DATA = fs.mkdtempSync(path.join(os.tmpdir(), "vt-delete-leftovers-"));
+process.env.VT_DATA_DIR = TMP_DATA;
 
 const { PATHS, SOURCES_FILE, PROMPTS_OVERRIDE_DIR, LEDGER_FILES } = await import("../config.ts");
 const { chatStore } = await import("../src/store/chats.ts");

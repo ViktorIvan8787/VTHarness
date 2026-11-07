@@ -116,10 +116,10 @@ export function useChainNavigation(rootRef: RefObject<HTMLDivElement | null>, se
 				readRows().find((row) => row.key === result.toggle)?.element.querySelector<HTMLButtonElement>("button[aria-expanded]")?.click();
 			}
 		};
-		window.addEventListener("lh:kbd-find", onFind);
+		window.addEventListener("vt:kbd-find", onFind);
 		document.addEventListener("keydown", onKeyDown);
 		root?.addEventListener("pointerdown", onPointerDown);
-		return () => { window.removeEventListener("lh:kbd-find", onFind); document.removeEventListener("keydown", onKeyDown); root?.removeEventListener("pointerdown", onPointerDown); };
+		return () => { window.removeEventListener("vt:kbd-find", onFind); document.removeEventListener("keydown", onKeyDown); root?.removeEventListener("pointerdown", onPointerDown); };
 	});
 	useEffect(() => { if (enabled && !sessionFindHasForegroundLayer(document)) rootRef.current?.focus({ preventScroll: true }); }, [enabled, rootRef]);
 	return { focusRow(parts: string[]) {

@@ -3,8 +3,8 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { after, describe, it } from "node:test";
 import assert from "node:assert/strict";
-const testData = fs.mkdtempSync(path.join(os.tmpdir(), "lh-cli-catalog-data-"));
-process.env.LH_DATA_DIR = testData;
+const testData = fs.mkdtempSync(path.join(os.tmpdir(), "vt-cli-catalog-data-"));
+process.env.VT_DATA_DIR = testData;
 after(() => fs.rmSync(testData, { recursive: true, force: true }));
 const {
 	catalogContextLimits,
@@ -365,7 +365,7 @@ function withClaudeInstalled(installed: boolean, fn: () => void, enabled = true)
 	}
 }
 
-describe("the claude-code provider (native CLI authentication, no LearnHarness key)", () => {
+describe("the claude-code provider (native CLI authentication, no VT-Harness key)", () => {
 	it("modelCatalog() lists claude-code opus/sonnet/haiku when the CLI is installed", () => {
 		withClaudeInstalled(true, () => {
 			const ids = modelCatalog()

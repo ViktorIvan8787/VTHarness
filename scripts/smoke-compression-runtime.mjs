@@ -15,7 +15,7 @@ import { Readable } from "node:stream";
 import { fileURLToPath } from "node:url";
 
 export function verifyCompressionRuntime(root, runtime = process.execPath) {
-	const home = fs.mkdtempSync(path.join(os.tmpdir(), "lh-compression-runtime-"));
+	const home = fs.mkdtempSync(path.join(os.tmpdir(), "vt-compression-runtime-"));
 	try {
 		for (const dir of ["data", "tmp"]) fs.mkdirSync(path.join(home, dir));
 		fs.writeFileSync(path.join(home, "auth.json"), "{}\n", { mode: 0o600 });
@@ -25,7 +25,7 @@ export function verifyCompressionRuntime(root, runtime = process.execPath) {
 		const result = spawnSync(runtime, [fileURLToPath(import.meta.url), "--probe", path.resolve(root)], {
 			cwd: home,
 			env: { ...env, HOME: home, USERPROFILE: home, TMPDIR: path.join(home, "tmp"), TEMP: path.join(home, "tmp"), TMP: path.join(home, "tmp"),
-				LH_DATA_DIR: path.join(home, "data"), LH_AUTH_FILE: path.join(home, "auth.json"), NODE_ENV: "production", ELECTRON_RUN_AS_NODE: "1", NEXT_TELEMETRY_DISABLED: "1" },
+				VT_DATA_DIR: path.join(home, "data"), VT_AUTH_FILE: path.join(home, "auth.json"), NODE_ENV: "production", ELECTRON_RUN_AS_NODE: "1", NEXT_TELEMETRY_DISABLED: "1" },
 			encoding: "utf8", timeout: 30_000, maxBuffer: 128 * 1024,
 		});
 		assert.equal(result.error, undefined, `compression probe failed: ${result.error?.message}`);

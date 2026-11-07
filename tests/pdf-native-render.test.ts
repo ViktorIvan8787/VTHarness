@@ -142,7 +142,7 @@ describe("native pdf_render (pdfjs paints, @napi-rs/canvas hosts)", () => {
 	});
 
 	it("bounds a synthetic oversized rotated PDF before native canvas allocation", async () => {
-		const dir = fs.mkdtempSync(path.join(os.tmpdir(), "lh-pdf-canvas-test-"));
+		const dir = fs.mkdtempSync(path.join(os.tmpdir(), "vt-pdf-canvas-test-"));
 		try {
 			const fixture = path.join(dir, "oversized.pdf");
 			fs.writeFileSync(fixture, oversizedPdf());

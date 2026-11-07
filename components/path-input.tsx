@@ -11,7 +11,7 @@ import {
 	type PathEditSnapshot, type TextSelection,
 } from "./path-input-dom";
 
-export const INSERT_FILE_PATHS_EVENT = "lh:insert-file-paths";
+export const INSERT_FILE_PATHS_EVENT = "vt:insert-file-paths";
 export type PathInputProps = Omit<React.HTMLAttributes<HTMLDivElement>, "children" | "dangerouslySetInnerHTML" | "defaultValue" | "onChange"> & {
 	value: string;
 	onValueChange: (value: string) => void;

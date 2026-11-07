@@ -34,16 +34,16 @@ export interface LlmSlots {
 	queue: { resolve: () => void; dead: boolean }[];
 }
 
-interface LhLlmSemaphoreGlobal {
-	__lhLlmSlots?: LlmSlots;
+interface VtLlmSemaphoreGlobal {
+	__vtLlmSlots?: LlmSlots;
 }
 
 /** The process's single permit pool (globalThis — Next dev compiles each
  *  route entry as its own module instance; a module-level object would
  *  split the pool per route. One process, one truth). */
 export function bgLlmSlots(): LlmSlots {
-	const g = globalThis as typeof globalThis & LhLlmSemaphoreGlobal;
-	return (g.__lhLlmSlots ??= { active: 0, queue: [] });
+	const g = globalThis as typeof globalThis & VtLlmSemaphoreGlobal;
+	return (g.__vtLlmSlots ??= { active: 0, queue: [] });
 }
 
 /** Run `critical` under one permit of the shared pool. `signal` (the

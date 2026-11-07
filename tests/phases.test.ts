@@ -12,11 +12,11 @@
  */
 import assert from "node:assert";
 import test from "node:test";
-import type { LhViewMessage } from "../src/core/view.ts";
+import type { VtViewMessage } from "../src/core/view.ts";
 import { phaseAt3, phaseTimeline, type Phase3 } from "../src/core/phases.ts";
 
 /** Text-only user message. */
-function user(text: string): LhViewMessage {
+function user(text: string): VtViewMessage {
 	return { id: `u_${text}`, role: "user", parts: [{ type: "text", text }] };
 }
 
@@ -25,7 +25,7 @@ function assistantTool(
 	name: string,
 	state: "input-available" | "output-available" | "output-error",
 	output?: unknown,
-): LhViewMessage {
+): VtViewMessage {
 	return {
 		id: `a_${name}_${state}_${Math.random().toString(36).slice(2, 6)}`,
 		role: "assistant",
@@ -34,7 +34,7 @@ function assistantTool(
 }
 
 /** A quiz call with its parsed input — `nodeId` present iff tagged. */
-function assistantQuiz(input: Record<string, unknown> | undefined): LhViewMessage {
+function assistantQuiz(input: Record<string, unknown> | undefined): VtViewMessage {
 	return {
 		id: `a_quiz_${Math.random().toString(36).slice(2, 6)}`,
 		role: "assistant",
@@ -137,13 +137,13 @@ test("phaseAt3: empty transcript is probe", () => {
 	assert.equal(phaseAt3([]), "probe");
 });
 
-// ─── the native fold (phaseAt3Lh over LhMessage[]) ──────────────────────────
+// ─── the native fold (phaseAt3Vt over VtMessage[]) ──────────────────────────
 
-import type { LhMessage } from "../src/core/native-messages.ts";
-import { phaseAt3Lh } from "../src/core/phases.ts";
+import type { VtMessage } from "../src/core/native-messages.ts";
+import { phaseAt3Vt } from "../src/core/phases.ts";
 
 /** A native toolResult (the probe_done conclusion). */
-function toolResult(toolName: string, isError = false): LhMessage {
+function toolResult(toolName: string, isError = false): VtMessage {
 	return {
 		id: `tr_${toolName}_${Math.random().toString(36).slice(2, 6)}`,
 		role: "toolResult",
@@ -152,12 +152,12 @@ function toolResult(toolName: string, isError = false): LhMessage {
 		content: [{ type: "text", text: "ok" }],
 		isError,
 		timestamp: Date.now(),
-	} as LhMessage;
+	} as VtMessage;
 }
 
 /** A native assistant message carrying a quiz toolCall — arguments carry
  *  `nodeId` iff tagged (exactly what the wire would persist). */
-function assistantQuizCall(arguments_: Record<string, unknown>): LhMessage {
+function assistantQuizCall(arguments_: Record<string, unknown>): VtMessage {
 	return {
 		id: `a_${Math.random().toString(36).slice(2, 6)}`,
 		role: "assistant",
@@ -165,34 +165,34 @@ function assistantQuizCall(arguments_: Record<string, unknown>): LhMessage {
 		stopReason: "toolUse",
 		usage: undefined,
 		timestamp: Date.now(),
-	} as unknown as LhMessage;
+	} as unknown as VtMessage;
 }
 
-function assistantProbeCall(): LhMessage {
+function assistantProbeCall(): VtMessage {
 	return {
 		...assistantQuizCall({}),
 		content: [{ type: "toolCall", id: "call_probe_done", name: "probe_done", arguments: {} }],
-	} as LhMessage;
+	} as VtMessage;
 }
 
-test("phaseAt3Lh (native fold): probe→plan at the clean probe_done result; plan→teach at the first tagged quiz CALL", () => {
+test("phaseAt3Vt (native fold): probe→plan at the clean probe_done result; plan→teach at the first tagged quiz CALL", () => {
 	const done = toolResult("probe_done");
 	const call = assistantProbeCall();
 	const tagged = assistantQuizCall({ question: "q", nodeId: "gravity-basics", correctAnswer: "a" });
 	const untagged = assistantQuizCall({ question: "q", correctAnswer: "a" });
 
-	assert.equal(phaseAt3Lh([call, done, untagged]), "plan", "an untagged quiz call never starts teaching");
-	assert.equal(phaseAt3Lh([call, done, tagged]), "teach", "the tagged quiz CALL is the seam");
-	assert.equal(phaseAt3Lh([tagged]), "probe", "the chain never skips (tag before probe_done)");
+	assert.equal(phaseAt3Vt([call, done, untagged]), "plan", "an untagged quiz call never starts teaching");
+	assert.equal(phaseAt3Vt([call, done, tagged]), "teach", "the tagged quiz CALL is the seam");
+	assert.equal(phaseAt3Vt([tagged]), "probe", "the chain never skips (tag before probe_done)");
 	assert.equal(
-		phaseAt3Lh([call, toolResult("probe_done", true), tagged]),
+		phaseAt3Vt([call, toolResult("probe_done", true), tagged]),
 		"probe",
 		"an ERRORED probe_done concludes nothing",
 	);
 	// The two folds agree on the same settled transcript (the view projection
 	// of the tagged call carries its arguments as the part input).
 	assert.equal(
-		phaseAt3Lh([call, done, tagged]),
+		phaseAt3Vt([call, done, tagged]),
 		phaseAt3([
 			{ parts: [{ type: "tool-probe_done", state: "output-available" } as never] },
 			{ parts: [{ type: "tool-quiz", input: { nodeId: "gravity-basics" } } as never] },
@@ -204,24 +204,24 @@ test("phaseAt3Lh (native fold): probe→plan at the clean probe_done result; pla
 // Both quizzing tools (quiz OR explain, whichever the settings armed) open
 // teaching — the seam is structural, not name-bound to the MC tool.
 
-test("phaseAt3 + phaseAt3Lh: a tagged explain CALL is the plan→teach seam too", () => {
+test("phaseAt3 + phaseAt3Vt: a tagged explain CALL is the plan→teach seam too", () => {
 	const done = toolResult("probe_done");
 	const call = assistantProbeCall();
-	const explainCall = (args: Record<string, unknown>): LhMessage =>
+	const explainCall = (args: Record<string, unknown>): VtMessage =>
 		({
 			id: "a_explain",
 			role: "assistant",
 			content: [{ type: "toolCall", id: "call_explain", name: "explain", arguments: args }],
 			timestamp: Date.now(),
-		}) as unknown as LhMessage;
+		}) as unknown as VtMessage;
 
 	const tagged = explainCall({ question: "q", correctAnswer: "a", explanation: "e", nodeId: "gravity-basics" });
 	const untagged = explainCall({ question: "q", correctAnswer: "a", explanation: "e" });
 
-	assert.equal(phaseAt3Lh([call, done, untagged]), "plan", "an untagged explain never starts teaching");
-	assert.equal(phaseAt3Lh([call, done, tagged]), "teach", "the tagged explain CALL is the seam");
+	assert.equal(phaseAt3Vt([call, done, untagged]), "plan", "an untagged explain never starts teaching");
+	assert.equal(phaseAt3Vt([call, done, tagged]), "teach", "the tagged explain CALL is the seam");
 	assert.equal(
-		phaseAt3Lh([call, done, tagged]),
+		phaseAt3Vt([call, done, tagged]),
 		phaseAt3([
 			{ parts: [{ type: "tool-probe_done", state: "output-available" } as never] },
 			{ parts: [{ type: "tool-explain", input: { nodeId: "gravity-basics" } } as never] },

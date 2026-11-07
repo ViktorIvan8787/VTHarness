@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { ContextWindowProbe } from "../src/agent/claude-code/context-window.ts";
 import { CLAUDE_CODE_MODELS } from "../src/agent/claude-code/provider.ts";
-import { asAgentMessages, cliContextWindowOf, toLlmMessages, type LhMessage } from "../src/core/native-messages.ts";
+import { asAgentMessages, cliContextWindowOf, toLlmMessages, type VtMessage } from "../src/core/native-messages.ts";
 import { catalogLimits } from "../components/model-picker.tsx";
 import { contextLimitForModel, formatContextMeasurement } from "../components/stats-bar.tsx";
 import { toModelDto } from "../src/server/model-catalog.ts";
@@ -62,7 +62,7 @@ test("initialization errors/timeouts fall back to ordinary prompt delivery; clos
 	assert.equal(closed.prompts(), 0);
 });
 
-function assistant(model = "opus", tokens: number | undefined = 200000): LhMessage & { role: "assistant" } {
+function assistant(model = "opus", tokens: number | undefined = 200000): VtMessage & { role: "assistant" } {
 	return { id: "cli-assistant", role: "assistant", api: "claude-code-cli", provider: "claude-code", model,
 		content: [], timestamp: 0, stopReason: "stop", cliContextWindow: tokens,
 		usage: { input: 1, output: 1, cacheRead: 0, cacheWrite: 0, totalTokens: 2, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 } } };
@@ -86,7 +86,7 @@ test("per-session metadata survives JSON persistence, never borrows older report
 	assert.equal(cliContextWindowOf([first, unreported]), null);
 	const other = assistant("api"); other.provider = "anthropic";
 	assert.equal(cliContextWindowOf([first, other]), null);
-	const compacted: LhMessage = { id: "compact", role: "custom", customType: "compaction", content: "summary", display: false, details: {}, timestamp: 1 };
+	const compacted: VtMessage = { id: "compact", role: "custom", customType: "compaction", content: "summary", display: false, details: {}, timestamp: 1 };
 	assert.equal(cliContextWindowOf([first, compacted]), null);
 	assert.equal(cliContextWindowOf([]), null);
 });

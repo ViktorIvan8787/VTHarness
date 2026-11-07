@@ -29,7 +29,7 @@
  */
 
 import type { QuestionAnswerData } from "./question-core.ts";
-import type { LhMessage } from "./native-messages.ts";
+import type { VtMessage } from "./native-messages.ts";
 import {
 	activeProblemOf,
 	concludedByDismissalPair,
@@ -70,7 +70,7 @@ export type ChatInput =
  *  input appends — with claimSteers deleted, the pump's wake is the only
  *  steer appender left (the in-run path hands markers to pi's own
  *  follow-up queue instead, so it never builds an input event). */
-export type SteerInput = { type: "steers"; steers: LhMessage[] };
+export type SteerInput = { type: "steers"; steers: VtMessage[] };
 
 /** Every input the turn composition accepts. */
 export type TurnInput = ChatInput | SteerInput;
@@ -138,7 +138,7 @@ export function parseUserSteerInput(input: unknown): UserSteerInput {
 /** The native appends a dismissal makes (pure — same orphan discipline
  *  as answers: the call must be a DANGLING question call, or — the
  *  practice variant — the ACTIVE problem). */
-export function dismissAppends(record: { messages: LhMessage[] }, input: DismissInput): LhMessage[] {
+export function dismissAppends(record: { messages: VtMessage[] }, input: DismissInput): VtMessage[] {
 	if (input.type === "dismiss-problem") {
 		const active = activeProblemOf(record.messages);
 		if (!active || active.toolCallId !== input.problemCallId) {
@@ -212,9 +212,9 @@ export function parseChatInput(input: unknown): ChatInput {
  * double-answering.
  */
 export function inputAppends(
-	record: { messages: LhMessage[]; kind?: string },
+	record: { messages: VtMessage[]; kind?: string },
 	input: ChatInput,
-): LhMessage[] {
+): VtMessage[] {
 	switch (input.type) {
 		case "text":
 			return [...dismissalConclusion(record), newUserMessage(input.text)];
@@ -260,9 +260,9 @@ export function inputAppends(
  * Never accepts a failed/aborted generation (the existing Retry/new-message
  * paths own those), a stale occurrence, or an answerable sibling. */
 export function questionRecoveryAppends(
-	messages: readonly LhMessage[],
+	messages: readonly VtMessage[],
 	input: Extract<ChatInput, { type: "retry-question" }>,
-): LhMessage[] {
+): VtMessage[] {
 	const calls = questionCallsOf(messages);
 	const target = calls.find(call => call.messageId === input.messageId && call.contentIndex === input.contentIndex && call.toolCallId === input.toolCallId);
 	if (!target || target.status !== "malformed") throw new ChatInputError("This malformed question is no longer available to retry. Refresh the session.");
@@ -277,7 +277,7 @@ export function questionRecoveryAppends(
 /** The failure owning the ephemeral banner. Plan presentation and
  * compaction do not resolve an error; substantive later input/output does.
  * This is deliberately broader than Retry eligibility below. */
-export function failedResponseAtEnd(messages: readonly LhMessage[]): Extract<LhMessage, { role: "assistant" }> | undefined {
+export function failedResponseAtEnd(messages: readonly VtMessage[]): Extract<VtMessage, { role: "assistant" }> | undefined {
 	for (let i = messages.length - 1; i >= 0; i--) {
 		const m = messages[i]!;
 		if (m.role === "custom" && (m.customType === "plan-block" || m.customType === "compaction")) continue;
@@ -289,7 +289,7 @@ export function failedResponseAtEnd(messages: readonly LhMessage[]): Extract<LhM
 /** Does the record end in a failure with input that can be retried?
  * Aborts are deliberate stops; compaction after a failure requires new
  * learner input rather than a retry using a changed context. */
-export function endsInFailedTurn(messages: readonly LhMessage[]): boolean {
+export function endsInFailedTurn(messages: readonly VtMessage[]): boolean {
 	const { ids, before } = failedTail(messages);
 	return ids.size > 0 && before !== undefined && before.role !== "assistant";
 }
@@ -302,7 +302,7 @@ export function endsInFailedTurn(messages: readonly LhMessage[]): boolean {
  * completed tool results without replaying tools or resubmitting input.
  * Plan blocks may follow the failure and stay; later compaction blocks
  * Retry without changing compaction itself. */
-export function retryDrops(messages: readonly LhMessage[]): Set<string> {
+export function retryDrops(messages: readonly VtMessage[]): Set<string> {
 	const { ids, before } = failedTail(messages);
 	if (ids.size === 0) {
 		const failure = failedResponseAtEnd(messages);
@@ -318,7 +318,7 @@ export function retryDrops(messages: readonly LhMessage[]): Set<string> {
 /** Walk back over failed assistants and UI-only plan blocks. A compaction
  * is a boundary, not a marker Retry may cross. A failure AFTER a compaction
  * can still retry: that compacted context was already its starting state. */
-function failedTail(messages: readonly LhMessage[]): { ids: Set<string>; before: LhMessage | undefined } {
+function failedTail(messages: readonly VtMessage[]): { ids: Set<string>; before: VtMessage | undefined } {
 	const ids = new Set<string>();
 	let i = messages.length - 1;
 	for (; i >= 0; i--) {
@@ -334,7 +334,7 @@ function failedTail(messages: readonly LhMessage[]): { ids: Set<string>; before:
  *  (synthetic conclude call + ack) rides ahead of it, so the agent reads
  *  the dismissal through its own vocabulary and the slot frees. Pure;
  *  empty when nothing dismissals pend. */
-function dismissalConclusion(record: { messages: LhMessage[] }): LhMessage[] {
+function dismissalConclusion(record: { messages: VtMessage[] }): VtMessage[] {
 	const problemCallId = pendingProblemDismissalOf(record.messages);
 	return problemCallId ? concludedByDismissalPair(problemCallId) : [];
 }

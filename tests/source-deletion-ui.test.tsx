@@ -41,7 +41,7 @@ it("a failed deletion keeps its original confirmation targets for retry even aft
 		}
 		return Response.json(current);
 	};
-	const onRevision = () => { revisions++; }; window.addEventListener("lh:graph-revision", onRevision);
+	const onRevision = () => { revisions++; }; window.addEventListener("vt:graph-revision", onRevision);
 	try {
 		await mount(<ChainTableOverlay open nodes={[]} chains={[]} sessions={{}} fileSources={{}} onClose={() => {}} />);
 		await click("cluster-checkbox-a"); await click("chain-delete"); await click("source-delete-confirm");
@@ -53,7 +53,7 @@ it("a failed deletion keeps its original confirmation targets for retry even aft
 		assert.equal(document.querySelector('[data-testid="delete-source-dialog"]'), null);
 		assert.deepEqual(requests, [{ sourceIds: ["a"], folderIds: [], deleteSessions: false }, { sourceIds: ["a"], folderIds: [], deleteSessions: false }]);
 		assert.equal(revisions, 2, "even a partial/ambiguous failure refreshes graph content");
-	} finally { window.removeEventListener("lh:graph-revision", onRevision); }
+	} finally { window.removeEventListener("vt:graph-revision", onRevision); }
 });
 it("clearing ordinary source selection does not clear the caller's independent practice node picks", async () => {
 	let changes = 0; globalThis.fetch = async () => Response.json(directory());

@@ -9,7 +9,7 @@ import { Type } from "typebox";
 import type { PiEngine } from "../src/agent/models.ts";
 import type { AssistantMessage, Model } from "@earendil-works/pi-ai";
 
-const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "lh-background-capture-"));
+const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "vt-background-capture-"));
 const originalEnv = process.env;
 const originalFetch = globalThis.fetch;
 fs.mkdirSync(path.join(scratch, "home"));
@@ -18,7 +18,7 @@ process.env = {
 	...(originalEnv.NODE_TEST_CONTEXT ? { NODE_TEST_CONTEXT: originalEnv.NODE_TEST_CONTEXT } : {}),
 	...(originalEnv.NODE_OPTIONS ? { NODE_OPTIONS: originalEnv.NODE_OPTIONS } : {}),
 	NODE_ENV: "test", HOME: path.join(scratch, "home"),
-	LH_DATA_DIR: path.join(scratch, "data"), LH_AUTH_FILE: path.join(scratch, "auth.json"),
+	VT_DATA_DIR: path.join(scratch, "data"), VT_AUTH_FILE: path.join(scratch, "auth.json"),
 };
 globalThis.fetch = async () => { throw new Error("CLOSED: unexpected external request"); };
 after(() => {
@@ -47,8 +47,8 @@ function setup(t: TestContext, selection = "auditor") {
 	const dir = fs.mkdtempSync(path.join(scratch, "captures-"));
 	const previous = backgroundCaptureDir.current;
 	backgroundCaptureDir.current = dir;
-	process.env.LH_BACKGROUND_CAPTURE = selection;
-	t.after(() => { backgroundCaptureDir.current = previous; delete process.env.LH_BACKGROUND_CAPTURE; });
+	process.env.VT_BACKGROUND_CAPTURE = selection;
+	t.after(() => { backgroundCaptureDir.current = previous; delete process.env.VT_BACKGROUND_CAPTURE; });
 	return dir;
 }
 function readCapture(dir: string) {
@@ -97,11 +97,11 @@ test("capture is off by default; role lists and all select only requested worker
 	const dir = setup(t, "");
 	assert.equal(backgroundCaptureEnabled("auditor"), false);
 	assert.equal(createBackgroundCapture({ role: "auditor", runId: "off" }), undefined);
-	process.env.LH_BACKGROUND_CAPTURE = "auditor, extractor";
+	process.env.VT_BACKGROUND_CAPTURE = "auditor, extractor";
 	assert.equal(backgroundCaptureEnabled("auditor"), true);
 	assert.equal(backgroundCaptureEnabled("extractor"), true);
 	assert.equal(backgroundCaptureEnabled("pdfReader"), false);
-	process.env.LH_BACKGROUND_CAPTURE = "all";
+	process.env.VT_BACKGROUND_CAPTURE = "all";
 	assert.equal(backgroundCaptureEnabled("pdfReader"), true);
 	assert.equal(backgroundCaptureEnabled("researcher"), true);
 	assert.deepEqual(fs.readdirSync(dir), [], "No eager files or directories per disabled run");
@@ -235,7 +235,7 @@ test("prepared-payload observer uses the process-wide context shared by route mo
 	const dir = setup(t);
 	const capture = createBackgroundCapture({ role: "auditor", runId: "shared-context" })!;
 	capture.begin(model, { messages: [] });
-	const shared = (globalThis as typeof globalThis & { __lhBackgroundCaptureContext?: AsyncLocalStorage<BackgroundCapture> }).__lhBackgroundCaptureContext;
+	const shared = (globalThis as typeof globalThis & { __vtBackgroundCaptureContext?: AsyncLocalStorage<BackgroundCapture> }).__vtBackgroundCaptureContext;
 	assert.ok(shared);
 	await shared.run(capture, async () => {
 		await Promise.resolve();

@@ -17,7 +17,7 @@ import { boundedSmokeOperation, stopOwnedSmokeServer } from "./lib/owned-smoke-l
 // This developer smoke needs detached POSIX groups to own descendant cleanup.
 if (process.platform === "win32") throw new Error("Learner-image UI smoke requires POSIX owned process groups");
 const root = path.resolve(import.meta.dirname, "..");
-const home = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "lh364-ui-"));
+const home = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "vt364-ui-"));
 const data = path.join(home, "data");
 fs.mkdirSync(path.join(data, "chats"), { recursive: true });
 fs.writeFileSync(path.join(home, "auth.json"), "{}");
@@ -69,7 +69,7 @@ fs.writeFileSync(path.join(data, "chats", `${chatId}.json`), JSON.stringify({ id
 const listener = net.createServer(); listener.listen(0, "127.0.0.1"); await once(listener, "listening");
 const port = listener.address().port; await new Promise(resolve => listener.close(resolve));
 const origin = `http://127.0.0.1:${port}`;
-const env = { PATH: process.env.PATH, HOME: home, TMPDIR: home, LH_DATA_DIR: data, LH_AUTH_FILE: path.join(home, "auth.json"), NODE_ENV: "development", NEXT_TELEMETRY_DISABLED: "1", NEXT_FONT_GOOGLE_MOCKED_RESPONSES: path.join(home, "fonts.cjs") };
+const env = { PATH: process.env.PATH, HOME: home, TMPDIR: home, VT_DATA_DIR: data, VT_AUTH_FILE: path.join(home, "auth.json"), NODE_ENV: "development", NEXT_TELEMETRY_DISABLED: "1", NEXT_FONT_GOOGLE_MOCKED_RESPONSES: path.join(home, "fonts.cjs") };
 const server = spawn(process.execPath, ["node_modules/next/dist/bin/next", "dev", "--hostname", "127.0.0.1", "--port", String(port)], { cwd: root, env, detached: true, stdio: ["ignore", "pipe", "pipe"] });
 let logs = "";
 server.stdout.on("data", chunk => { logs += chunk; }); server.stderr.on("data", chunk => { logs += chunk; });
@@ -82,7 +82,7 @@ try {
 		const ready = () => { if (logs.includes("Ready in")) { clearTimeout(timeout); server.stdout.off("data", ready); resolve(); } };
 		server.stdout.on("data", ready); server.once("exit", code => { clearTimeout(timeout); reject(new Error(`server exited ${code}`)); }); ready();
 	});
-	browser = await puppeteer.launch({ executablePath: process.env.LH_TEST_CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true, protocolTimeout: 30000, userDataDir: path.join(home, "browser"), env, args: ["--disable-background-networking", "--disable-sync", "--no-first-run", "--disable-default-apps"] });
+	browser = await puppeteer.launch({ executablePath: process.env.VT_TEST_CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true, protocolTimeout: 30000, userDataDir: path.join(home, "browser"), env, args: ["--disable-background-networking", "--disable-sync", "--no-first-run", "--disable-default-apps"] });
 	page = await browser.newPage(); page.setDefaultTimeout(30000);
 	page.on("pageerror", error => errors.push(error.message));
 	await page.setRequestInterception(true);

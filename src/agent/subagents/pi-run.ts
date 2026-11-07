@@ -41,10 +41,10 @@ export interface SubagentRunOptions {
 	onAssistantMessage?: (message: AssistantMessage, step: number) => void;
 	/** Extra stop rule (extractor: stop after a clean submit). */
 	shouldStop?: (message: AssistantMessage, toolResults: ToolResultMessage[]) => boolean;
-	/** Debug: when set AND LH_PROVIDER_EVENTS=1, raw provider stream
+	/** Debug: when set AND VT_PROVIDER_EVENTS=1, raw provider stream
 	 *  events append to data/debug/provider-events/<chatId>.jsonl (context
 	 *  "job:<role>"). Absent or env-off → no observer.
-	 *  Also identifies the source in opt-in LH_BACKGROUND_CAPTURE captures. */
+	 *  Also identifies the source in opt-in VT_BACKGROUND_CAPTURE captures. */
 	chatId?: string;
 }
 

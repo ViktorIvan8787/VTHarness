@@ -52,7 +52,7 @@ async function point(selector: string) {
 	await act(async () => { document.querySelector(selector)!.dispatchEvent(new dom.window.Event("pointerdown", { bubbles: true })); });
 }
 it("Find focuses/selects chains search, and Down enters results without changing checkbox selection", async () => {
-	await mount(); await act(async () => { window.dispatchEvent(new dom.window.CustomEvent("lh:kbd-find")); });
+	await mount(); await act(async () => { window.dispatchEvent(new dom.window.CustomEvent("vt:kbd-find")); });
 	const search = document.querySelector('[data-testid="chain-table-search"]')!;
 	assert.equal(focused, search); assert.equal(selectedText, 1);
 	assert.equal((await key("ArrowLeft", search)).defaultPrevented, false); assert.equal(focused, search);
@@ -89,10 +89,10 @@ it("a foreground menu/dialog keeps both Find and arrows, even if focus was left 
 	await mount(); const dialog = document.createElement("div"); dialog.setAttribute("role", "dialog"); document.body.appendChild(dialog);
 	const before = focused;
 	try {
-		await act(async () => { window.dispatchEvent(new dom.window.CustomEvent("lh:kbd-find")); });
+		await act(async () => { window.dispatchEvent(new dom.window.CustomEvent("vt:kbd-find")); });
 		assert.equal(focused, before); assert.equal((await key("ArrowDown")).defaultPrevented, false); assert.equal(active(), null);
 	} finally { dialog.remove(); }
-	await act(async () => { window.dispatchEvent(new dom.window.CustomEvent("lh:kbd-find")); });
+	await act(async () => { window.dispatchEvent(new dom.window.CustomEvent("vt:kbd-find")); });
 	assert.equal(focused, document.querySelector('[data-testid="chain-table-search"]'));
 });
 it("removing the active row by filtering safely restarts on the first visible result", async () => {
@@ -106,7 +106,7 @@ it("rename arrows stay in the input, and modal-owned keyboard focus disables bot
 	const input = document.querySelector('[data-testid="source-name-input"]')!;
 	for (const arrow of ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]) assert.equal((await key(arrow, input)).defaultPrevented, false);
 	assert.equal(focused, input); await act(async () => { setEnabled(false); });
-	await act(async () => { window.dispatchEvent(new dom.window.CustomEvent("lh:kbd-find")); }); assert.equal(focused, input);
+	await act(async () => { window.dispatchEvent(new dom.window.CustomEvent("vt:kbd-find")); }); assert.equal(focused, input);
 	assert.equal((await key("ArrowDown", document.querySelector('[data-testid="chain-table"]')!)).defaultPrevented, false);
 });
 it("Space clicks only the focused row's enabled checkbox; text editing and checkbox-free chain rows retain native behavior", async () => {

@@ -25,7 +25,7 @@ import type { AnthropicEffort } from "@earendil-works/pi-ai/api/anthropic-messag
 import { parseStreamingJson, parseToolCallArguments } from "@earendil-works/pi-ai/utils/json-parse";
 
 import { externalCliEnv } from "../../core/auth-env.ts";
-import type { LhMessage } from "../../core/native-messages.ts";
+import type { VtMessage } from "../../core/native-messages.ts";
 import { ClaudeLaunchError, createClaudeLauncher } from "./launch.ts";
 import { parseCliLine, type CliBlock, type CliEvent, type CliUsage } from "./cli-events.ts";
 import { ClaudeCodeError } from "./constants.ts";
@@ -144,7 +144,7 @@ function getAssistantErrorMessage(error: string, text: string): string {
 }
 
 class ClaudeTurn {
-	private readonly output: AssistantMessage & Pick<LhMessage, "cliContextWindow">;
+	private readonly output: AssistantMessage & Pick<VtMessage, "cliContextWindow">;
 	private readonly contentIndexes = new Map<number, number>();
 	private readonly partialJson = new Map<number, string>();
 	private readonly toolBlocks = new Map<number, ToolCall>();
@@ -629,7 +629,7 @@ function continueLiveProcess(turn: ClaudeTurn, owner: symbol, sessionId: string 
 
 function toClaudeEnv(): NodeJS.ProcessEnv {
 	// Preserve native CLI auth/routing, including launch-environment credentials.
-	// Claude Code chooses the account and billing method, not LearnHarness.
+	// Claude Code chooses the account and billing method, not VT-Harness.
 	// Loading user settings also loads ~/.claude/CLAUDE.md and memory files;
 	// the tutor's system prompt must not inherit them.
 	return {

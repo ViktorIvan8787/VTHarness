@@ -7,7 +7,7 @@ import type { ChainSort } from "./chain-table";
 import { chainRow } from "./chain-navigation";
 
 export type OrganizationChange = (action: OrganizationAction) => Promise<string | void>;
-const DRAG_TYPE = "application/x-learnharness-source";
+const DRAG_TYPE = "application/x-vt-harness-source";
 const RowEditing = createContext<((editing: boolean) => void) | null>(null);
 
 /** Keep the existing row as the drag surface, not the editor. A transient,

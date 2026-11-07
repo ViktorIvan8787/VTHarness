@@ -6,14 +6,14 @@ import { spawnSync } from "node:child_process";
 import { Agent } from "@earendil-works/pi-agent-core";
 import { after, afterEach, test } from "node:test";
 import { createFauxCore, fauxAssistantMessage } from "@earendil-works/pi-ai";
-import { toLlmMessages, type LhMessage } from "../src/core/native-messages.ts";
+import { toLlmMessages, type VtMessage } from "../src/core/native-messages.ts";
 import { buildSubagentSteer, type JobKind, type SteerMessage } from "../src/core/contracts.ts";
 
 // Install isolation before importing any storage/configuration composition.
-const directory = fs.mkdtempSync(path.join(os.tmpdir(), "lh-job-delivery-"));
-process.env.LH_DATA_DIR = path.join(directory, "data");
-process.env.LH_AUTH_FILE = path.join(directory, "auth.json");
-fs.writeFileSync(process.env.LH_AUTH_FILE, "{}");
+const directory = fs.mkdtempSync(path.join(os.tmpdir(), "vt-job-delivery-"));
+process.env.VT_DATA_DIR = path.join(directory, "data");
+process.env.VT_AUTH_FILE = path.join(directory, "auth.json");
+fs.writeFileSync(process.env.VT_AUTH_FILE, "{}");
 const { stores } = await import("../src/server/stores.ts");
 const { jobTools } = await import("../src/agent/tools/jobs.ts");
 const { createJobRunner, researchModelOverride } = await import("../src/agent/subagents/runner.ts");
@@ -30,15 +30,15 @@ const result = { brief: "Fixture research result", sources: [] };
 const question = {
 	id: "question-message", role: "assistant", content: [{ type: "toolCall", id: "question-call", name: "quiz", arguments: {} }],
 	api: "openai-completions", provider: "faux", model: "faux", timestamp: 1,
-} as unknown as LhMessage;
+} as unknown as VtMessage;
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 async function until(predicate: () => boolean): Promise<void> {
 	const end = Date.now() + 8000;
 	while (!predicate()) { assert(Date.now() < end, "fixture condition timed out"); await delay(10); }
 }
 function sweep(): void {
-	const global = globalThis as { __lhWakePipeline?: { lastSweepAt: number } };
-	if (global.__lhWakePipeline) global.__lhWakePipeline.lastSweepAt = 0;
+	const global = globalThis as { __vtWakePipeline?: { lastSweepAt: number } };
+	if (global.__vtWakePipeline) global.__vtWakePipeline.lastSweepAt = 0;
 	recoverStaleJobs();
 }
 function chat(blocked = false) {
@@ -58,7 +58,7 @@ function agent() {
 	const handed: SteerMessage[] = [];
 	return { handed, value: { steer: (marker: SteerMessage) => handed.push(marker) } as unknown as Parameters<typeof registerLiveAgent>[1] };
 }
-function persist(chatId: string, steers: readonly LhMessage[]): void {
+function persist(chatId: string, steers: readonly VtMessage[]): void {
 	stores.chatStore.saveMessages(chatId, [...stores.chatStore.getChat(chatId)!.messages, ...steers]);
 	noteSteersDurable(chatId, steers);
 }
@@ -224,8 +224,8 @@ test("a racing foreground settlement cannot release an outstanding staged wake",
 		assert(beginTurn(id));
 		registerLiveAgent(id, wake, false, new Set(input.steers.map((message) => message.id)));
 		await wake.continue();
-		nativeCopies = wake.state.messages.filter((message) => (message as LhMessage).id === steer.id).length;
-		persist(id, wake.state.messages.filter((message) => message.role !== "system") as LhMessage[]);
+		nativeCopies = wake.state.messages.filter((message) => (message as VtMessage).id === steer.id).length;
+		persist(id, wake.state.messages.filter((message) => message.role !== "system") as VtMessage[]);
 		unregisterLiveAgent(id); endTurn(id); settleSteers(id, stores.chatStore.getChat(id)!.messages, false, wake);
 		return 200;
 	});
@@ -288,7 +288,7 @@ test("fresh process restores a pending delivery on registration without a jobs p
 	`;
 	const child = spawnSync(process.execPath, ["--import", "tsx", "--input-type=module", "-e", script], {
 		cwd: process.cwd(), encoding: "utf8", timeout: 15000,
-		env: { PATH: process.env.PATH, HOME: path.join(directory, "home"), NODE_ENV: "test", LH_DATA_DIR: process.env.LH_DATA_DIR, LH_AUTH_FILE: process.env.LH_AUTH_FILE },
+		env: { PATH: process.env.PATH, HOME: path.join(directory, "home"), NODE_ENV: "test", VT_DATA_DIR: process.env.VT_DATA_DIR, VT_AUTH_FILE: process.env.VT_AUTH_FILE },
 	});
 	assert.equal(child.status, 0, child.stderr);
 	assert.deepEqual(JSON.parse(child.stdout.trim()), [steer.id]);

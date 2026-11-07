@@ -15,7 +15,7 @@ import type { NativeSubscriptionSnapshot } from "../core/contracts/subscriptions
 import { configureWebSubscriptionRuntime, publishWebSubscriptionPacket, webSubscriptionsEnabled, type SubscriptionRuntimeChannel as Channel, type SubscriptionRuntimePacket as Packet } from "../agent/subscription-runtime.ts";
 export { webSubscriptionsEnabled } from "../agent/subscription-runtime.ts";
 interface BrowserAction { target: string; origin: string; scope: string; expires: number; current(): Promise<boolean> }
-const KEY = Symbol.for("lh.webSubscriptions");
+const KEY = Symbol.for("vt.webSubscriptions");
 interface Registry {
 	owner?: ReturnType<typeof createWebSubscriptionOwner>;
 }
@@ -55,11 +55,11 @@ export function createWebSubscriptionOwner(options: {
 	const chatgpt = createChatGPT({
 		store: options.chatgptStore ?? fileStore(path.join(options.directory, "chatgpt-credentials.json")),
 		openExternal,
-		onChange: (packet?: Packet) => { if (packet) notify("lh:chatgpt", packet); },
+		onChange: (packet?: Packet) => { if (packet) notify("vt:chatgpt", packet); },
 	});
 	const native = createSubscriptions({
 		directory: options.directory, sdk: options.sdk, loadSDK, openExternal,
-		onChange: (snapshot: NativeSubscriptionSnapshot) => notify("lh:subscriptions", { channel: "lh:subscriptions", op: "changed", snapshot }),
+		onChange: (snapshot: NativeSubscriptionSnapshot) => notify("vt:subscriptions", { channel: "vt:subscriptions", op: "changed", snapshot }),
 	});
 	return {
 		chatgpt, native,
@@ -106,7 +106,7 @@ export function webSubscriptionOwner() {
 export async function webSubscriptionRequest<T>(channel: Channel, op: string, fields: Record<string, unknown>): Promise<T> {
 	const owner = webSubscriptionOwner();
 	let value: unknown;
-	if (channel === "lh:chatgpt") {
+	if (channel === "vt:chatgpt") {
 		if (op === "status") value = { status: await owner.chatgpt.status(), ...owner.chatgpt.stamp() };
 		else if (op === "models") value = await owner.chatgpt.models();
 		else if (op === "lease" && typeof fields.background === "boolean") value = await owner.chatgpt.lease(fields.background, fields);

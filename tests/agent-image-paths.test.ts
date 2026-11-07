@@ -22,7 +22,7 @@ import type { ModelImageResizeOptions } from "../src/agent/image-processing/inde
 import type { HeadlessApi } from "../src/agent/subagents/headless.ts";
 
 // Install storage/auth seams BEFORE importing the agent composition root.
-const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "lh-agent-image-paths-"));
+const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "vt-agent-image-paths-"));
 const originalEnv = process.env;
 const originalFetch = globalThis.fetch;
 fs.mkdirSync(path.join(scratch, "home"));
@@ -32,8 +32,8 @@ process.env = {
 	...(originalEnv.NODE_OPTIONS ? { NODE_OPTIONS: originalEnv.NODE_OPTIONS } : {}),
 	NODE_ENV: "test",
 	HOME: path.join(scratch, "home"),
-	LH_DATA_DIR: path.join(scratch, "data"),
-	LH_AUTH_FILE: path.join(scratch, "auth.json"),
+	VT_DATA_DIR: path.join(scratch, "data"),
+	VT_AUTH_FILE: path.join(scratch, "auth.json"),
 };
 globalThis.fetch = async () => { throw new Error("CLOSED: unexpected network request"); };
 after(() => {

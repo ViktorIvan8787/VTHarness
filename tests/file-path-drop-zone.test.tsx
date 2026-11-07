@@ -49,8 +49,8 @@ async function fixture({ desktop = true, claimed = true } = {}) {
 		previous.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
 		Object.defineProperty(globalThis, name, { configurable: true, writable: true, value: next });
 	}
-	const oldBridge = Object.getOwnPropertyDescriptor(win, "lh");
-	Object.defineProperty(win, "lh", { configurable: true, value: bridge });
+	const oldBridge = Object.getOwnPropertyDescriptor(win, "vt");
+	Object.defineProperty(win, "vt", { configurable: true, value: bridge });
 	const { createRoot } = await import("react-dom/client");
 	const root = createRoot(doc.getElementById("root")!);
 	function Harness() {
@@ -70,8 +70,8 @@ async function fixture({ desktop = true, claimed = true } = {}) {
 	await act(async () => { draw(); });
 	cleanup = async () => {
 		await act(async () => { root.unmount(); });
-		if (oldBridge) Object.defineProperty(win, "lh", oldBridge);
-		else delete (win as unknown as Record<string, unknown>).lh;
+		if (oldBridge) Object.defineProperty(win, "vt", oldBridge);
+		else delete (win as unknown as Record<string, unknown>).vt;
 		for (const [name, descriptor] of previous) {
 			if (descriptor) Object.defineProperty(globalThis, name, descriptor);
 			else delete (globalThis as Record<string, unknown>)[name];

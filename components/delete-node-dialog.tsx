@@ -153,7 +153,7 @@ export function DeleteNodeDialog({
 	onRemoveFolder?: (id: string) => Promise<void>;
 	onFoldersDeleted?: (ids: string[]) => void;
 	onClose: () => void;
-	/** Success path — the callers announce lh:graph-revision so the
+	/** Success path — the callers announce vt:graph-revision so the
 	 *  snapshot refetches. The deleted ids ride along so
 	 *  selection-side callers can prune. */
 	onDeleted: (nodeIds: string[], graphRevision: number) => void;

@@ -7,7 +7,7 @@ import { parseHTML } from "linkedom";
 import { QuestionDock } from "../components/question-dock.tsx";
 import { SessionModel } from "../components/session-core.ts";
 import { findPendingToolCall } from "../src/core/pending.ts";
-import { pendingQuestionOf, type LhMessage } from "../src/core/native-messages.ts";
+import { pendingQuestionOf, type VtMessage } from "../src/core/native-messages.ts";
 import type { QuizToolInput } from "../src/core/question-core.ts";
 
 const dom = parseHTML("<html><body></body></html>");
@@ -16,10 +16,10 @@ Object.assign(globalThis, {
 	IS_REACT_ACT_ENVIRONMENT: true,
 });
 
-function question(id: string, callId: string, text: string): LhMessage {
+function question(id: string, callId: string, text: string): VtMessage {
 	return { id, role: "assistant", content: [{ type: "toolCall", id: callId, name: "quiz", arguments: {
 		question: text, options: [{ label: "Yes", value: "yes" }, { label: "No", value: "no" }], correctAnswer: "yes", explanation: "Yes is correct.",
-	} }], stopReason: "toolUse", timestamp: 1 } as unknown as LhMessage;
+	} }], stopReason: "toolUse", timestamp: 1 } as unknown as VtMessage;
 }
 
 // The same keyed-content boundary as Chat's DockOverlay. This exercises the
@@ -28,7 +28,7 @@ for (const reusedId of [false, true]) {
 	test(`question form resets on a newer question (${reusedId ? "reused" : "unique"} call id)`, async () => {
 		const host = document.createElement("div"); document.body.append(host);
 		const root = createRoot(host);
-		const render = async (messages: LhMessage[]) => {
+		const render = async (messages: VtMessage[]) => {
 			const pending = pendingQuestionOf(messages)!;
 			await act(async () => root.render(<QuestionDock key={`question:${pending.key}`}
 				toolName="quiz" toolCallId={pending.toolCallId} input={pending.input as QuizToolInput}
@@ -113,7 +113,7 @@ test("saving a unique live question preserves its mounted form and selection", a
 	const root = createRoot(host);
 	const live = question("c_live", "unique-q", "Same question");
 	const saved = { ...live, id: "saved" };
-	const render = async (messages: LhMessage[]) => {
+	const render = async (messages: VtMessage[]) => {
 		const pending = pendingQuestionOf(messages)!;
 		await act(async () => root.render(<QuestionDock key={`question:${pending.key}`}
 			toolName="quiz" toolCallId={pending.toolCallId} input={pending.input as QuizToolInput}

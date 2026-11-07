@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { findPendingToolCall } from "../src/core/pending.ts";
-import { danglingQuestionOf, pendingQuestionOf, newAnswerResult, newUserMessage, type LhMessage } from "../src/core/native-messages.ts";
+import { danglingQuestionOf, pendingQuestionOf, newAnswerResult, newUserMessage, type VtMessage } from "../src/core/native-messages.ts";
 import { inputAppends } from "../src/core/input-events.ts";
 import { projectView } from "../src/core/view.ts";
 
-function assistant(id: string, ...calls: string[]): LhMessage {
+function assistant(id: string, ...calls: string[]): VtMessage {
 	return {
 		id, role: "assistant", content: calls.map(id => ({ type: "toolCall", id, name: "quiz", arguments: { question: id, options: [{ label: "Yes", value: "yes" }, { label: "No", value: "no" }], correctAnswer: "yes", explanation: "Yes is correct." } })),
 		stopReason: "toolUse", timestamp: 1, api: "openai-completions", provider: "fixture", model: "fixture",
@@ -13,7 +13,7 @@ function assistant(id: string, ...calls: string[]): LhMessage {
 	};
 }
 
-function pending(messages: LhMessage[], view = projectView(messages)) {
+function pending(messages: VtMessage[], view = projectView(messages)) {
 	return findPendingToolCall(view, pendingQuestionOf(messages));
 }
 
@@ -82,7 +82,7 @@ test("older questions never revive across display groups or after a text-only ne
 	const messages = [assistant("old", "old-q"), newUserMessage("another turn"), assistant("new", "new-q")];
 	assert.equal(pending(messages)?.toolCallId, "new-q");
 	assert.equal(pending([...messages, newAnswerResult("new-q", "quiz", {} as never)]), null);
-	const textOnly = { ...assistant("text"), content: [{ type: "text", text: "done" }] } as LhMessage;
+	const textOnly = { ...assistant("text"), content: [{ type: "text", text: "done" }] } as VtMessage;
 	assert.equal(pending([...messages, textOnly]), null);
 });
 

@@ -11,12 +11,12 @@ import type { ChatStore, JobStore } from "../src/core/ports.ts";
 
 // Set this test process's locations BEFORE importing config/agent modules.
 // Never read or modify the developer's actual home, keys or learning data.
-const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "lh-source-access-")));
+const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "vt-source-access-")));
 const home = path.join(root, "home");
 const auth = path.join(root, "private", "custom-keys.json");
 const data = path.join(root, "private", "data");
-const previous = Object.fromEntries(["HOME", "USERPROFILE", "LH_AUTH_FILE", "LH_DATA_DIR"].map((key) => [key, process.env[key]]));
-Object.assign(process.env, { HOME: home, USERPROFILE: home, LH_AUTH_FILE: auth, LH_DATA_DIR: data });
+const previous = Object.fromEntries(["HOME", "USERPROFILE", "VT_AUTH_FILE", "VT_DATA_DIR"].map((key) => [key, process.env[key]]));
+Object.assign(process.env, { HOME: home, USERPROFILE: home, VT_AUTH_FILE: auth, VT_DATA_DIR: data });
 after(async () => {
 	for (const [key, value] of Object.entries(previous)) {
 		if (value === undefined) delete process.env[key]; else process.env[key] = value;
@@ -24,7 +24,7 @@ after(async () => {
 	await fs.rm(root, { recursive: true, force: true });
 });
 
-async function write(relative: string, body = "LH_SYNTHETIC_SECRET_MARKER\n"): Promise<string> {
+async function write(relative: string, body = "VT_SYNTHETIC_SECRET_MARKER\n"): Promise<string> {
 	const file = path.join(root, relative);
 	await fs.mkdir(path.dirname(file), { recursive: true });
 	await fs.writeFile(file, body);
@@ -95,7 +95,7 @@ describe("source access: configured credentials only", () => {
 	for (const file of protectedFiles) {
 		it(`refuses read and direct grep of ${path.relative(root, file)}`, async () => {
 			await assert.rejects(readTool.execute!("s", { path: file }), denied);
-			await assert.rejects(grepTool.execute!("s", { path: file, pattern: "LH_SYNTHETIC_SECRET_MARKER" }), denied);
+			await assert.rejects(grepTool.execute!("s", { path: file, pattern: "VT_SYNTHETIC_SECRET_MARKER" }), denied);
 		});
 	}
 
@@ -109,7 +109,7 @@ describe("source access: configured credentials only", () => {
 	});
 
 	it("root-wide discovery omits credential targets, temp files, transcripts and dotenv contents", async () => {
-		assert.equal(await text(grepTool, { path: root, pattern: "LH_SYNTHETIC_SECRET_MARKER" }), "No matches found");
+		assert.equal(await text(grepTool, { path: root, pattern: "VT_SYNTHETIC_SECRET_MARKER" }), "No matches found");
 		const found = await text(findTool, { path: root, pattern: "*" });
 		assert.match(found, /data\/chats\/session\.json/);
 		assert.doesNotMatch(found, /relocated-token|credentials\.json|\.auth\.json\.tmp|transcripts\/|id_ed25519|elsewhere\/\.env/i);
@@ -138,7 +138,7 @@ describe("source access: canonical roots and all tool paths", () => {
 			const found = await text(findTool, { path: alias, pattern: "*" });
 			assert.match(found, /notes\/topic\.md/);
 			assert.doesNotMatch(found, /id_ed25519|session\.jsonl/);
-			assert.equal(await text(grepTool, { path: alias, pattern: "LH_SYNTHETIC_SECRET_MARKER" }), "No matches found");
+			assert.equal(await text(grepTool, { path: alias, pattern: "VT_SYNTHETIC_SECRET_MARKER" }), "No matches found");
 			const files: string[] = [];
 			await walkFiles(alias, (file) => { files.push(file); return false; });
 			assert.ok(files.every((file) => file.startsWith(home + path.sep)), "walk uses checked canonical paths");
@@ -163,7 +163,7 @@ describe("source access: canonical roots and all tool paths", () => {
 			assert.equal(resolveSourcePath("~"), home);
 			assert.equal(resolveSourcePath("~/notes/topic.md"), path.join(home, "notes", "topic.md"));
 			assert.match(await text(readTool, { path: "notes/topic.md" }), /ordinary study notes/);
-			assert.equal(await text(grepTool, { pattern: "LH_SYNTHETIC_SECRET_MARKER" }), "No matches found");
+			assert.equal(await text(grepTool, { pattern: "VT_SYNTHETIC_SECRET_MARKER" }), "No matches found");
 		} finally { process.env.HOME = process.env.USERPROFILE = home; }
 	});
 
@@ -231,7 +231,7 @@ describe("source access: canonical roots and all tool paths", () => {
 			const result = await runPdfReaderAgent({ path: file, question: "synthetic" }, { engine });
 			assert.match(result.brief, /^PDF failed: Access denied:/);
 			assert.match(result.brief, /Do not paste credentials or private transcripts/);
-			assert.doesNotMatch(result.brief, /LH_SYNTHETIC_SECRET_MARKER/);
+			assert.doesNotMatch(result.brief, /VT_SYNTHETIC_SECRET_MARKER/);
 			assert.deepEqual(result.pagesRead, []);
 			assert.deepEqual(result.pagesConsulted, []);
 		}
@@ -329,11 +329,11 @@ describe("source access: credential case aliases on the fixture filesystem", () 
 				assert.equal(realpathSync.native(alias), realpathSync.native(original), "native realpath canonicalizes these synthetic case aliases on this Mac");
 			}
 			await assert.rejects(readTool.execute!("case-alias", { path: alias }), denied);
-			await assert.rejects(grepTool.execute!("case-alias", { path: alias, pattern: "LH_SYNTHETIC_SECRET_MARKER" }), denied);
+			await assert.rejects(grepTool.execute!("case-alias", { path: alias, pattern: "VT_SYNTHETIC_SECRET_MARKER" }), denied);
 			const pdf = await runPdfReaderAgent({ path: alias, question: "synthetic" });
 			assert.match(pdf.brief, /^PDF failed: Access denied:/);
 		}
-		assert.equal(await text(grepTool, { path: path.join(root, "KEYFILES"), pattern: "LH_SYNTHETIC_SECRET_MARKER" }), "No matches found");
+		assert.equal(await text(grepTool, { path: path.join(root, "KEYFILES"), pattern: "VT_SYNTHETIC_SECRET_MARKER" }), "No matches found");
 		const found = await text(findTool, { path: path.join(root, "KEYFILES"), pattern: "*" });
 		assert.doesNotMatch(found, /credentials\.json|\.auth\.json\.tmp/);
 		assert.match(found, /data\/chats\/session\.json/);
@@ -342,11 +342,11 @@ describe("source access: credential case aliases on the fixture filesystem", () 
 	it("protects a non-symlink configured AUTH_FILE regardless of filename or parent-directory case", async (t) => {
 		if (!await caseAliasesAvailable()) return t.skip("fixture filesystem is case-sensitive");
 		await fs.unlink(auth);
-		await fs.writeFile(auth, "LH_SYNTHETIC_SECRET_MARKER\n");
+		await fs.writeFile(auth, "VT_SYNTHETIC_SECRET_MARKER\n");
 		try {
 			for (const alias of [path.join(root, "keyfiles", "CUSTOM-KEYS.JSON"), path.join(root, "KEYFILES", "custom-keys.json")]) {
 				await assert.rejects(readTool.execute!("case-auth", { path: alias }), denied);
-				await assert.rejects(grepTool.execute!("case-auth", { path: alias, pattern: "LH_SYNTHETIC_SECRET_MARKER" }), denied);
+				await assert.rejects(grepTool.execute!("case-auth", { path: alias, pattern: "VT_SYNTHETIC_SECRET_MARKER" }), denied);
 				const pdf = await runPdfReaderAgent({ path: alias, question: "synthetic" });
 				assert.match(pdf.brief, /^PDF failed: Access denied:/);
 			}

@@ -66,7 +66,7 @@ export function ReadingThinkingField({
 				value={draft}
 				onValueChange={applyDraft}
 				/* py-0.5 (owner round, 2026-10-07): the scrollbar fix. Source
-				   Sans 3's font box is 22px at 16px; lh-input's 1.25 leading
+				   Sans 3's font box is 22px at 16px; vt-input's 1.25 leading
 				   gives a 20px line box — the content area sticks 1px below the
 				   line, Chromium counts it in scrollHeight, and a zero-padding
 				   textarea turns that into a permanent 1px scroll (the bar shows
@@ -103,7 +103,7 @@ export function ReadingThinkingField({
 					}
 				}}
 				placeholder="Whatever comes to mind as you read."
-				className="field-sizing-content lh-input max-h-40 w-full resize-none bg-transparent py-0.5 outline-none placeholder:text-muted-foreground/70"
+				className="field-sizing-content vt-input max-h-40 w-full resize-none bg-transparent py-0.5 outline-none placeholder:text-muted-foreground/70"
 			/>
 		</div>
 	);

@@ -41,8 +41,8 @@ import {
 	serializeForSummary,
 	toLlmMessages,
 	type CompactionDetails,
-	type LhMessage,
-	type LhMarkerMessage,
+	type VtMessage,
+	type VtMarkerMessage,
 } from "../core/index.ts";
 import { emit } from "../core/events.ts";
 import type { ChatStore } from "../core/ports.ts";
@@ -121,9 +121,9 @@ export interface CompactionDeps {
 interface CompactionState {
 	inFlight: Map<string, Promise<void>>;
 }
-const g = globalThis as typeof globalThis & { __lhCompaction?: CompactionState };
+const g = globalThis as typeof globalThis & { __vtCompaction?: CompactionState };
 function state(): CompactionState {
-	return (g.__lhCompaction ??= { inFlight: new Map() });
+	return (g.__vtCompaction ??= { inFlight: new Map() });
 }
 
 /** Is a compaction running for this chat? (The client status event's
@@ -161,10 +161,10 @@ export function effectiveThresholdTokens(settingTokens: number | undefined, cont
  *  carry), so the fallback path runs the plain heuristic over the
  *  CUT-HONORED projection (never the dropped span) plus the additive
  *  prompt term the anchor would have covered. */
-export function projectedContextTokens(messages: readonly LhMessage[], systemPromptTokens: number): number {
+export function projectedContextTokens(messages: readonly VtMessage[], systemPromptTokens: number): number {
 	const est = estimateContextTokens(messages);
 	if (est.lastUsageIndex !== null) return est.tokens;
-	return estimateTokens(toLlmMessages(messages as readonly AgentMessage[]) as unknown as readonly LhMessage[]) + systemPromptTokens;
+	return estimateTokens(toLlmMessages(messages as readonly AgentMessage[]) as unknown as readonly VtMessage[]) + systemPromptTokens;
 }
 
 // ─── the compaction run ─────────────────────────────────────────────────────

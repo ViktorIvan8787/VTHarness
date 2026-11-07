@@ -5,7 +5,7 @@
  * the save must throw and the file on disk must be exactly what it was,
  * with no temp file left. Stores that write in place would never reach
  * the rename, so their saves would succeed and this test would fail. Runs
- * under its own isolated LH_DATA_DIR (set before any config-loading import).
+ * under its own isolated VT_DATA_DIR (set before any config-loading import).
  */
 
 import assert from "node:assert/strict";
@@ -14,9 +14,9 @@ import os from "node:os";
 import path from "node:path";
 import { after, describe, it, type TestContext } from "node:test";
 
-const TMP_DATA = fs.mkdtempSync(path.join(os.tmpdir(), "lh-store-writes-atomic-"));
-process.env.LH_DATA_DIR = TMP_DATA;
-process.env.LH_AUTH_FILE = path.join(TMP_DATA, "auth.json");
+const TMP_DATA = fs.mkdtempSync(path.join(os.tmpdir(), "vt-store-writes-atomic-"));
+process.env.VT_DATA_DIR = TMP_DATA;
+process.env.VT_AUTH_FILE = path.join(TMP_DATA, "auth.json");
 
 const config = await import("../config.ts");
 const { chatStore } = await import("../src/store/chats.ts");

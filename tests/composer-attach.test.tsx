@@ -47,7 +47,7 @@ async function fixture({ desktop = true } = {}) {
 		previous.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
 		Object.defineProperty(globalThis, name, { configurable: true, writable: true, value: next });
 	}
-	Object.defineProperty(win, "lh", {
+	Object.defineProperty(win, "vt", {
 		configurable: true,
 		value: desktop ? {
 			getPathForFile: (file: File) => backingPaths.get(file) ?? "",

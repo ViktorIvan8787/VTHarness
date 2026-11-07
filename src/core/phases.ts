@@ -27,7 +27,7 @@
  *
  * TWO FOLDS over the same events (Wave D): `phaseAt3`/`phaseTimeline` fold
  * VIEW messages (the client's dividers and dock — part shapes, pure and
- * structural); `phaseAt3Lh` folds the NATIVE record (server summaries,
+ * structural); `phaseAt3Vt` folds the NATIVE record (server summaries,
  * tests) — probe→plan advances at the probe_done RESULT message, plan→teach
  * at the assistant message carrying the first nodeId-tagged quiz CALL.
  * Both are strictly sequential; the two derivations agree on every settled
@@ -154,16 +154,16 @@ export function phaseTimeline(messages: readonly PhaseMessage[]): Phase3[] {
 	return out;
 }
 
-// ─── the native fold (Wave D: record-side phase over LhMessage[]) ───────────
+// ─── the native fold (Wave D: record-side phase over VtMessage[]) ───────────
 
-import { probeDoneResultIds, type LhMessage } from "./native-messages.ts";
+import { probeDoneResultIds, type VtMessage } from "./native-messages.ts";
 
 /** The phase at `upToIndex` (inclusive; default: the last message) of a
  *  NATIVE record. probe→plan advances at the probe_done call's clean
  *  toolResult; plan→teach at the assistant message carrying the first
  *  nodeId-tagged quiz CALL (mirrors the view fold — same seam, native
  *  shape). */
-export function phaseAt3Lh(messages: readonly LhMessage[], upToIndex?: number): Phase3 {
+export function phaseAt3Vt(messages: readonly VtMessage[], upToIndex?: number): Phase3 {
 	let phase: Phase3 = "probe";
 	const last = Math.min(upToIndex ?? messages.length - 1, messages.length - 1);
 	const concluded = probeDoneResultIds(messages.slice(0, last + 1));

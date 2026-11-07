@@ -11,7 +11,7 @@ import { createClaudeLauncher } from "../src/agent/claude-code/launch.ts";
 
 const unsupportedShebang = process.platform === "win32" || /\s/.test(process.execPath);
 function fixture(t: TestContext, mode: "normal" | "oversize" | "hang", name = "claude") {
-	const dir = mkdtempSync(join(tmpdir(), "lh-version-runner-"));
+	const dir = mkdtempSync(join(tmpdir(), "vt-version-runner-"));
 	t.after(() => rmSync(dir, { recursive: true, force: true }));
 	const bin = join(dir, "bin"); mkdirSync(bin);
 	const binary = join(bin, name);

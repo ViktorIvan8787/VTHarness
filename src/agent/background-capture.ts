@@ -1,5 +1,5 @@
 /** Opt-in behavioral captures: one last request/reply pair per background worker run.
- * LH_BACKGROUND_CAPTURE=auditor,extractor (or all). Private diagnostic content;
+ * VT_BACKGROUND_CAPTURE=auditor,extractor (or all). Private diagnostic content;
  * never a credential/header recorder, retention policy, or worker recovery store.
  */
 import * as fs from "node:fs";
@@ -41,7 +41,7 @@ interface CaptureRecord {
 export const backgroundCaptureDir = { current: path.join(PATHS.debug, "background-captures") };
 
 export function backgroundCaptureEnabled(role: ModelRole): boolean {
-	const selected = process.env.LH_BACKGROUND_CAPTURE?.split(",").map((value) => value.trim());
+	const selected = process.env.VT_BACKGROUND_CAPTURE?.split(",").map((value) => value.trim());
 	return selected?.includes("all") === true || selected?.includes(role) === true;
 }
 
@@ -141,8 +141,8 @@ export function createBackgroundCapture(input: { role: ModelRole; runId: string;
 export type BackgroundCapture = NonNullable<ReturnType<typeof createBackgroundCapture>>;
 // Next dev can instantiate callers/adapters in different route modules. Keep
 // their association process-wide, like the app's extraction/event registries.
-const captureGlobal = globalThis as typeof globalThis & { __lhBackgroundCaptureContext?: AsyncLocalStorage<BackgroundCapture> };
-const activeCapture = captureGlobal.__lhBackgroundCaptureContext ??= new AsyncLocalStorage<BackgroundCapture>();
+const captureGlobal = globalThis as typeof globalThis & { __vtBackgroundCaptureContext?: AsyncLocalStorage<BackgroundCapture> };
+const activeCapture = captureGlobal.__vtBackgroundCaptureContext ??= new AsyncLocalStorage<BackgroundCapture>();
 const preparedPayloadProviders = new Set(["chatgpt", ...NATIVE_SUBSCRIPTIONS.map((provider) => provider.logicalId)]);
 
 /** Observe an app adapter's FINAL prepared body, after caller replacement and

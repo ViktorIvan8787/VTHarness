@@ -13,7 +13,7 @@ import { chatGPTHistory, chatGPTPayload } from "../src/agent/chatgpt-stream.ts";
 const originalSend = Object.getOwnPropertyDescriptor(process, "send");
 const originalConnected = Object.getOwnPropertyDescriptor(process, "connected");
 const realFetch = globalThis.fetch;
-const desktopMarker = process.env.LH_DESKTOP_SERVER, desktopSecret = process.env.LH_DESKTOP_API_SECRET;
+const desktopMarker = process.env.VT_DESKTOP_SERVER, desktopSecret = process.env.VT_DESKTOP_API_SECRET;
 const originalKey = process.env.OPENAI_API_KEY;
 let leaseError: string | null = null;
 let requests: { authorization: string | null; body: Record<string, any>; url: string }[] = [];
@@ -22,13 +22,13 @@ const ipc = (value: unknown) => (process.emit as (name: string, value: unknown) 
 const model = piModels().getModel("openai", "gpt-5") as Model<"openai-responses">;
 const status = { available: true, pending: false, allowBackgroundUse: false, activeId: "scratch-account", accounts: [{ id: "scratch-account", email: "dummy@example.invalid", registration: "oaiapp_scratch", connected: true, planEnabled: true, background: false }], error: null };
 before(async () => {
-	process.env.LH_DESKTOP_SERVER = "1"; process.env.LH_DESKTOP_API_SECRET = "d".repeat(64);
+	process.env.VT_DESKTOP_SERVER = "1"; process.env.VT_DESKTOP_API_SECRET = "d".repeat(64);
 	assert(model);
 	process.env.OPENAI_API_KEY = "sk-scratch-must-never-be-used";
 	Object.defineProperty(process, "connected", { configurable: true, value: true });
 	Object.defineProperty(process, "send", { configurable: true, value: (message: any, callback?: () => void) => {
 		queueMicrotask(() => {
-			ipc({ channel: "lh:chatgpt", id: message.id, op: message.op,
+			ipc({ channel: "vt:chatgpt", id: message.id, op: message.op,
 				...(message.op === "lease" && leaseError ? { ok: false, error: leaseError, stamp: { epoch: 1, authorityRevision: 1, revision: 1 } } : { ok: true, value: message.op === "lease" ? { accessToken: "scratch-oauth-only", accountId: "scratch-account", epoch: 1, authorityRevision: 1, revision: 1 } : { epoch: 1, authorityRevision: 1, revision: 1, status, accountId: "scratch-account", models: [{ id: model.id, name: "Scratch account model" }, { id: "unknown-capabilities", name: "Do not invent capabilities" }] } }),
 			});
 		});
@@ -42,8 +42,8 @@ before(async () => {
 	};
 });
 after(() => {
-	if (desktopMarker === undefined) delete process.env.LH_DESKTOP_SERVER; else process.env.LH_DESKTOP_SERVER = desktopMarker;
-	if (desktopSecret === undefined) delete process.env.LH_DESKTOP_API_SECRET; else process.env.LH_DESKTOP_API_SECRET = desktopSecret;
+	if (desktopMarker === undefined) delete process.env.VT_DESKTOP_SERVER; else process.env.VT_DESKTOP_SERVER = desktopMarker;
+	if (desktopSecret === undefined) delete process.env.VT_DESKTOP_API_SECRET; else process.env.VT_DESKTOP_API_SECRET = desktopSecret;
 	globalThis.fetch = realFetch;
 	if (originalSend) Object.defineProperty(process, "send", originalSend); else delete process.send;
 	if (originalConnected) Object.defineProperty(process, "connected", originalConnected); else delete (process as { connected?: boolean }).connected;
@@ -62,7 +62,7 @@ test("catalog intersects supported capabilities, without inventing model limits"
 
 test("alias resolves only OAuth; native Responses body is stateless/namespaced, image/history preserved and logical output retained", async () => {
 	requests = [];
-	const tool = { type: "function_call", id: "fc_scratch", call_id: "call_scratch", name: "scratch_tool", namespace: "learnharness", arguments: '{"value":"yes"}', status: "completed" };
+	const tool = { type: "function_call", id: "fc_scratch", call_id: "call_scratch", name: "scratch_tool", namespace: "vt_harness", arguments: '{"value":"yes"}', status: "completed" };
 	const reasoning = { type: "reasoning", id: "rs_scratch", summary: [], encrypted_content: "scratch-encrypted-reasoning" };
 	responseEvents = [{ type: "response.created", response: { id: "resp_scratch" } }, { type: "response.output_item.added", output_index: 0, item: reasoning }, { type: "response.output_item.done", output_index: 0, item: reasoning }, { type: "response.output_item.added", output_index: 1, item: tool }, { type: "response.output_item.done", output_index: 1, item: tool }, complete([reasoning, tool])];
 	const engine = piEngineForSpec({ provider: "chatgpt", id: model.id }, false);
@@ -80,7 +80,7 @@ test("alias resolves only OAuth; native Responses body is stateless/namespaced, 
 	assert.equal(body.input[1].content[1].type, "input_image");
 	assert.equal(body.tools[0].type, "namespace"); assert.equal(body.tools[0].tools[0].name, "scratch_tool");
 	const call = result.content.find((block) => block.type === "toolCall")!;
-	assert.equal(call.id, "call_scratch|fc_scratch"); assert.equal(call.namespace, "learnharness");
+	assert.equal(call.id, "call_scratch|fc_scratch"); assert.equal(call.namespace, "vt_harness");
 	const thinking = result.content.find((block) => block.type === "thinking")!;
 	assert.equal(thinking.thinkingSignature, JSON.stringify(reasoning));
 	const history = normalizeContext({ messages: [...context().messages, result, { role: "toolResult", toolCallId: call.id, toolName: call.name, isError: false, content: [{ type: "text", text: "Scratch tool result" }], timestamp: 2 }] });
@@ -88,7 +88,7 @@ test("alias resolves only OAuth; native Responses body is stateless/namespaced, 
 	await engine.streamFn(engine.model, history).result();
 	const replay = requests[1]!.body.input;
 	assert(replay.some((item: any) => item.encrypted_content === "scratch-encrypted-reasoning"));
-	assert(replay.some((item: any) => item.type === "function_call" && item.id === "fc_scratch" && item.namespace === "learnharness"));
+	assert(replay.some((item: any) => item.type === "function_call" && item.id === "fc_scratch" && item.namespace === "vt_harness"));
 	assert(replay.some((item: any) => item.type === "function_call_output" && item.call_id === "call_scratch"));
 });
 
@@ -127,7 +127,7 @@ test("OAuth failure and background denial NEVER use ambient OPENAI_API_KEY", asy
 test("consent revocation cancels only applicable background streams and preserves foreground", () => {
 	const foreground = chatGPTAbortController(false);
 	const background = chatGPTAbortController(true);
-	ipc({ channel: "lh:chatgpt", kind: "state", stamp: { epoch: 1, authorityRevision: 1, revision: 2 }, status, invalidate: "background" });
+	ipc({ channel: "vt:chatgpt", kind: "state", stamp: { epoch: 1, authorityRevision: 1, revision: 2 }, status, invalidate: "background" });
 	assert.equal(foreground.controller.signal.aborted, false);
 	assert.equal(background.controller.signal.aborted, true);
 	foreground.release(); background.release();
@@ -166,12 +166,12 @@ test("native identity/session/cache/fetch and awaited caller observers survive e
 });
 
 test("background capture matches final ChatGPT transport body without changing awaited callbacks or foreground", async (t) => {
-	const dir = fs.mkdtempSync(path.join(os.tmpdir(), "lh-chatgpt-capture-"));
-	const previousDir = backgroundCaptureDir.current, previousFlag = process.env.LH_BACKGROUND_CAPTURE;
-	backgroundCaptureDir.current = dir; process.env.LH_BACKGROUND_CAPTURE = "all";
+	const dir = fs.mkdtempSync(path.join(os.tmpdir(), "vt-chatgpt-capture-"));
+	const previousDir = backgroundCaptureDir.current, previousFlag = process.env.VT_BACKGROUND_CAPTURE;
+	backgroundCaptureDir.current = dir; process.env.VT_BACKGROUND_CAPTURE = "all";
 	t.after(() => {
 		backgroundCaptureDir.current = previousDir;
-		if (previousFlag === undefined) delete process.env.LH_BACKGROUND_CAPTURE; else process.env.LH_BACKGROUND_CAPTURE = previousFlag;
+		if (previousFlag === undefined) delete process.env.VT_BACKGROUND_CAPTURE; else process.env.VT_BACKGROUND_CAPTURE = previousFlag;
 		fs.rmSync(dir, { recursive: true, force: true });
 	});
 	const engine = piEngineForSpec({ provider: "chatgpt", id: model.id }, true);
@@ -220,7 +220,7 @@ test("case-insensitive Authorization overrides including null are refused before
 
 test("full credential-storage invalidation aborts foreground and background controllers and clears capabilities", () => {
 	const foreground = chatGPTAbortController(false), background = chatGPTAbortController(true);
-	ipc({ channel: "lh:chatgpt", kind: "state", stamp: { epoch: 2, authorityRevision: 2, revision: 3 }, status: { ...status, available: false }, invalidate: "all" });
+	ipc({ channel: "vt:chatgpt", kind: "state", stamp: { epoch: 2, authorityRevision: 2, revision: 3 }, status: { ...status, available: false }, invalidate: "all" });
 	assert(foreground.controller.signal.aborted); assert(background.controller.signal.aborted); assert.equal(chatGPTModels().length, 0);
 	foreground.release(); background.release();
 });

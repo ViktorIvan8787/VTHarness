@@ -16,7 +16,7 @@ Practice has its own base and doctrine. Its shared appendix is explicitly allowl
 
 ## Overrides and defaults
 
-Source files are the default instructions. User override files mirror segment keys under [`PROMPTS_OVERRIDE_DIR`](../../../config.ts), normally `data/prompts/` (relocated by `LH_DATA_DIR`):
+Source files are the default instructions. User override files mirror segment keys under [`PROMPTS_OVERRIDE_DIR`](../../../config.ts), normally `data/prompts/` (relocated by `VT_DATA_DIR`):
 
 ```text
 system-prompt.md

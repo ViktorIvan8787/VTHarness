@@ -23,13 +23,13 @@
 import { emit } from "../core/events.ts";
 import { clearTurnFailure } from "./turn-runs.ts";
 
-interface LhGlobal {
-	__lhTurnRegistry?: Map<string, number>;
+interface VtGlobal {
+	__vtTurnRegistry?: Map<string, number>;
 }
 
 function registry(): Map<string, number> {
-	const g = globalThis as typeof globalThis & LhGlobal;
-	return (g.__lhTurnRegistry ??= new Map<string, number>());
+	const g = globalThis as typeof globalThis & VtGlobal;
+	return (g.__vtTurnRegistry ??= new Map<string, number>());
 }
 
 const inFlight = registry();

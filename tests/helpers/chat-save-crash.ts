@@ -1,6 +1,6 @@
 /** Child-process fixture (#403): `create` makes one chat and prints its id;
  *  `crash <id>` dies right before that chat's save would land; `read <id>`
- *  reports what fresh boots see. Runs on the caller's LH_DATA_DIR. */
+ *  reports what fresh boots see. Runs on the caller's VT_DATA_DIR. */
 import fs from "node:fs";
 const [mode, id = ""] = process.argv.slice(2);
 const { chatStore } = await import("../../src/store/chats.ts");

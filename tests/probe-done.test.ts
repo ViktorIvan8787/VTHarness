@@ -13,8 +13,8 @@ import * as path from "node:path";
 import { after, describe, it } from "node:test";
 import { probeDoneTool } from "../src/agent/tools/probe.ts";
 import type { SteerMessage } from "../src/core/contracts.ts";
-import { hasProbeDone, type LhMessage } from "../src/core/native-messages.ts";
-import { phaseAt3Lh } from "../src/core/phases.ts";
+import { hasProbeDone, type VtMessage } from "../src/core/native-messages.ts";
+import { phaseAt3Vt } from "../src/core/phases.ts";
 import { HANDOFF_TEXT } from "../src/core/contracts.ts";
 import { chatStore } from "../src/store/chats.ts";
 import { PATHS } from "../config.ts";
@@ -48,7 +48,7 @@ const ASSESSMENT = {
 
 /** A native assistant message carrying one tool call (the minimal fixture
  *  shape the scans read — role assistant, content blocks). */
-function assistantWithCall(id: string, toolName: string, args: unknown): LhMessage {
+function assistantWithCall(id: string, toolName: string, args: unknown): VtMessage {
 	return {
 		id,
 		role: "assistant",
@@ -145,7 +145,7 @@ describe("probe_done: the probe→planning seam", () => {
 });
 
 /** A real record result, distinct from the calling assistant message. */
-function probeResult(overrides: Partial<Extract<LhMessage, { role: "toolResult" }>> = {}): LhMessage {
+function probeResult(overrides: Partial<Extract<VtMessage, { role: "toolResult" }>> = {}): VtMessage {
 	return {
 		id: "probe-result", role: "toolResult", toolCallId: "call_probe", toolName: "probe_done",
 		content: [{ type: "text", text: "ok" }], isError: false, timestamp: 1,
@@ -154,8 +154,8 @@ function probeResult(overrides: Partial<Extract<LhMessage, { role: "toolResult" 
 }
 
 const probeCall = () => assistantWithCall("probe", "probe_done", { assessment: ASSESSMENT });
-const failedProbeCall = (stopReason: "error" | "aborted"): LhMessage => ({ ...probeCall(), stopReason } as LhMessage);
-const incompleteProbes: Array<[string, () => LhMessage[]]> = [
+const failedProbeCall = (stopReason: "error" | "aborted"): VtMessage => ({ ...probeCall(), stopReason } as VtMessage);
+const incompleteProbes: Array<[string, () => VtMessage[]]> = [
 	["unmatched call", () => [probeCall()]],
 	["errored result", () => [probeCall(), probeResult({ isError: true })]],
 	["explicit refusal without isError", () => [probeCall(), probeResult({ details: { ok: false, error: "refused" } })]],
@@ -176,7 +176,7 @@ describe("probe completion: matched successful results only (PR130 foundation)",
 			const snapshot = structuredClone(before);
 			chatStore.saveMessages(chatId, before);
 			assert.equal(hasProbeDone(before), false);
-			assert.equal(phaseAt3Lh(before), "probe");
+			assert.equal(phaseAt3Vt(before), "probe");
 			const delivered: SteerMessage[] = [];
 			const tools = probeDoneTool({ chatId, chatStore, deliver: (s) => delivered.push(s) });
 			assert.equal((await execute(tools, { assessment: ASSESSMENT })).ok, true);
@@ -195,8 +195,8 @@ describe("probe completion: matched successful results only (PR130 foundation)",
 			const messages = [probeCall(), result];
 			const before = structuredClone(messages);
 			assert.equal(hasProbeDone(messages), true);
-			assert.equal(phaseAt3Lh(messages, 0), "probe", "a future result cannot conclude an earlier prefix");
-			assert.equal(phaseAt3Lh(messages, 1), "plan");
+			assert.equal(phaseAt3Vt(messages, 0), "probe", "a future result cannot conclude an earlier prefix");
+			assert.equal(phaseAt3Vt(messages, 1), "plan");
 			assert.deepEqual(messages, before);
 		});
 	}

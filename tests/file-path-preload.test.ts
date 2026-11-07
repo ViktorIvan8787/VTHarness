@@ -43,7 +43,7 @@ describe("path-only preload bridge", () => {
 		}
 		const fullPath = "/actual/course/notes with `backticks`.pdf";
 		const f = fixture((supplied) => { assert.equal(supplied, file); return fullPath; });
-		assert.deepEqual(f.exposed, ["lh"]);
+		assert.deepEqual(f.exposed, ["vt"]);
 		assert.deepEqual(f.imports, ["electron"]);
 		assert.equal(f.bridge.getPathForFile(file), fullPath);
 		assert.equal(f.supplied.length, 1);
@@ -89,7 +89,7 @@ describe("path-only preload bridge", () => {
 	it("folder picker invokes only its whitelisted mode, never forwarding renderer options", async () => {
 		const f = fixture(() => "");
 		await f.bridge.chooseAttachmentFolder({ properties: ["openFile", "multiSelections"], defaultPath: "/private" });
-		assert.deepEqual(f.invoked, [["lh:attachment:pick", "folder"]]);
+		assert.deepEqual(f.invoked, [["vt:attachment:pick", "folder"]]);
 		assert.deepEqual(f.supplied, []);
 	});
 

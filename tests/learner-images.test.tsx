@@ -55,7 +55,7 @@ import { artifactRenderers } from "../components/artifacts/index.ts";
 // read env-first truth.
 process.env.OPENROUTER_API_KEY ??= "test-key-presence-gate";
 
-const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "lh-learner-images-"));
+const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "vt-learner-images-"));
 const JOBS_DIR = path.join(PATHS.data, "jobs");
 const createdChats: string[] = [];
 const createdJobs: string[] = [];
@@ -227,8 +227,8 @@ describe("learner image loader", () => {
 	});
 
 	it("resolves relative paths against the learner's home, like read", async () => {
-		await assert.rejects(checkLearnerImage("lh-no-such-image.png"), (err: Error) =>
-			err.message.includes(path.join(os.homedir(), "lh-no-such-image.png")),
+		await assert.rejects(checkLearnerImage("vt-no-such-image.png"), (err: Error) =>
+			err.message.includes(path.join(os.homedir(), "vt-no-such-image.png")),
 		);
 	});
 });

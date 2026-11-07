@@ -15,7 +15,7 @@ import { GET } from "../app/api/chats/[id]/images/[snapshotId]/route.ts";
 import type { JobRecord, ShowImageDetails } from "../src/core/contracts.ts";
 import type { JobStore } from "../src/core/ports.ts";
 
-const scratch = await fs.mkdtemp(path.join(os.tmpdir(), "lh-image-snapshots-"));
+const scratch = await fs.mkdtemp(path.join(os.tmpdir(), "vt-image-snapshots-"));
 const chats: string[] = [];
 after(async () => {
 	for (const id of chats) chatStore.deleteChat(id);

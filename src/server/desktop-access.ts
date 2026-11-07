@@ -6,10 +6,10 @@ export function desktopAPIAuthorized(
 	headers: Headers,
 	env: Record<string, string | undefined> = process.env,
 ): boolean {
-	const expected = env.LH_DESKTOP_API_SECRET;
-	if (env.LH_DESKTOP_SERVER !== "1" && !expected) return true;
+	const expected = env.VT_DESKTOP_API_SECRET;
+	if (env.VT_DESKTOP_SERVER !== "1" && !expected) return true;
 	if (!expected || expected.length < 64) return false;
-	const supplied = headers.get("x-learnharness-desktop");
+	const supplied = headers.get("x-vt-harness-desktop");
 	if (!supplied) return false;
 	const actual = Buffer.from(supplied);
 	const wanted = Buffer.from(expected);

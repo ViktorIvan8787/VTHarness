@@ -26,7 +26,7 @@ such as **?** and **F2** do not fire while typing; modifier shortcuts still do.
 
 **Settings → Keyboard** displays the registry and offers Rebind, per-action
 Reset, and Reset all controls. Overrides are stored on this device in
-localStorage (`lh:keymap`), not in the learning-data settings file. Contextual
+localStorage (`vt:keymap`), not in the learning-data settings file. Contextual
 question keys are shown as **Fixed — part of this screen**, not rebindable.
 Tab and Esc also have dedicated handling outside ordinary registry dispatch.
 

@@ -17,7 +17,7 @@ import { deflateSync } from "node:zlib";
 import { formatProbeError, probeEnv } from "./smoke-demo-runtime.mjs";
 
 export function verifyImageRuntime(standalone, runtime = process.execPath) {
-	const home = fs.mkdtempSync(path.join(os.tmpdir(), "lh-image-runtime-"));
+	const home = fs.mkdtempSync(path.join(os.tmpdir(), "vt-image-runtime-"));
 	try {
 		fs.writeFileSync(path.join(home, "auth.json"), "{}\n", { mode: 0o600 });
 		const result = spawnSync(runtime, [fileURLToPath(import.meta.url), "--probe", path.resolve(standalone)], {
@@ -147,7 +147,7 @@ function assertResized(result) {
 }
 
 async function probeWorker(root, inputBytes, options, responseType) {
-	const readyType = "lh:image-runtime-ready";
+	const readyType = "vt:image-runtime-ready";
 	const worker = new Worker(`
 		const { parentPort, workerData } = require("node:worker_threads");
 		const guards = (${installGuards.toString()})(require, workerData.root);

@@ -47,7 +47,7 @@ async function fire(selector: string, type: string, data: ReturnType<typeof tran
 it("dragging the name moves the item with an icon/name-only preview, not the whole row", async () => {
 	await mount(); const data = transfer();
 	await fire('[data-source-drag-row="b"] button[title="Rename"]', "dragstart", data);
-	assert.deepEqual(JSON.parse(data.getData("application/x-learnharness-source")), { kind: "source", id: "b" });
+	assert.deepEqual(JSON.parse(data.getData("application/x-vt-harness-source")), { kind: "source", id: "b" });
 	assert.equal(data.effectAllowed, "move"); assert.equal(data.preview?.textContent, "Source B");
 	assert.equal(data.preview?.querySelectorAll("svg").length, 1); assert.equal(data.preview?.querySelectorAll("input,button").length, 0);
 	assert.equal(document.querySelector('[data-testid="source-name-input"]'), null, "a drag does not enter rename mode");

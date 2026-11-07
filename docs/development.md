@@ -19,7 +19,7 @@ npm run build          # Next production build, including standalone output
 npm start              # serve the production build with Next
 ```
 
-`npm run desktop:dist` is the local **signed macOS** packaging path, not a portable unsigned shortcut. Prerequisites and Windows/Linux instructions are in [Desktop builds and releases](desktop-release.md).
+`npm run desktop:dist` builds an **unsigned macOS** package without signing or notarization credentials. Prerequisites and Windows/Linux instructions are in [Desktop builds and releases](desktop-release.md).
 
 ## Configuration
 
@@ -27,8 +27,8 @@ Nonsecret settings are deltas in `<data root>/settings.json`; absent values reso
 
 | Variable | Purpose |
 | --- | --- |
-| `LH_DATA_DIR` | Mutable chats/jobs/graph/settings/prompts; default repo `data/`. |
-| `LH_AUTH_FILE` | Keys/custom-endpoint binding; default repo-root `auth.json`, outside `data/`. |
+| `VT_DATA_DIR` | Mutable chats/jobs/graph/settings/prompts; default repo `data/`. |
+| `VT_AUTH_FILE` | Keys/custom-endpoint binding; default repo-root `auth.json`, outside `data/`. |
 | Provider API-key variables | Optional, selected-provider dependent; UI names are in `src/core/auth-keys.ts`. |
 | `TAVILY_API_KEY`, `BRAVE_API_KEY`, `EXA_API_KEY`, `FIRECRAWL_API_KEY`, `OLLAMA_API_KEY` | Optional search adapters. Without a Settings pin, the first keyed engine wins: Tavily → Brave → Exa → Firecrawl → Ollama. A pinned engine requires its own key; no silent fallback. Ollama search is hosted at ollama.com, not a local model server. Page fetching is independent; research can fetch known URLs without a search key. |
 | `DEEPGRAM_API_KEY` | Optional dictation token minting. |
@@ -42,7 +42,7 @@ Provider-specific setup and limitations: [Claude Code](claude-code.md), [custom 
 
 `npm run dev` and `npm start` support ChatGPT, GitHub Copilot, and Grok sign-in. `desktop:dev` uses those same dev-server connections; packaged desktop has a separate main-process credential owner/private transport. Subscription routes do not fall back to API-key billing.
 
-Web/dev writes `chatgpt-credentials.json`, `github-copilot-credentials.json`, and `xai-credentials.json` **beside `LH_AUTH_FILE`**, in the repo by default—not under `data/` or a global Pi profile. Git/build exclusions cover these files and their write temporaries. Refresh serialization is process-local: use one server per credential directory.
+Web/dev writes `chatgpt-credentials.json`, `github-copilot-credentials.json`, and `xai-credentials.json` **beside `VT_AUTH_FILE`**, in the repo by default—not under `data/` or a global Pi profile. Git/build exclusions cover these files and their write temporaries. Refresh serialization is process-local: use one server per credential directory.
 
 ChatGPT's callback listener is `127.0.0.1` on the **server's machine**; complete sign-in in a browser there. Copilot/Grok use device codes. Allow the initiating browser's sign-in tab if blocked; Electron dev opens provider pages in the system browser. Connected browsers share server credentials, background-use consent, keys, and learning data.
 
@@ -53,8 +53,8 @@ This is **trusted local/shared development**, not multi-user hosting. Same-origi
 Use a disposable data root and a separate empty `{}` auth file:
 
 ```sh
-LH_DATA_DIR=/absolute/path/to/scratch/data \
-LH_AUTH_FILE=/absolute/path/to/scratch/auth.json \
+VT_DATA_DIR=/absolute/path/to/scratch/data \
+VT_AUTH_FILE=/absolute/path/to/scratch/auth.json \
 npm run dev -- --port 3001
 ```
 
@@ -66,13 +66,13 @@ Read the relevant installed Next guide under `node_modules/next/dist/docs/` befo
 
 ## Debugging
 
-- `LH_PROVIDER_EVENTS=1` saves raw provider events under the selected data root. They may contain private lesson/provider content.
-- `LH_BACKGROUND_CAPTURE=auditor` (or comma-separated roles, or `all`) captures background requests/results. Roles are `researcher`, `demoBuilder`, `extractor`, `auditor`, `visualMaker`, and `pdfReader`; foreground teaching/probing is excluded.
+- `VT_PROVIDER_EVENTS=1` saves raw provider events under the selected data root. They may contain private lesson/provider content.
+- `VT_BACKGROUND_CAPTURE=auditor` (or comma-separated roles, or `all`) captures background requests/results. Roles are `researcher`, `demoBuilder`, `extractor`, `auditor`, `visualMaker`, and `pdfReader`; foreground teaching/probing is excluded.
 
 For example:
 
 ```sh
-LH_BACKGROUND_CAPTURE=auditor npm run desktop:dev
+VT_BACKGROUND_CAPTURE=auditor npm run desktop:dev
 ```
 
 The flag must reach the **Next server**; restart an existing server to change it. Captures are off by default and written to `<data root>/debug/background-captures/<role>-<run ID>.json`. Each file retains the last request and response/error/tool results, with prior conversation in that request and compact per-turn timings—not every request body.

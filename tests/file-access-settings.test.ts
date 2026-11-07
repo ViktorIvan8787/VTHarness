@@ -7,14 +7,14 @@ import { after, beforeEach, describe, it } from "node:test";
 
 // Every store, route and composition-root import sees only these synthetic
 // locations. No real settings, credential files or learning records are used.
-const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "lh-folder-settings-")));
+const root = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), "vt-folder-settings-")));
 const home = path.join(root, "home");
 const data = path.join(root, "data");
 const auth = path.join(root, "auth.json");
 const a = path.join(home, "Study");
 const b = path.join(root, "Other");
-const prior = Object.fromEntries(["HOME", "USERPROFILE", "LH_AUTH_FILE", "LH_DATA_DIR"].map((key) => [key, process.env[key]]));
-Object.assign(process.env, { HOME: home, USERPROFILE: home, LH_AUTH_FILE: auth, LH_DATA_DIR: data });
+const prior = Object.fromEntries(["HOME", "USERPROFILE", "VT_AUTH_FILE", "VT_DATA_DIR"].map((key) => [key, process.env[key]]));
+Object.assign(process.env, { HOME: home, USERPROFILE: home, VT_AUTH_FILE: auth, VT_DATA_DIR: data });
 for (const directory of [a, b, data]) await fs.mkdir(directory, { recursive: true });
 await fs.writeFile(auth, "{}\n");
 await fs.writeFile(path.join(a, "notes.md"), "synthetic study\n");

@@ -1,10 +1,10 @@
 /**
- * LearnHarness — the Electron shell (wrapper milestone, 2026-09-17).
+ * VT-Harness — the Electron shell (wrapper milestone, 2026-09-17).
  *
  * What this process is and is not:
  *   IS:  a thin launcher + security guard around the app's real server —
  *        `next build`'s standalone server.js (Next 16), spawned as a child
- *        on 127.0.0.1 with the BYOK auth file and the LH_DATA_DIR seam.
+ *        on 127.0.0.1 with the BYOK auth file and the VT_DATA_DIR seam.
  *   NOT: a host for any app logic. Everything — teacher turns, extraction,
  *        the graph — runs in the Next server, unchanged.
  *
@@ -19,7 +19,7 @@
  *   - keys ride the child's ENV, never argv; auth.json (BYOK) is a flat
  *     {VAR: value} JSON map, plaintext, mode 0600 — server-managed since
  *     the auth-keys wave (2026-09-19): the child reads/writes it DIRECTLY
- *     (LH_AUTH_FILE below) and reflects values into its own env. The old
+ *     (VT_AUTH_FILE below) and reflects values into its own env. The old
  *     spawn-time env injection retired with that wave — a copy made here
  *     would shadow every settings-page key change until restart.
  */
@@ -43,20 +43,20 @@ const path = require("node:path");
 // renderer owns the number; this is the IPC widen target).
 const SIDEBAR_AUTOCLOSE = 928;
 
-const PRODUCT_NAME = "LearnHarness";
+const PRODUCT_NAME = "VT-Harness";
 
 // APP NAME → userData (owner, 2026-10-10): the Application Support dir is
-// exactly "LearnHarness" in dev AND packaged. Packaged Electron would
+// exactly "VT-Harness" in dev AND packaged. Packaged Electron would
 // otherwise derive it from package.json "name" (now lowercase
-// "learnharness"), and productName metadata alone doesn't reach app.name.
-// Must run before the LH_DEV_URL suffix below — dev becomes
-// "LearnHarness-dev".
+// "vt-harness"), and productName metadata alone doesn't reach app.name.
+// Must run before the VT_DEV_URL suffix below — dev becomes
+// "VT-Harness-dev".
 app.setName(PRODUCT_NAME);
 const AUTH_FILE = () => path.join(app.getPath("userData"), "auth.json");
 const DATA_DIR = () => path.join(app.getPath("userData"), "data");
 
 /** The packaged standalone server (extraResources → Resources/server).
- *  In dev LH_DEV_URL short-circuits everything: no spawn, no packaging —
+ *  In dev VT_DEV_URL short-circuits everything: no spawn, no packaging —
  *  the window points at the running `next dev` server (full HMR). */
 function serverEntry() {
 	// extraResources ships the whole .next payload under server/standalone/
@@ -74,7 +74,7 @@ function serverEntry() {
 // the helper prints "BROWSER_SERVICE_CDP <port>" on stdout once the CDP
 // endpoint listens. Lifetime: parent IPC disconnect/death = quit.
 // MUST run before the single-instance lock — a helper is a second
-// instance of this very binary, and before the LH_DEV_URL redirect — the
+// instance of this very binary, and before the VT_DEV_URL redirect — the
 // helper owns no user data at all.
 if (process.argv.includes("--browser-service")) {
 	const { waitForBrowserService } = require("./browser-service-readiness.cjs");
@@ -110,11 +110,11 @@ if (process.argv.includes("--browser-service")) {
 		}
 	})();
 } else {
-	// Dev shell (LH_DEV_URL) runs BESIDE the packaged app, not instead of it:
+	// Dev shell (VT_DEV_URL) runs BESIDE the packaged app, not instead of it:
 	// its own userData so (a) the single-instance lock — checked below — doesn't
 	// silently kill it, and (b) it never reads/writes the real app's
 	// localStorage, auth.json, or logs. Must run before the lock check.
-	if (process.env.LH_DEV_URL) {
+	if (process.env.VT_DEV_URL) {
 		app.setPath("userData", `${app.getPath("userData")}-dev`);
 	}
 
@@ -172,7 +172,7 @@ function freePort() {
 
 /** BYOK keys: auth.json in userData, flat {VAR: value} map, 0600 —
  *  SERVER-MANAGED since the auth-keys wave (2026-09-19). This shell no
- *  longer reads or injects it: the child gets LH_AUTH_FILE below and does
+ *  longer reads or injects it: the child gets VT_AUTH_FILE below and does
  *  its own read/reflect/write, so a key saved in the settings page takes
  *  effect on the next model call — no restart. Real environment variables
  *  still win over the file inside the child (its documented rule). */
@@ -184,7 +184,7 @@ function log(line) {
 	// piped run) must not die on its next log line when the pipe breaks.
 	// The file below stays the durable channel.
 	try {
-		console.log(`[lh ${stamp}] ${line}`);
+		console.log(`[vt ${stamp}] ${line}`);
 	} catch {
 		/* stdout gone — userData/logs/main.log still carries it */
 	}
@@ -216,13 +216,13 @@ function startServer(port) {
 					NODE_ENV: "production",
 					PORT: String(port),
 					HOSTNAME: "127.0.0.1", // the server defaults to 0.0.0.0 — never
-					LH_DATA_DIR: DATA_DIR(),
+					VT_DATA_DIR: DATA_DIR(),
 					// The auth/keys store — the child reads AND writes this file itself
 					// (no env injection anymore: a spawn-time copy would shadow every
 					// settings-page key change until restart; env wins over file).
-					LH_AUTH_FILE: AUTH_FILE(),
-					LH_DESKTOP_SERVER: "1",
-					LH_DESKTOP_API_SECRET: desktopAPISecret,
+					VT_AUTH_FILE: AUTH_FILE(),
+					VT_DESKTOP_SERVER: "1",
+					VT_DESKTOP_API_SECRET: desktopAPISecret,
 				},
 				stdio: ["ignore", "pipe", "pipe", "ipc"],
 			},
@@ -294,13 +294,13 @@ function createWindow(url) {
 		title: PRODUCT_NAME,
 		// Merged chrome (owner, 2026-09-17): the system title bar is gone;
 		// the app's own 60px header bands ARE the title bar. The traffic
-		// lights float over the sidebar's LH wordmark band, vertically
+		// lights float over the sidebar's VT wordmark band, vertically
 		// Aligned to the PHASE PILL's drawn box, not the band's geometric
 		// center (owner ask, 2026-09-17): macOS centers each 12px circle at
 		// y+6.75, and the pill box center measures 29.25 in the running app
 		// (band 0–59.5, pill box 19–39.5) — y 22.5 lands the circles at
 		// 29.25, exactly on the pill. Wordmark gutter: components/sidebar.tsx.
-		// Dragging comes from the renderer's .lh-drag bands (app/globals.css).
+		// Dragging comes from the renderer's .vt-drag bands (app/globals.css).
 		...(process.platform === "darwin"
 			? { titleBarStyle: "hiddenInset", trafficLightPosition: { x: 16, y: 22.5 } }
 			: {
@@ -317,7 +317,7 @@ function createWindow(url) {
 			contextIsolation: true,
 			sandbox: true,
 			nodeIntegration: false,
-			...(process.env.LH_DEV_URL ? { additionalArguments: ["--lh-web-subscriptions"] } : {}),
+			...(process.env.VT_DEV_URL ? { additionalArguments: ["--vt-web-subscriptions"] } : {}),
 			preload: path.join(__dirname, "preload.cjs"),
 		},
 		// Live-resize + first-paint flash (owner, 2026-09-17): during a resize
@@ -333,7 +333,7 @@ function createWindow(url) {
 		// below it even a wrapped chrome row gets cramped and the chat header
 		// (lights gutter 92 + toggle + title) runs out of room. The sidebar
 		// auto-closes below 928 = 640 + 288 (sidebar) in the renderer
-		// (components/sidebar.tsx, SIDEBAR_AUTOCLOSE); its "lh:expand-window"
+		// (components/sidebar.tsx, SIDEBAR_AUTOCLOSE); its "vt:expand-window"
 		// IPC widens the window back to that threshold.
 		minWidth: 640,
 		minHeight: 600,
@@ -374,12 +374,12 @@ function createWindow(url) {
 
 	void win.loadURL(url);
 	// Zoom truth reaches the renderer for EVERY load (reload, nav): the
-	// renderer's --lh-zoom must never go stale. The fallback catcher below
+	// renderer's --vt-zoom must never go stale. The fallback catcher below
 	// covers ⌘= / layout variants the menu's ⌘Plus may not claim — menu-
 	// claimed keys never reach before-input-event, so exactly one of the
 	// two applies any given zoom keypress.
 	win.webContents.on("did-finish-load", () => {
-		win.webContents.send("lh:zoom", win.webContents.getZoomFactor());
+		win.webContents.send("vt:zoom", win.webContents.getZoomFactor());
 	});
 	win.webContents.on("before-input-event", (event, input) => {
 		if (input.type !== "keyDown" || !(input.meta || input.control)) return;
@@ -400,8 +400,8 @@ function createWindow(url) {
  * hiddenInset) drift out of relation to the scaled chrome: the graph
  * button rides away from them zoomed in, content slides under them
  * zoomed out. Here zoom is explicit: a factor ladder, applied through
- * setZoomFactor, and broadcast to the renderer ("lh:zoom" — it publishes
- * --lh-zoom so gutter lengths can divide by it and stay PHYSICAL-
+ * setZoomFactor, and broadcast to the renderer ("vt:zoom" — it publishes
+ * --vt-zoom so gutter lengths can divide by it and stay PHYSICAL-
  * constant). The traffic lights themselves stay at their construction
  * position ({x:16, y:22.5} — Electron 44 has NO runtime setter, only
  * the BrowserWindow option), which is HIG-correct anyway: native lights
@@ -427,14 +427,14 @@ const ZOOM_LADDER = [0.75, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2];
  *  - THE UPDATER CAN NEVER TAKE THE APP DOWN: every event and check is
  *    caught and logged (feed down, disk full, bad signature — all just
  *    log lines; the app keeps working, update or no update).
- *  - LH_UPDATE_FEED (env): overrides the baked GitHub feed with a generic
+ *  - VT_UPDATE_FEED (env): overrides the baked GitHub feed with a generic
  *    local server — the pre-release verification drill (serve
  *    latest-mac.yml + zip + blockmap from any localhost HTTP dir and
  *    watch a real installed copy find/download/restart). Test-only seam.
  *
  * Install path: the downloaded update applies on quit (autoInstallOnAppQuit
  * — Squirrel.Mac stages natively and swaps on relaunch). The renderer
- * banner asks for an immediate restart via "lh:update-install"; we kill
+ * banner asks for an immediate restart via "vt:update-install"; we kill
  * the child server FIRST — deterministic ordering: the server lives
  * inside the .app bundle Squirrel is about to replace (extraResources),
  * and before-quit alone would race the swap. */
@@ -451,7 +451,7 @@ function reportUpdateStatus(status, version = null) {
 		updateState = { status, version: typeof version === "string" ? version : null, revision: updateState.revision + 1 };
 		for (const win of BrowserWindow.getAllWindows()) {
 			try {
-				win.webContents.send("lh:update-status", updateState);
+				win.webContents.send("vt:update-status", updateState);
 			} catch {
 				/* window mid-teardown — snapshot retrieval covers a later load */
 			}
@@ -517,10 +517,10 @@ function setupAutoUpdater() {
 		reportUpdateStatus("disabled");
 		return;
 	}
-	const feed = process.env.LH_UPDATE_FEED;
+	const feed = process.env.VT_UPDATE_FEED;
 	if (feed) {
 		autoUpdater.setFeedURL({ provider: "generic", url: feed });
-		log(`auto-update: LH_UPDATE_FEED override → ${feed}`);
+		log(`auto-update: VT_UPDATE_FEED override → ${feed}`);
 	}
 	autoUpdater.autoDownload = true;
 	autoUpdater.autoInstallOnAppQuit = true;
@@ -554,7 +554,7 @@ function checkForUpdatesFromMenu() {
 			if (win.isMinimized()) win.restore();
 			win.focus();
 			const openSettings = () => {
-				try { win.webContents.send("lh:open-settings", "general"); } catch { /* window closed */ }
+				try { win.webContents.send("vt:open-settings", "general"); } catch { /* window closed */ }
 			};
 			if (win.webContents.isLoadingMainFrame()) win.webContents.once("did-finish-load", openSettings);
 			else openSettings();
@@ -577,7 +577,7 @@ function zoomStep(win, dir) {
 function applyZoom(win, factor) {
 	factor = Math.min(2, Math.max(0.75, factor)); // ladder clamps; ⌘0 = 1
 	win.webContents.setZoomFactor(factor);
-	win.webContents.send("lh:zoom", factor);
+	win.webContents.send("vt:zoom", factor);
 }
 
 /** macOS needs an application menu with the Edit roles — without one,
@@ -606,7 +606,7 @@ function installMenu() {
 				{ type: "separator" },
 				// OWNED zoom (see applyZoom): the roles change zoomLevel
 				// silently; these broadcast the factor and re-seat the
-				// traffic lights. The renderer's --lh-zoom depends on
+				// traffic lights. The renderer's --vt-zoom depends on
 				// hearing every change.
 				{
 					label: "Actual Size",
@@ -647,10 +647,10 @@ async function main() {
 
 	await app.whenReady();
 
-	// Dev mode: point at a running `next dev` server (LH_DEV_URL) — no
+	// Dev mode: point at a running `next dev` server (VT_DEV_URL) — no
 	// spawn, no packaging, full HMR. The rest of this shell still applies
 	// (guards, menu, single instance).
-	const devUrl = process.env.LH_DEV_URL;
+	const devUrl = process.env.VT_DEV_URL;
 	const url = devUrl ?? `http://127.0.0.1:${await freePort()}`;
 	if (!devUrl) {
 		desktopAPISecret = randomBytes(32).toString("hex");
@@ -664,7 +664,7 @@ async function main() {
 			openExternal: (target) => shell.openExternal(target),
 			onChange: (value) => {
 				chatgptChild?.send(value);
-				for (const win of BrowserWindow.getAllWindows()) win.webContents.send("lh:chatgpt:changed");
+				for (const win of BrowserWindow.getAllWindows()) win.webContents.send("vt:chatgpt:changed");
 			},
 		});
 		subscriptions = createSubscriptions({
@@ -673,7 +673,7 @@ async function main() {
 			openExternal: (target) => shell.openExternal(target),
 			onChange: (snapshot) => {
 				subscriptionChild?.send(snapshot);
-				for (const win of BrowserWindow.getAllWindows()) win.webContents.send("lh:subscriptions:changed");
+				for (const win of BrowserWindow.getAllWindows()) win.webContents.send("vt:subscriptions:changed");
 			},
 		});
 		await subscriptions.ready;
@@ -688,13 +688,13 @@ async function main() {
 
 	// Renderer controls contain no token/URL/code operation. The separate server
 	// child is the only recipient of credential leases over inherited IPC.
-	ipcMain.handle("lh:chatgpt:control", async (event, command) => {
+	ipcMain.handle("vt:chatgpt:control", async (event, command) => {
 		if (!trustedAppWindows.has(BrowserWindow.fromWebContents(event.sender)) || !trustedSender(event, new URL(url).origin, BrowserWindow)) return { error: "Untrusted desktop request." };
 		if (!chatgpt || !serverProcess?.connected) return { available: false, pending: false, activeId: null, accounts: [], error: "ChatGPT sign-in requires the desktop app's private server connection. Browser-only and externally launched development servers keep API-key connections." };
 		return chatGPTControl(command, chatgpt);
 	});
 
-	ipcMain.handle("lh:subscriptions:control", async (event, command) => {
+	ipcMain.handle("vt:subscriptions:control", async (event, command) => {
 		if (!trustedAppWindows.has(BrowserWindow.fromWebContents(event.sender)) || !trustedSender(event, new URL(url).origin, BrowserWindow)) throw new Error("Untrusted desktop request.");
 		if (!subscriptions || !serverProcess?.connected) {
 			if (command?.op === "status") return [];
@@ -705,12 +705,12 @@ async function main() {
 
 	// The dev shell has no browser tabs. Only a one-use action on its own
 	// Next server may be resolved here; never accept an arbitrary external URL.
-	ipcMain.handle("lh:subscriptions:web-browser", async (event, action) => {
+	ipcMain.handle("vt:subscriptions:web-browser", async (event, action) => {
 		if (!devUrl || !trustedAppWindows.has(BrowserWindow.fromWebContents(event.sender)) || !trustedSender(event, new URL(url).origin, BrowserWindow)) throw new Error("Untrusted development request.");
 		await openWebSubscriptionBrowser(action, new URL(url).origin, { openExternal: (target) => shell.openExternal(target) });
 	});
 
-	ipcMain.handle("lh:attachment:pick", (event, mode) => pickAttachmentPath(event, mode, {
+	ipcMain.handle("vt:attachment:pick", (event, mode) => pickAttachmentPath(event, mode, {
 		BrowserWindow, dialog, trustedAppWindows, origin: new URL(url).origin,
 	}));
 
@@ -721,12 +721,12 @@ async function main() {
 	// interval fire after it below. setupAutoUpdater's contract: failures
 	// are log lines — this can never block boot.
 	setupAutoUpdater();
-	ipcMain.on("lh:update-install", () => installUpdateNow());
-	ipcMain.handle("lh:update:get", (event) => {
+	ipcMain.on("vt:update-install", () => installUpdateNow());
+	ipcMain.handle("vt:update:get", (event) => {
 		if (!trustedAppWindows.has(BrowserWindow.fromWebContents(event.sender)) || !trustedSender(event, new URL(url).origin, BrowserWindow)) throw new Error("Untrusted desktop request.");
 		return updateState;
 	});
-	ipcMain.handle("lh:update:check", (event) => {
+	ipcMain.handle("vt:update:check", (event) => {
 		if (!trustedAppWindows.has(BrowserWindow.fromWebContents(event.sender)) || !trustedSender(event, new URL(url).origin, BrowserWindow)) throw new Error("Untrusted desktop request.");
 		checkForUpdates({ manual: true });
 	});
@@ -737,9 +737,9 @@ async function main() {
 	// accommodate a narrow window + open sidebar. Top-left stays fixed, the
 	// window grows right. No-op when already wide.
 	// The renderer's first paint can race did-finish-load — it asks for
-	// the current factor itself (mirrors "lh:zoom" pushes).
-	ipcMain.handle("lh:zoom:get", (event) => BrowserWindow.fromWebContents(event.sender)?.webContents.getZoomFactor() ?? 1);
-	ipcMain.on("lh:expand-window", (event) => {
+	// the current factor itself (mirrors "vt:zoom" pushes).
+	ipcMain.handle("vt:zoom:get", (event) => BrowserWindow.fromWebContents(event.sender)?.webContents.getZoomFactor() ?? 1);
+	ipcMain.on("vt:expand-window", (event) => {
 		const win = BrowserWindow.fromWebContents(event.sender);
 		if (!win) return;
 		const { x, y, width, height } = win.getBounds();

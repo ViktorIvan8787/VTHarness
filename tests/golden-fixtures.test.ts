@@ -2,7 +2,7 @@
  * GOLDEN FIXTURES (owner ruling, 2026-10-10): real user data, verbatim,
  * read through the PRODUCTION read paths. tests/fixtures/golden-data/ is a
  * real data dir (see its README); this suite copies it to a temp dir, points
- * the stores at it via the LH_DATA_DIR seam (set BEFORE any config-loading
+ * the stores at it via the VT_DATA_DIR seam (set BEFORE any config-loading
  * import — every app-module import is dynamic), and asserts:
  *
  *   1. every record parses and passes the contract folds the app itself
@@ -31,9 +31,9 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const GOLDEN = path.join(HERE, "fixtures", "golden-data");
 
 // ── the seam, BEFORE any config-loading import ──────────────────────────────
-const TMP = fs.mkdtempSync(path.join(os.tmpdir(), "lh-golden-"));
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), "vt-golden-"));
 fs.cpSync(GOLDEN, TMP, { recursive: true });
-process.env.LH_DATA_DIR = TMP;
+process.env.VT_DATA_DIR = TMP;
 
 const { chatStore } = await import("../src/store/chats.ts");
 const { graphStore } = await import("../src/store/graph.ts");
@@ -43,7 +43,7 @@ const { readRenderSettings } = await import("../src/store/render-settings.ts");
 const { getGraph, deriveView } = await import("../src/core/graph.ts");
 const { sanitizeRenderSettings } = await import("../src/core/render-settings.ts");
 const { toLlmMessages } = await import("../src/core/native-messages.ts");
-const { phaseAt3Lh } = await import("../src/core/phases.ts");
+const { phaseAt3Vt } = await import("../src/core/phases.ts");
 const { danglingQuestionOf, activeProblemOf } = await import("../src/core/native-messages.ts");
 
 const TEACH = "chat_mv27rrra_feff23b6";
@@ -78,7 +78,7 @@ test("chats: both fixture records parse through the production read path", () =>
 		assert.ok(r, `${id} reads`);
 		assert.ok(Array.isArray(r!.messages) && r!.messages.length > 0);
 		// the folds the app itself runs per render/turn:
-		assert.equal(typeof phaseAt3Lh(r!.messages), "string", "the phase fold runs clean");
+		assert.equal(typeof phaseAt3Vt(r!.messages), "string", "the phase fold runs clean");
 		assert.equal(danglingQuestionOf(r!.messages), null, "no dangling question tool call");
 		activeProblemOf(r!.messages); // must not throw
 	}

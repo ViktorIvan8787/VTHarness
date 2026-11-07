@@ -5,10 +5,10 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { after, it } from "node:test";
 
-const root = fs.mkdtempSync(path.join(os.tmpdir(), "lh-source-organization-"));
-process.env.LH_DATA_DIR = root;
-process.env.LH_AUTH_FILE = path.join(root, "auth.json");
-fs.writeFileSync(process.env.LH_AUTH_FILE, "{}\n");
+const root = fs.mkdtempSync(path.join(os.tmpdir(), "vt-source-organization-"));
+process.env.VT_DATA_DIR = root;
+process.env.VT_AUTH_FILE = path.join(root, "auth.json");
+fs.writeFileSync(process.env.VT_AUTH_FILE, "{}\n");
 after(() => fs.rmSync(root, { recursive: true, force: true }));
 const { GET, POST } = await import("../app/api/graph/sources/route.ts");
 const { stores } = await import("../src/server/stores.ts");

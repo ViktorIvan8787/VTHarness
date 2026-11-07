@@ -6,15 +6,15 @@ import { after, test } from "node:test";
 import { createFauxCore, fauxAssistantMessage, fauxToolCall, type FauxResponseStep, type AssistantMessage, type JsonObject } from "@earendil-works/pi-ai";
 import { streamSimple } from "@earendil-works/pi-ai/api/openai-completions";
 import type { PiEngine } from "../src/agent/models.ts";
-import type { LhMessage } from "../src/core/native-messages.ts";
+import type { VtMessage } from "../src/core/native-messages.ts";
 import type { ChatInput } from "../src/core/input-events.ts";
 
 assert.equal(process.env.NODE_ENV, "test");
-const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "lh-malformed-question-"));
-process.env.LH_DATA_DIR = path.join(scratch, "data");
-process.env.LH_AUTH_FILE = path.join(scratch, "auth.json");
+const scratch = fs.mkdtempSync(path.join(os.tmpdir(), "vt-malformed-question-"));
+process.env.VT_DATA_DIR = path.join(scratch, "data");
+process.env.VT_AUTH_FILE = path.join(scratch, "auth.json");
 process.env.OPENROUTER_API_KEY = "offline-key-presence-only";
-fs.writeFileSync(process.env.LH_AUTH_FILE, "{}");
+fs.writeFileSync(process.env.VT_AUTH_FILE, "{}");
 after(() => fs.rmSync(scratch, { recursive: true, force: true }));
 
 const { createTeacherAgent } = await import("../src/agent/teacher-agent.ts");
@@ -43,7 +43,7 @@ function scripted(steps: FauxResponseStep[]) {
 	return { engine: { model: faux.getModel(), streamFn: faux.streamSimple } as PiEngine, histories };
 }
 const replacement = () => fauxAssistantMessage([fauxToolCall("quiz", valid, { id: "replacement" })], { stopReason: "toolUse" });
-function configured(messages: LhMessage[] = []) {
+function configured(messages: VtMessage[] = []) {
 	const chat = chatStore.createChat("Offline malformed question");
 	chatStore.saveSettings(chat.id, { model: { provider: "openrouter", id: "z-ai/glm-5.3-flash" } });
 	chatStore.saveTree(chat.id, { nodes: [{ id: "fixture", title: "Fixture" }], edges: [], version: 1 });
@@ -135,7 +135,7 @@ for (const stopReason of ["toolUse", "length"]) {
 test("manual recovery preserves history and successful sibling tools, sends errors instead of learner answers", async () => {
 	const bad = assistant();
 	if (bad.role === "assistant") bad.content.push(fauxToolCall("save_note", {}, { id: "note" }));
-	const before: LhMessage[] = [newUserMessage("fixture"), bad, { id: "note-result", role: "toolResult", toolCallId: "note", toolName: "save_note", content: [{ type: "text", text: "Already saved" }], details: { saved: true }, isError: false, timestamp: 1 }];
+	const before: VtMessage[] = [newUserMessage("fixture"), bad, { id: "note-result", role: "toolResult", toolCallId: "note", toolName: "save_note", content: [{ type: "text", text: "Already saved" }], details: { saved: true }, isError: false, timestamp: 1 }];
 	const id = configured(before);
 	const { engine, histories } = scripted([replacement]);
 	assert.equal(pendingQuestionOf(before), null);

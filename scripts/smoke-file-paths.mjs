@@ -14,7 +14,7 @@ import path from "node:path";
 import puppeteer from "puppeteer-core";
 
 const root = path.resolve(import.meta.dirname, "..");
-const home = fs.mkdtempSync(path.join(os.tmpdir(), "lh-file-paths-"));
+const home = fs.mkdtempSync(path.join(os.tmpdir(), "vt-file-paths-"));
 const require = createRequire(import.meta.url);
 const checks = [];
 const errors = [];
@@ -150,7 +150,7 @@ async function syntheticDrop(target, paths, selector = '[data-testid="file-path-
 	return target.$eval(selector, (zone, paths) => {
 		const transfer = new DataTransfer();
 		window.__syntheticPaths = new WeakMap();
-		window.lh = { platform: "darwin", getPathForFile(file) { return window.__syntheticPaths.get(file) ?? ""; } };
+		window.vt = { platform: "darwin", getPathForFile(file) { return window.__syntheticPaths.get(file) ?? ""; } };
 		for (const [index, path] of paths.entries()) {
 			const file = new File(["never read"], `synthetic-display-${index}.pdf`, { type: "application/pdf" });
 			window.__syntheticPaths.set(file, path);
@@ -208,13 +208,13 @@ try {
 	const fonts = Object.fromEntries(["JetBrains Mono", "Source Sans 3"].map(family => [getGoogleFontsUrl(family, getFontAxes(family, ["variable"], ["normal"]), "swap"), `@font-face { font-family: '${family}'; src: local('Arial'); font-weight: 100 900; }`]));
 	fs.writeFileSync(path.join(home, "fonts.cjs"), `module.exports = ${JSON.stringify(fonts)};\n`);
 	const port = await freePort(); origin = `http://127.0.0.1:${port}`;
-	const env = { PATH: process.env.PATH, HOME: home, TMPDIR: home, NODE_ENV: "development", LH_DATA_DIR: path.join(home, "data"), LH_AUTH_FILE: path.join(home, "auth.json"), LH_IGNORE_ENV_KEYS: "1", NEXT_TELEMETRY_DISABLED: "1", NEXT_FONT_GOOGLE_MOCKED_RESPONSES: path.join(home, "fonts.cjs") };
+	const env = { PATH: process.env.PATH, HOME: home, TMPDIR: home, NODE_ENV: "development", VT_DATA_DIR: path.join(home, "data"), VT_AUTH_FILE: path.join(home, "auth.json"), VT_IGNORE_ENV_KEYS: "1", NEXT_TELEMETRY_DISABLED: "1", NEXT_FONT_GOOGLE_MOCKED_RESPONSES: path.join(home, "fonts.cjs") };
 	const server = spawn(process.execPath, ["node_modules/next/dist/bin/next", "dev", "--hostname", "127.0.0.1", "--port", String(port)], { cwd: root, env, stdio: ["ignore", "pipe", "pipe"] }); children.push(server);
 	const captureServer = data => { serverLogs = (serverLogs + data).slice(-28000); };
 	server.stdout.on("data", captureServer); server.stderr.on("data", captureServer);
 	await startup(server, () => serverLogs, /Ready in/);
 	if (!process.argv.includes("--desktop-only")) {
-	const chrome = await puppeteer.launch({ executablePath: process.env.LH_TEST_CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true, userDataDir: path.join(home, "chrome-profile"), env, args: ["--disable-background-networking", "--disable-sync", "--no-first-run", "--disable-default-apps"] }); browsers.push(chrome);
+	const chrome = await puppeteer.launch({ executablePath: process.env.VT_TEST_CHROME || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true, userDataDir: path.join(home, "chrome-profile"), env, args: ["--disable-background-networking", "--disable-sync", "--no-first-run", "--disable-default-apps"] }); browsers.push(chrome);
 	page = await chrome.newPage(); await page.setViewport({ width: 1280, height: 900 }); await instrument(page);
 	await chrome.defaultBrowserContext().overridePermissions(origin, ["clipboard-read", "clipboard-write", "clipboard-sanitized-write"]);
 	const token = "`/synthetic/course notes.pdf`";
@@ -371,25 +371,25 @@ try {
 	const launcher = path.join(home, "electron-launcher.cjs");
 	fs.mkdirSync(path.join(home, "desktop-profile"), { recursive: true });
 	fs.mkdirSync(path.join(home, "desktop-profile-dev"), { recursive: true });
-	fs.writeFileSync(launcher, `const {app,session}=require('electron');\napp.setPath('home',${JSON.stringify(home)});\napp.setPath('userData',${JSON.stringify(path.join(home, "desktop-profile"))});\napp.commandLine.appendSwitch('remote-debugging-port',${JSON.stringify(String(debugPort))});\napp.commandLine.appendSwitch('disable-background-networking');\napp.commandLine.appendSwitch('disable-sync');\napp.whenReady().then(()=>session.defaultSession.webRequest.onBeforeRequest((details,cb)=>{let u;try{u=new URL(details.url)}catch{return cb({cancel:true})}cb({cancel:!(${JSON.stringify(origin)}===u.origin||(u.protocol==='ws:'&&u.host===${JSON.stringify(new URL(origin).host)})||['about:','data:','devtools:'].includes(u.protocol))});}));\nrequire(${JSON.stringify(path.join(root, "electron", "main.cjs"))});\nconsole.log('LH_FILE_PATH_PROFILE '+JSON.stringify({home:app.getPath('home'),userData:app.getPath('userData')}));\n`);
-	const electron = spawn(require("electron"), [launcher], { cwd: root, env: { ...env, LH_DEV_URL: origin }, stdio: ["ignore", "pipe", "pipe"] }); children.push(electron);
+	fs.writeFileSync(launcher, `const {app,session}=require('electron');\napp.setPath('home',${JSON.stringify(home)});\napp.setPath('userData',${JSON.stringify(path.join(home, "desktop-profile"))});\napp.commandLine.appendSwitch('remote-debugging-port',${JSON.stringify(String(debugPort))});\napp.commandLine.appendSwitch('disable-background-networking');\napp.commandLine.appendSwitch('disable-sync');\napp.whenReady().then(()=>session.defaultSession.webRequest.onBeforeRequest((details,cb)=>{let u;try{u=new URL(details.url)}catch{return cb({cancel:true})}cb({cancel:!(${JSON.stringify(origin)}===u.origin||(u.protocol==='ws:'&&u.host===${JSON.stringify(new URL(origin).host)})||['about:','data:','devtools:'].includes(u.protocol))});}));\nrequire(${JSON.stringify(path.join(root, "electron", "main.cjs"))});\nconsole.log('VT_FILE_PATH_PROFILE '+JSON.stringify({home:app.getPath('home'),userData:app.getPath('userData')}));\n`);
+	const electron = spawn(require("electron"), [launcher], { cwd: root, env: { ...env, VT_DEV_URL: origin }, stdio: ["ignore", "pipe", "pipe"] }); children.push(electron);
 	const captureElectron = data => { electronLogs = (electronLogs + data).slice(-24000); }; electron.stdout.on("data", captureElectron); electron.stderr.on("data", captureElectron);
 	await startup(electron, () => electronLogs, /DevTools listening on (ws:\/\/[^\s]+)/, 45000);
-	const profile = JSON.parse(electronLogs.match(/LH_FILE_PATH_PROFILE ([^\r\n]+)/)[1]);
+	const profile = JSON.parse(electronLogs.match(/VT_FILE_PATH_PROFILE ([^\r\n]+)/)[1]);
 	assert.equal(profile.home, home); assert.equal(profile.userData, path.join(home, "desktop-profile-dev"));
-	const desktopLaunch = { executable: require("electron"), args: [launcher], LH_DEV_URL: origin, HOME: home, userDataBeforeMain: path.join(home, "desktop-profile"), actualProfile: profile, cleanup: "all temporary profiles/data/fixtures removed on exit" };
+	const desktopLaunch = { executable: require("electron"), args: [launcher], VT_DEV_URL: origin, HOME: home, userDataBeforeMain: path.join(home, "desktop-profile"), actualProfile: profile, cleanup: "all temporary profiles/data/fixtures removed on exit" };
 	const endpoint = electronLogs.match(/DevTools listening on (ws:\/\/[^\s]+)/)[1];
 	const desktop = await puppeteer.connect({ browserWSEndpoint: endpoint }); browsers.push(desktop);
 	const desktopPage = await desktop.waitForTarget(target => target.type() === "page").then(target => target.page());
 	await instrument(desktopPage); page = desktopPage;
 	await open(desktopPage, "/chat/new");
-	assert.equal(await desktopPage.evaluate(() => typeof window.lh?.getPathForFile), "function");
+	assert.equal(await desktopPage.evaluate(() => typeof window.vt?.getPathForFile), "function");
 	const fixturePath = path.join(home, "actual OS-backed α `notes`.pdf"); fs.writeFileSync(fixturePath, "%PDF-1.7\nsynthetic offline fixture\n");
 	await desktopPage.evaluate(() => { const input = document.createElement("input"); input.type = "file"; input.id = "os-backed-fixture"; document.body.append(input); });
 	await (await desktopPage.$("#os-backed-fixture")).uploadFile(fixturePath);
 	const resolved = await desktopPage.evaluate(() => {
 		const input = document.querySelector("#os-backed-fixture");
-		return { count: input.files.length, actual: window.lh.getPathForFile(input.files[0]), virtual: window.lh.getPathForFile(new File(["virtual"], "/not/a/backing/path.pdf")) };
+		return { count: input.files.length, actual: window.vt.getPathForFile(input.files[0]), virtual: window.vt.getPathForFile(new File(["virtual"], "/not/a/backing/path.pdf")) };
 	});
 	assert.equal(resolved.count, 1); assert.equal(resolved.actual, fixturePath); assert.equal(resolved.virtual, "");
 	await fill(desktopPage, "readthis"); await caret(desktopPage, 4);

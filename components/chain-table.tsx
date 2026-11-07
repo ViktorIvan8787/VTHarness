@@ -5,7 +5,7 @@
  * every reasoning chain of the graph in one FULL-BLEED surface — the blur
  * + translucent background IS the surface, no inner card. The top bar is
  * THE shared TopBar (standardization ruling: one element, every surface —
- * h-15, lh-drag with carve-outs, select-none, sidebar reopen, traffic-
+ * h-15, vt-drag with carve-outs, select-none, sidebar reopen, traffic-
  * light gutter; born from this overlay's hand-rolled bar breaking every
  * rule at once). The overlay (z-40) covers home's floating header while
  * open, so the TopBar's own SidebarToggle is the reopen path.
@@ -312,14 +312,14 @@ export function ChainTableBody({
 			    chat surface. NO TITLE (owner round 11, 2026-10-05): the serif
 			    title register is RESERVED — it always names a session; the
 			    chain table names nothing, so its bar carries counts + search +
-			    close only. Search + close carve out with lh-no-drag (the mask
+			    close only. Search + close carve out with vt-no-drag (the mask
 			    law: later in the DOM). */}
 			<TopBar>
 				<span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
 					{chains.length} {chains.length === 1 ? "chain" : "chains"} · {nodes.length} {nodes.length === 1 ? "node" : "nodes"}
 				</span>
 				{onOrganizationChange && <button type="button" aria-label="Add folder" data-testid="add-source-folder"
-					onClick={() => setCreatingFolder(true)} className="lh-no-drag rounded-lg p-2 text-muted-foreground hover:bg-accent"><FolderPlusIcon className="size-4" /></button>}
+					onClick={() => setCreatingFolder(true)} className="vt-no-drag rounded-lg p-2 text-muted-foreground hover:bg-accent"><FolderPlusIcon className="size-4" /></button>}
 				<div className="relative shrink-0">
 					<SearchIcon className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
 					<input
@@ -330,7 +330,7 @@ export function ChainTableBody({
 						placeholder="Search nodes…"
 						aria-label="Search nodes"
 						spellCheck={false}
-						className="lh-no-drag h-8 w-56 rounded-lg border bg-background pl-8 pr-3 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
+						className="vt-no-drag h-8 w-56 rounded-lg border bg-background pl-8 pr-3 text-xs outline-none placeholder:text-muted-foreground focus:border-ring"
 					/>
 				</div>
 			<button
@@ -338,7 +338,7 @@ export function ChainTableBody({
 					data-testid="chain-table-close"
 					onClick={onClose}
 					aria-label="Close chains"
-					className="lh-no-drag flex size-8 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-card/80 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+					className="vt-no-drag flex size-8 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-card/80 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 				>
 					<XIcon className="size-4" />
 				</button>
@@ -772,7 +772,7 @@ export function ChainTableOverlay({
 				}
 				if (action.action === "rename-source") {
 					const entry = (body as SourceDirectory).sources.find((s) => s.id === action.id);
-					window.dispatchEvent(new CustomEvent(entry?.kind === "chat" ? "lh:chat-renamed" : "lh:source-renamed", { detail: { id: action.id, title: action.name } }));
+					window.dispatchEvent(new CustomEvent(entry?.kind === "chat" ? "vt:chat-renamed" : "vt:source-renamed", { detail: { id: action.id, title: action.name } }));
 				}
 				return typeof body.createdFolderId === "string" ? body.createdFolderId : undefined;
 			} catch (error) { setDirectoryFailure(error instanceof Error ? error.message : String(error)); throw error; }
@@ -901,7 +901,7 @@ export function ChainTableOverlay({
 							// A failed response can still follow partial disk writes.
 							// Refresh graph content as well as the directory, in both home modes.
 							void readDirectory();
-							window.dispatchEvent(new CustomEvent("lh:graph-revision", { detail: { graphRevision } }));
+							window.dispatchEvent(new CustomEvent("vt:graph-revision", { detail: { graphRevision } }));
 						}
 					});
 					mutationTail.current = operation; return operation;

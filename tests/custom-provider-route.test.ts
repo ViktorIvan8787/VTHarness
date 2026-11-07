@@ -12,17 +12,17 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { after, before, describe, it } from "node:test";
 
-const dir = fs.mkdtempSync(path.join(os.tmpdir(), "lh-custom-route-"));
-process.env.LH_DATA_DIR = dir;
-process.env.LH_AUTH_FILE = path.join(dir, "auth.json");
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), "vt-custom-route-"));
+process.env.VT_DATA_DIR = dir;
+process.env.VT_AUTH_FILE = path.join(dir, "auth.json");
 const SETTINGS_FILE = path.join(dir, "settings.json");
 
 const realFetch = globalThis.fetch;
 after(() => {
 	globalThis.fetch = realFetch;
 	fs.rmSync(dir, { recursive: true, force: true });
-	delete process.env.LH_DATA_DIR;
-	delete process.env.LH_AUTH_FILE;
+	delete process.env.VT_DATA_DIR;
+	delete process.env.VT_AUTH_FILE;
 });
 
 type Route = typeof import("../app/api/custom-provider/route.ts");

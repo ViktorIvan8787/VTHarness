@@ -316,7 +316,7 @@ test("MIME sniffing matches native supported signatures and rejects APNG/JPEG-LS
 	const badBmp = bmp();
 	badBmp.writeUInt16LE(2, 26);
 	assert.equal(detectSupportedImageMimeType(badBmp), null);
-	const dir = await mkdtemp(path.join(os.tmpdir(), "lh-image-processing-"));
+	const dir = await mkdtemp(path.join(os.tmpdir(), "vt-image-processing-"));
 	try {
 		await writeFile(path.join(dir, "renamed.txt"), source);
 		await writeFile(path.join(dir, "animated.png"), apng);
@@ -343,7 +343,7 @@ test("unbundled Node worker responds with tagged output and matches the in-proce
 
 test("missing cwd-relative worker falls back in-process without altering the caller bytes", async () => {
 	const cwd = process.cwd();
-	const dir = await mkdtemp(path.join(os.tmpdir(), "lh-image-worker-fallback-"));
+	const dir = await mkdtemp(path.join(os.tmpdir(), "vt-image-worker-fallback-"));
 	const bytes = png();
 	const options = { maxWidth: 64, maxHeight: 64 };
 	const expected = await resizeImageInProcess(bytes, "image/png", options);

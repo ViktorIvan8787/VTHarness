@@ -2,10 +2,10 @@
 interface AuthBoot {
 	/** Names owned by the original launch environment. */
 	realEnv: Set<string>;
-	/** Names reflected into process.env by LearnHarness's key store. */
+	/** Names reflected into process.env by VT-Harness's key store. */
 	fillGap: Set<string>;
 }
-const BOOT_KEY = Symbol.for("lh.authBoot");
+const BOOT_KEY = Symbol.for("vt.authBoot");
 
 export function authEnvRecord(): AuthBoot {
 	const g = globalThis as Record<symbol, AuthBoot | undefined>;
@@ -13,7 +13,7 @@ export function authEnvRecord(): AuthBoot {
 	return g[BOOT_KEY];
 }
 
-/** External CLIs own their authentication. Never pass LearnHarness-only injections. */
+/** External CLIs own their authentication. Never pass VT-Harness-only injections. */
 export function externalCliEnv(env: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
 	const result = { ...env };
 	const { realEnv, fillGap } = authEnvRecord();

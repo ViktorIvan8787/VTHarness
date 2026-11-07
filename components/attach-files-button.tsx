@@ -43,7 +43,7 @@ const noSubscribe = () => () => {};
 /** The bridge is fixed for the window's life; the server render is always
  *  the browser case, so hydration never mismatches. */
 function useDesktopPaths(): boolean {
-	return useSyncExternalStore(noSubscribe, () => Boolean(window.lh?.getPathForFile), () => false);
+	return useSyncExternalStore(noSubscribe, () => Boolean(window.vt?.getPathForFile), () => false);
 }
 
 /**
@@ -100,7 +100,7 @@ export function AttachFilesButton({ editorRef }: { editorRef: React.RefObject<HT
 	const chooseFolder = async () => {
 		if (choosingFolder.current) return;
 		const editor = editorRef.current;
-		const choose = window.lh?.chooseAttachmentFolder;
+		const choose = window.vt?.chooseAttachmentFolder;
 		setOpen(false);
 		setNotice("");
 		if (!choose) { setNotice(BROWSER_NOTICE); return; }
@@ -126,7 +126,7 @@ export function AttachFilesButton({ editorRef }: { editorRef: React.RefObject<HT
 				hidden
 				data-testid="attach-files-input"
 				onChange={(e) => {
-					const resolve = window.lh?.getPathForFile;
+					const resolve = window.vt?.getPathForFile;
 					const { paths } = resolve ? pathsForFiles(Array.from(e.currentTarget.files ?? []), resolve) : { paths: [] };
 					if (paths.length > 0) editorRef.current?.dispatchEvent(new CustomEvent(INSERT_FILE_PATHS_EVENT, { detail: paths }));
 					e.currentTarget.value = ""; // allow re-picking the same file

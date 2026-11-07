@@ -15,7 +15,7 @@
  *
  * UI-ONLY CONTENT (owner ruling, fork 1 + the plan's custom-message
  * taxonomy): the probe→teach handoff, sub-agent steers,
- * and plan blocks are LhMarkerMessage — this app's declaration-merged
+ * and plan blocks are VtMarkerMessage — this app's declaration-merged
  * member of pi-agent-core's CustomAgentMessages extension point, shaped
  * exactly like pi's own CustomMessage ({role:"custom", customType,
  * content, display, details}). ONE seam — toLlmMessages, wired as the
@@ -63,7 +63,7 @@ export const INTERRUPTED_TEXT =
  * model-visible), `display` marks messages the UI renders (our projection
  * keys rendering on customType; the flag documents intent).
  */
-export interface LhMarkerMessage {
+export interface VtMarkerMessage {
 	/** Record identity (pi messages carry no id — see the file header). */
 	id: string;
 	role: "custom";
@@ -87,12 +87,12 @@ export interface LhMarkerMessage {
 
 declare module "@earendil-works/pi-agent-core" {
 	interface CustomAgentMessages {
-		lhMarker: LhMarkerMessage;
+		vtMarker: VtMarkerMessage;
 	}
 }
 
 /** A record message: a native pi message (or our marker) plus the record id. */
-export type LhMessage = (UserMessage | AssistantMessage | ToolResultMessage | LhMarkerMessage) & {
+export type VtMessage = (UserMessage | AssistantMessage | ToolResultMessage | VtMarkerMessage) & {
 	id: string;
 	/** CLI-reported effective context budget, not a catalog model maximum.
 	 * App-only metadata: never transmitted as provider/model message content. */
@@ -101,7 +101,7 @@ export type LhMessage = (UserMessage | AssistantMessage | ToolResultMessage | Lh
 
 /** Latest response only: never borrow an older process/model's window when
  * a fresh response has no metadata. Compaction invalidates the old report. */
-export function cliContextWindowOf(messages: readonly LhMessage[]): { model: string; tokens: number } | null {
+export function cliContextWindowOf(messages: readonly VtMessage[]): { model: string; tokens: number } | null {
 	for (let i = messages.length - 1; i >= 0; i--) {
 		const message = messages[i]!;
 		if (message.role === "custom" && message.customType === "compaction") return null;
@@ -115,7 +115,7 @@ export function cliContextWindowOf(messages: readonly LhMessage[]): { model: str
 
 /** A record message list is assignable to the agent's context — that IS
  *  the replay (ui-stream/chat-handler assign it to initialState.messages). */
-export function asAgentMessages(messages: readonly LhMessage[]): AgentMessage[] {
+export function asAgentMessages(messages: readonly VtMessage[]): AgentMessage[] {
 	return messages as unknown as AgentMessage[];
 }
 
@@ -154,7 +154,7 @@ export function userFacingTextOf(content: unknown, failedOutputCalls?: ReadonlyS
 /** Failed output calls remain retry context, not delivered teaching.
  * Truncated calls can have valid-looking partial arguments. Failed/aborted
  * generations do not execute their calls at all, so may have no result. */
-export function failedOutputCallIds(messages: readonly LhMessage[]): ReadonlySet<string> {
+export function failedOutputCallIds(messages: readonly VtMessage[]): ReadonlySet<string> {
 	const failed = new Set<string>();
 	for (const message of messages) {
 		if (message.role === "toolResult" && message.toolName === SEND_TO_USER_TOOL && message.isError) {
@@ -179,7 +179,7 @@ export function newMessageId(): string {
 //     core/input-events.ts; steers in core/contracts/jobs.ts) ─────────────────
 
 /** A learner-authored user message (text input, verdict note). */
-export function newUserMessage(text: string): LhMessage & UserMessage {
+export function newUserMessage(text: string): VtMessage & UserMessage {
 	return {
 		id: newMessageId(),
 		role: "user",
@@ -193,7 +193,7 @@ export function newUserMessage(text: string): LhMessage & UserMessage {
  *  rides agent.steer(), the live stream's message events, and the settled
  *  record, so the optimistic queued indicator and the transcript card
  *  upsert by one identity. */
-export function newUserSteer(text: string, id: string): LhMessage & UserMessage {
+export function newUserSteer(text: string, id: string): VtMessage & UserMessage {
 	return { id, role: "user", content: text, timestamp: Date.now() };
 }
 
@@ -207,7 +207,7 @@ export function newAnswerResult(
 	toolCallId: string,
 	toolName: string,
 	answer: unknown,
-): LhMessage & ToolResultMessage {
+): VtMessage & ToolResultMessage {
 	return {
 		id: newMessageId(),
 		role: "toolResult",
@@ -224,7 +224,7 @@ export function newAnswerResult(
 
 /** The probe→teach handoff wake: scaffolding, not speech — the model reads
  *  HANDOFF_TEXT, the UI renders the quiet system line. */
-export function newHandoffMessage(chatId: string): LhMarkerMessage {
+export function newHandoffMessage(chatId: string): VtMarkerMessage {
 	return {
 		id: `steer_probe_${chatId}`,
 		role: "custom",
@@ -242,7 +242,7 @@ export function newHandoffMessage(chatId: string): LhMarkerMessage {
 export function newPlanBlockMessage(
 	planCallId: string,
 	block: unknown,
-): LhMarkerMessage {
+): VtMarkerMessage {
 	return {
 		id: `pb_${Date.now().toString(36)}_${crypto.randomUUID().slice(0, 8)}`,
 		role: "custom",
@@ -276,7 +276,7 @@ export interface GraphContextPick {
  *  to a user message by toLlmMessages like every marker); `details`
  *  feeds the transcript's collapsible GraphContextCard. No more seed
  *  text glued into the first prompt. */
-export function newGraphContextMessage(picks: readonly GraphContextPick[], chains: readonly string[]): LhMarkerMessage {
+export function newGraphContextMessage(picks: readonly GraphContextPick[], chains: readonly string[]): VtMarkerMessage {
 	// IDS FIRST (owner round 9, 2026-10-05 — the mastery-trace contract):
 	// each proposition is introduced ONCE with its id, name, and statement;
 	// the problem tool's `target` field takes these ids (names normalize to
@@ -313,7 +313,7 @@ export function newGraphContextMessage(picks: readonly GraphContextPick[], chain
  *  content label is the single "Your thinking"; `details` keeps the raw
  *  payload for the transcript card. One problem may carry many
  *  submissions. */
-export function newThinkingMessage(problemCallId: string, text: string): LhMarkerMessage {
+export function newThinkingMessage(problemCallId: string, text: string): VtMarkerMessage {
 	return {
 		id: newMessageId(),
 		role: "custom",
@@ -331,7 +331,7 @@ export function newThinkingMessage(problemCallId: string, text: string): LhMarke
  *  single-sourced NEXT_PROBLEM_TEXT — the model's unambiguous go-ahead;
  *  the transcript renders its own compact line off the marker (never
  *  the content). */
-export function newNextMessage(): LhMarkerMessage {
+export function newNextMessage(): VtMarkerMessage {
 	return {
 		id: newMessageId(),
 		role: "custom",
@@ -349,7 +349,7 @@ export function newNextMessage(): LhMarkerMessage {
  *  (concludedByDismissalPair below) — the agent sees the dismissal as a
  *  conclude call it "made" with outcome "dismissed", so the slot-freed
  *  state and the dismissal read through the one vocabulary it owns. */
-export function newProblemDismissedMarker(problemCallId: string): LhMarkerMessage {
+export function newProblemDismissedMarker(problemCallId: string): VtMarkerMessage {
 	return {
 		id: newMessageId(),
 		role: "custom",
@@ -370,7 +370,7 @@ export function newProblemDismissedMarker(problemCallId: string): LhMarkerMessag
  *  pair appends at most once per marker). */
 export function concludedByDismissalPair(
 	problemCallId: string,
-): [LhMessage & AssistantMessage, LhMessage & ToolResultMessage] {
+): [VtMessage & AssistantMessage, VtMessage & ToolResultMessage] {
 	const callId = `call_conc_${problemCallId}`;
 	const now = Date.now();
 	// The stamps are placeholders by design: history serialization reads
@@ -419,7 +419,7 @@ export function concludedByDismissalPair(
  *  subject is the call, not a dangling result). */
 /** The ids of tool calls whose results are CLEAN (not errored) — the only
  *  calls that ever happened, per the honest-activation ruling. */
-function cleanToolCallIds(messages: readonly LhMessage[]): Set<string> {
+function cleanToolCallIds(messages: readonly VtMessage[]): Set<string> {
 	const ids = new Set<string>();
 	for (const m of messages) {
 		if ((m as { role?: string }).role !== "toolResult") continue;
@@ -436,7 +436,7 @@ function cleanToolCallIds(messages: readonly LhMessage[]): Set<string> {
  *  inputs that still carry their own solutionReveal fall back to it at the
  *  card. Undefined when the pose carries no string solution. */
 export function modelSolutionForConclude(
-	messages: readonly LhMessage[],
+	messages: readonly VtMessage[],
 	concludeCallId: string,
 ): string | undefined {
 	const input = problemInputForConclude(messages, concludeCallId);
@@ -450,7 +450,7 @@ export function modelSolutionForConclude(
  * and refusal law as the reveal: a pose the record never acked (a
  * refused call) folds nothing. */
 export function problemInputForConclude(
-	messages: readonly LhMessage[],
+	messages: readonly VtMessage[],
 	concludeCallId: string,
 ): { statement?: unknown; mode?: unknown; target?: unknown; modelSolution?: unknown } | undefined {
 	let mi = messages.findIndex(
@@ -479,7 +479,7 @@ export function problemInputForConclude(
 }
 
 export function activeProblemOf(
-	messages: readonly LhMessage[],
+	messages: readonly VtMessage[],
 ): { toolCallId: string; input: unknown } | null {
 	// HONEST ACTIVATION (owner ruling, 2026-10-05 — the BKT incident):
 	// calls count only through their RESULTS — a problem activates on its
@@ -490,7 +490,7 @@ export function activeProblemOf(
 		const m = messages[mi]!;
 		const role = (m as { role?: string }).role;
 		if (role === "custom") {
-			const marker = m as LhMarkerMessage;
+			const marker = m as VtMarkerMessage;
 			if (marker.customType === "problem-dismissed") return null;
 			continue;
 		}
@@ -517,13 +517,13 @@ export function activeProblemOf(
  *  text/continue appends read this: the pair rides the user's next input
  *  (input-events). Newest-marker-wins scan: the first dismissal marker or
  *  conclude call from the end decides. */
-export function pendingProblemDismissalOf(messages: readonly LhMessage[]): string | null {
+export function pendingProblemDismissalOf(messages: readonly VtMessage[]): string | null {
 	const cleanCallIds = cleanToolCallIds(messages);
 	for (let mi = messages.length - 1; mi >= 0; mi--) {
 		const m = messages[mi]!;
 		const role = (m as { role?: string }).role;
 		if (role === "custom") {
-			const marker = m as LhMarkerMessage;
+			const marker = m as VtMarkerMessage;
 			if (marker.customType === "problem-dismissed") {
 				return (marker.details as { problemCallId?: unknown }).problemCallId as string;
 			}
@@ -588,12 +588,12 @@ export function toLlmMessages(messages: readonly AgentMessage[]): Message[] {
 	// in the retained tail are then skipped, including older summaries
 	// whose stored positions still lie after the cut. A cut naming a
 	// missing id degrades honestly (everything renders — never throw).
-	const lhMessages = messages as readonly LhMessage[];
-	const active = activeCompactionOf(lhMessages);
+	const vtMessages = messages as readonly VtMessage[];
+	const active = activeCompactionOf(vtMessages);
 	let start = 0;
 	let head: Message | null = null;
 	if (active) {
-		const kept = keptIndexFor(lhMessages, active);
+		const kept = keptIndexFor(vtMessages, active);
 		if (kept > 0) {
 			start = kept;
 			head = {
@@ -623,7 +623,7 @@ export function toLlmMessages(messages: readonly AgentMessage[]): Message[] {
 		const m = messages[i]!;
 		const role = (m as { role?: string }).role;
 		if (role === "custom") {
-			const marker = m as LhMarkerMessage;
+			const marker = m as VtMarkerMessage;
 			// UI-only markers: plan blocks, and problem dismissals (the
 			// synthesized conclude pair carries the model's face).
 			if (marker.customType === "plan-block" || marker.customType === "problem-dismissed") continue;
@@ -639,7 +639,7 @@ export function toLlmMessages(messages: readonly AgentMessage[]): Message[] {
 			continue;
 		}
 		// Strip app-only id/CLI context metadata: the wire carries the native shape only.
-		const { id: _id, cliContextWindow: _cliContextWindow, ...native } = m as LhMessage;
+		const { id: _id, cliContextWindow: _cliContextWindow, ...native } = m as VtMessage;
 		out.push(native as Message);
 		// Repair unanswered calls from completed generations, not calls in
 		// failed generations. Pi filters error/aborted assistants itself;
@@ -672,7 +672,7 @@ export function toLlmMessages(messages: readonly AgentMessage[]): Message[] {
  *  NEWEST assistant message's FIRST answerable question-tool call with no
  *  result in the tail — never a failed generation or malformed fragment. */
 export function danglingQuestionOf(
-	messages: readonly LhMessage[],
+	messages: readonly VtMessage[],
 ): { toolCallId: string; tool: string; input: unknown } | null {
 	const question = questionCallsOf(messages).find(call => call.status === "answerable");
 	return question ? { toolCallId: question.toolCallId, tool: question.tool, input: question.input } : null;
@@ -682,7 +682,7 @@ export function danglingQuestionOf(
  * Unique call ids are stable even when a live message's local id is replaced
  * by its persisted stamp. Only colliding ids need an occurrence-qualified
  * draft/reset key; this never changes stored ids or the answer wire. */
-export function pendingQuestionOf(messages: readonly LhMessage[]): PendingQuestion | null {
+export function pendingQuestionOf(messages: readonly VtMessage[]): PendingQuestion | null {
 	// turn_end includes the temporary questionResult acknowledgement. The
 	// view ignores it too: it is NOT the learner's answer. Exclude it only
 	// from client authority, leaving persisted/server result policy intact.
@@ -708,7 +708,7 @@ export function pendingQuestionOf(messages: readonly LhMessage[]): PendingQuesti
 /** Only the transient c_ result with the questionResult contract qualifies.
  * Real answers have details; errors/aborts remain resolving results. A saved
  * null result is not reinterpreted by this client-only compatibility seam. */
-function isLiveQuestionPlaceholder(message: LhMessage): boolean {
+function isLiveQuestionPlaceholder(message: VtMessage): boolean {
 	return message.role === "toolResult" && message.id.startsWith("c_") &&
 		!message.isError && message.details === null &&
 		(QUESTION_TOOLS as readonly string[]).includes(message.toolName);
@@ -721,7 +721,7 @@ export interface QuestionCall extends Omit<PendingQuestion, "key"> {
 /** Newest native assistant only; siblings remain in call order. No result
  * alone is NOT proof of a posed question: failed generations never execute
  * their calls, and older records can contain truncated/unvalidated inputs. */
-export function questionCallsOf(messages: readonly LhMessage[]): QuestionCall[] {
+export function questionCallsOf(messages: readonly VtMessage[]): QuestionCall[] {
 	for (let mi = messages.length - 1; mi >= 0; mi--) {
 		const assistant = messages[mi]!;
 		if (assistant.role !== "assistant") continue;
@@ -743,12 +743,12 @@ export function questionCallsOf(messages: readonly LhMessage[]): QuestionCall[] 
 
 /** Background wakes must still wait for an explicit learner action when a
  * question is unusable. Releasing the composer is not permission to retry. */
-export function hasUnresolvedQuestion(messages: readonly LhMessage[]): boolean {
+export function hasUnresolvedQuestion(messages: readonly VtMessage[]): boolean {
 	return questionCallsOf(messages).length > 0;
 }
 
 /** Client placeholders are loop acknowledgements, not learner answers. */
-export function malformedQuestionsOf(messages: readonly LhMessage[]): QuestionCall[] {
+export function malformedQuestionsOf(messages: readonly VtMessage[]): QuestionCall[] {
 	return questionCallsOf(messages.filter(message => !isLiveQuestionPlaceholder(message))).filter(call => call.status === "malformed");
 }
 
@@ -757,7 +757,7 @@ export function malformedQuestionsOf(messages: readonly LhMessage[]): QuestionCa
  *  later result must match both call id and tool name, must not be an
  *  error, and must not explicitly refuse with details.ok:false. Older
  *  clean acknowledgments without ok:true still count. No history changes. */
-export function probeDoneResultIds(messages: readonly LhMessage[]): Set<string> {
+export function probeDoneResultIds(messages: readonly VtMessage[]): Set<string> {
 	const calls = new Set<string>();
 	const results = new Set<string>();
 	for (const m of messages) {
@@ -779,13 +779,13 @@ export function probeDoneResultIds(messages: readonly LhMessage[]): Set<string> 
 
 /** The probe→teach construction seam (chat-handler and the tool guard):
  *  only a concluded call plus a matching successful result means teach. */
-export function hasProbeDone(messages: readonly LhMessage[]): boolean {
+export function hasProbeDone(messages: readonly VtMessage[]): boolean {
 	return probeDoneResultIds(messages).size > 0;
 }
 
 /** Every toolResult id in the record — answer-event validation (the call
  *  must be a DANGLING question call, not an already-answered one). */
-export function answeredCallIds(messages: readonly LhMessage[]): Set<string> {
+export function answeredCallIds(messages: readonly VtMessage[]): Set<string> {
 	return resultIdsFrom(messages);
 }
 
@@ -811,7 +811,7 @@ export function answeredCallIds(messages: readonly LhMessage[]): Set<string> {
 /** Is this record message a user-dismissed question result? The full
  *  answer rides the toolResult's `details` (newAnswerResult) — the
  *  dismissal pause and the continuation fold both read it. */
-function isDismissedResult(m: LhMessage): boolean {
+function isDismissedResult(m: VtMessage): boolean {
 	if ((m as { role?: string }).role !== "toolResult") return false;
 	const details = (m as { details?: unknown }).details as { dismissed?: unknown } | undefined;
 	return details?.dismissed === true;
@@ -823,7 +823,7 @@ function isDismissedResult(m: LhMessage): boolean {
  *  the wake pipeline holds job deliveries in the steer queue until the
  *  next send. Derived from the tail — no latch to persist or clear; any
  *  user message flips it off by changing the record. */
-export function endsInDismissal(messages: readonly LhMessage[]): boolean {
+export function endsInDismissal(messages: readonly VtMessage[]): boolean {
 	const last = messages[messages.length - 1];
 	return last !== undefined && isDismissedResult(last);
 }
@@ -831,7 +831,7 @@ export function endsInDismissal(messages: readonly LhMessage[]): boolean {
 /** The recovery click authorizes its immediate replacement turn, not an
  * automatic restart if only the write-ahead error results survived. No new
  * stored latch: explicit input or replacement output changes this tail. */
-export function endsInQuestionRecovery(messages: readonly LhMessage[]): boolean {
+export function endsInQuestionRecovery(messages: readonly VtMessage[]): boolean {
 	const last = messages[messages.length - 1];
 	return last?.role === "toolResult" && last.isError &&
 		(last.details as { questionRecovery?: unknown } | null)?.questionRecovery === true;
@@ -851,7 +851,7 @@ export function nativeInputCause(message: AgentMessage, history: readonly AgentM
 	}
 	if (message.role === "toolResult") {
 		if (message.isError && (message.details as { questionRecovery?: unknown } | null)?.questionRecovery === true) {
-			return questionCallsOf(history as readonly LhMessage[]).some(call => call.status === "malformed" && call.toolCallId === message.toolCallId && call.tool === message.toolName) ? "learner" : "unrecognizable";
+			return questionCallsOf(history as readonly VtMessage[]).some(call => call.status === "malformed" && call.toolCallId === message.toolCallId && call.tool === message.toolName) ? "learner" : "unrecognizable";
 		}
 		if (!(QUESTION_TOOLS as readonly string[]).includes(message.toolName) || message.isError || message.details == null || (message.details as { dismissed?: boolean }).dismissed) return "neutral";
 		const details = message.details as Partial<QuestionAnswerData>;
@@ -862,7 +862,7 @@ export function nativeInputCause(message: AgentMessage, history: readonly AgentM
 	return "unrecognizable";
 }
 /** Full persisted native record, including pre-compaction causes. Never guessed foreground. */
-export function reconstructRequestCause(messages: readonly LhMessage[]): ReconstructedCause {
+export function reconstructRequestCause(messages: readonly VtMessage[]): ReconstructedCause {
 	let inherited: ReconstructedCause = "ambiguous";
 	let triggers: NativeInputCause[] = [];
 	const seen = new Map<string, string>();
@@ -891,7 +891,7 @@ export function reconstructRequestCause(messages: readonly LhMessage[]): Reconst
 	return resolve();
 }
 
-export function needsContinuation(messages: readonly LhMessage[]): boolean {
+export function needsContinuation(messages: readonly VtMessage[]): boolean {
 	const last = messages[messages.length - 1];
 	if (!last || (last as { role?: string }).role !== "toolResult") return false;
 	// The trailing results batch (contiguous by construction — the agent

@@ -6,9 +6,9 @@ import { after, beforeEach, it } from "node:test";
 import { SEARCH_ENGINES, type SearchEngineId } from "../src/core/search.ts";
 
 // Real settings/auth composition with fake keys and an injected transport only.
-const dir = fs.mkdtempSync(path.join(os.tmpdir(), "lh-search-expansion-"));
-process.env.LH_DATA_DIR = path.join(dir, "data");
-process.env.LH_AUTH_FILE = path.join(dir, "auth.json");
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), "vt-search-expansion-"));
+process.env.VT_DATA_DIR = path.join(dir, "data");
+process.env.VT_AUTH_FILE = path.join(dir, "auth.json");
 for (const { envVar } of SEARCH_ENGINES) delete process.env[envVar];
 const { saveKey, deleteKey, keyStatuses } = await import("../src/server/keys.ts");
 const { writeSettings, readSettings } = await import("../src/store/settings.ts");

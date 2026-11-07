@@ -4,7 +4,7 @@
  * never migrate; "practice" marks an adaptive-practice session (the
  * practice agent + its two tools from turn 1, no extraction, no graph
  * writes). The store normalizes at the summary projection; createChat
- * stamps the marker only for practice. Runs under an isolated LH_DATA_DIR
+ * stamps the marker only for practice. Runs under an isolated VT_DATA_DIR
  * (the chat-birth-stamp discipline: the seam is set before any
  * config-loading import, so every app-module import is dynamic).
  */
@@ -16,15 +16,15 @@ import * as path from "node:path";
 import { after, describe, it } from "node:test";
 
 // ── the seam, BEFORE any config-loading import ──────────────────────────────
-const TMP_DATA = fs.mkdtempSync(path.join(os.tmpdir(), "lh-chat-kind-"));
-process.env.LH_DATA_DIR = TMP_DATA;
+const TMP_DATA = fs.mkdtempSync(path.join(os.tmpdir(), "vt-chat-kind-"));
+process.env.VT_DATA_DIR = TMP_DATA;
 
 const { chatStore } = await import("../src/store/chats.ts");
 const { PRACTICE_PROBLEM_TOOL, PRACTICE_CONCLUDE_TOOL, newProblemDismissedMarker, newThinkingMessage, newUserMessage } = await import("../src/core/native-messages.ts");
 
-type LhMessage = import("../src/core/native-messages.ts").LhMessage;
+type VtMessage = import("../src/core/native-messages.ts").VtMessage;
 
-function practicePair(name: typeof PRACTICE_PROBLEM_TOOL | typeof PRACTICE_CONCLUDE_TOOL, callId: string, isError = false): LhMessage[] {
+function practicePair(name: typeof PRACTICE_PROBLEM_TOOL | typeof PRACTICE_CONCLUDE_TOOL, callId: string, isError = false): VtMessage[] {
 	return [
 		{
 			id: `msg_a_${callId}`,
@@ -118,7 +118,7 @@ describe("session kind (practice sessions, 2026-10-04)", () => {
 
 	const pose = () => practicePair(PRACTICE_PROBLEM_TOOL, "p1");
 	const conclude = () => practicePair(PRACTICE_CONCLUDE_TOOL, "c1");
-	const cases: Array<{ name: string; messages: LhMessage[]; pending: boolean }> = [
+	const cases: Array<{ name: string; messages: VtMessage[]; pending: boolean }> = [
 		{ name: "thinking keeps the posed problem waiting", messages: [...pose(), newThinkingMessage("p1", "My attempt")], pending: true },
 		{ name: "a clean conclusion clears the waiting status", messages: [...pose(), ...conclude()], pending: false },
 		{ name: "dismissal clears the stored waiting status before conclusion synthesis", messages: [...pose(), newProblemDismissedMarker("p1")], pending: false },
